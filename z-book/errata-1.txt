@@ -1,0 +1,246 @@
+ERRATA IN "The Way of Z", 1st printing
+
+** Chapter 5 **
+
+36, 2nd paragraph from bottom: "... < a <= ..." means
+
+(iroot(a) - 1)*(iroot(a) - 1) < a <= iroot(a)*iroot(a)
+
+Thanks to CJ Biazak for pointing this out.
+ 
+** Chapter 9 **
+
+78, 3rd line from the bottom: "(9, 11, 1989)" (second occurence)
+should be "(11, 9, 1989)" (different from first occurence).
+
+p. 90, Elevator example: Text says "first three elevators are stopped
+at the first floor" but Z says {1->3, 2->1, 3->1, 5->7, ...}.  It
+should be {1->1, 2->1, 3->1, 5->7, ...}
+
+** Chapter 10 **
+
+111, Exercise 10.8.1: "What is the meaning of this predicate ..."
+should be "What is the truth value of this predicate ..."
+
+** Chapter 12 **
+
+133, "Factor expresses that two numbers n and d are factors of n"
+should be "... two numbers q and d ... "
+
+136, footnote 3 on negations says x \in S <==> \lnot (x \in S).
+It should be x \notin S <==> \lnot (x \in S). 
+
+** Chapter 15 **
+
+154, Exercise 15.2.1: "2*x + 7 = 13 <=> x = 3" should be " ... => ... "
+(equivalence symbol "<=>" should be implication symbol "=>")
+
+157,  Last formula: size operator # in wrong place, 
+
+   #ch? e printing /\ ((left^<ch?>)^right) <= maxsize
+
+should be 
+
+   ch? e printing /\ #((left^<ch?>)^right) <= maxsize
+  
+** Chapter 18 **
+
+174: The fifth queen is missing from the set display.
+
+  { 1 -> 8, 2 |-> 4, 3 |-> 1, 4 |-> 3, 6 |-> 2, 7 |-> 7, 8 |-> 5 }
+
+It should be:
+
+  { 1 -> 8, 2 |-> 4, 3 |-> 1, 4 |-> 3, 5 |-> 6, 6 |-> 2, 7 |-> 7, 8 |-> 5 }
+
+176: The formulas for up and down are wrong.  In all the squares on
+the left edge of the board (Fig 18.2) the up and down diagonal are
+both the same as the rank, but in these squares the file is 1 not 0.
+Change the equation of a line to:
+
+  rank = slope x (file - 1) + intercept
+
+where slope = 1 where intercept = up and slope = -1 where intercept = down.
+
+Change the two formulas to:
+
+  up = rank - (file - 1) = rank - file + 1
+  down = rank + (file - 1) = rank + file - 1
+
+DIAGONAL ranges from the smallest possible value for up which is 1 - SIZE + 1 
+to the largest possible value for down which is SIZE + SIZE - 1 so change
+the next formula to 
+
+  DIAGONAL == -SIZE .. 2*SIZE - 1
+
+Then in the axiomatic definition change to
+
+  up(f,r) = r - f + 1 
+  down(f,r) = r + f - 1
+
+178: Change the formulas to be consistent with the corrections above:
+
+  DIAGONAL == -SIZE .. 2*SIZE - 1
+
+  up(f,r) = r - f + 1 
+  down(f,r) = r + f - 1
+
+** Chapter 21 **
+
+208, NewSetting schema: "actual' = actual" should be "measured' = measured"
+
+** Chapter 24 **
+
+p. 233, text  above TYPE ERROR, "the domain of error is Param" should be 
+"the domain of offset is Param"
+
+** Part IV, Further Reading (after Chapter 25) **
+
+241, third paragraph: "Morgan[1990]" should be "Morgan[1994]".
+
+** Chapter 27 **
+
+255: Two of the comments in the C code example at the bottom of the
+page are incorrect.  They do not agree with the code (the code itself
+is correct).  The two incorrect lines are:
+
+        term=term+2;   /* term = 2*i-1 */
+        sum=sum+term;  /* sum  = 1 + 3 + 5 + ... + 2*i - 1 */
+
+These should be:
+
+        term=term+2;   /* term = 2*(i+1) + 1 */
+        sum=sum+term;  /* sum  = 1 + 3 + 5 + ... + (2*(i+1) + 1) */
+
+263: "... the refinement symbol $\subbageq$ plays much the same role
+that equivalance does in ordinary proofs"  
+should be  " ... that implication does ..."
+
+** Chapter 28 **
+
+269: PS schema: "output" should be "value" (two places) to
+match prior definitions on pp. 221 & 222. Also in the C code.
+
+270: In the C code: 
+
+ #define N_BPLS = YWOB + 1 
+
+should be 
+
+ #define N_BPLS YWOB + 1 
+ 
+(with no equal sign) 
+
+** Appendix A, Glossary **
+
+301, range restriction and antirestriction: arguments reversed,
+
+  A |>  R   Range restriction
+  A |>- R   Range antirestriction 
+
+should be
+
+  R |>  A   Range restriction
+  R |>- A   Range antirestriction 
+
+** Appendix D **
+
+309: Declaration of nonmembership relation is missing.  Inside the
+generic definition box, add this line:
+
+	_ \notin _ : X <-> PX
+
+(where \notin is the slash epsilon symbol and P is the power set symbol)
+
+Declarations of union _U_, intersection, set difference _\_ are  wrong
+
+  PX x PX -> X
+
+should be 
+
+  PX x PX -> PX
+
+313: Declaration of prefix minus operator uses wrong symbol.  In the
+third declaration in the axiomatic definition box,
+
+	- : Z -> Z
+
+change the initial character from a (small, narrow) hyphen to a
+(wider) minus sign, and add a bit more space before the colon.
+
+** Appendix E **
+
+317: Contrapositive, text says p => q  <=>  ~p => ~q
+It should be p => q  <=>  ~q => ~p
+
+321: C conditional expression, text says if (p) x = y; else x = z 
+It should be x = p ? y : z
+
+** Appendix F **
+
+323, Exercise 15.2.1: "divide both sides by three" should be "... by two",
+"e div 3" should be "e div 2".
+
+** Bibliography **
+
+334: Kalet, et al. (1996) has appeared, Vol. 36, No. 2, pages 451 - 461.
+
+
+Errors in grammar, spelling, formatting, etc.:
+
+** Chapter 1 **
+
+3, first line last paragraph: "appears on" should be "turns on"
+
+8, fig. 1.1 caption: "D is does" should be "D is dose"
+
+** Chapter 2 **
+
+16, near bottom: "a entire" should be "an entire"
+
+20: Separate second paragraph from preceding bulleted paragraph, add a
+bit of vertical space before first sentence "I don't mean ..."
+
+** Chapter 5 **
+
+35, Next to last paragraph: "It tells use more." should be "It tells
+us more."
+
+** Chapter 6 **
+
+40, paragraph 3, line 4: "on directly" should be "directly on"
+
+** Chapter 10 **
+
+100, sec. 10.4.1, par. 3: "the the" should be "the"
+
+** Chapter 12 **
+
+134: Two exercises are unnumbered
+
+136, near top: "Explanding" should be "Expanding"
+
+** Chapter 15 **
+
+155, line 8 under section 15.4 "We can can calculate..." should be
+     "We can calculate ..."
+
+** Chapter 28 **
+
+278: Exercise 23.8.1 should be numbered 28.3.8.1
+
+296, second line under Conclusion: "A Z formula" should be "a Z formula".
+
+** Index **
+
+340: "antecedent" is a top-level entry; it should not be indented
+under "ANSI".
+
+A current version of this document is kept at 
+ http://staff.washington.edu/~jon/z-book/errata-1.txt
+
+Thanks to all who have reported errors.  
+
+Please report any others to jon@u.washington.edu
+ 
+Last revised  20-Dec-2007
