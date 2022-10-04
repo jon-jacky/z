@@ -1,0 +1,9 @@
+% logic.tex - root 
+
+\documentstyle[fuzz]{slides}
+
+\begin{document}
+
+\blackandwhite{logic-slides}
+
+\end{document}

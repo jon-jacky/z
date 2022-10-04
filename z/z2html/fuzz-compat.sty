@@ -1,0 +1,15 @@
+% fuzz-compat.sty, define fuzz.sty commands not present in oz.sty
+%                  my versions aren't quite as pretty as in the real fuzz.sty
+% 29-Nov-1999 J. Jacky
+
+\def \LET       {{\bf let} \ }
+\def \IF        {{\bf if} \ }
+\def \THEN      {\ {\bf then} \ }
+\def \ELSE      {\ {\bf else} \ }
+\def \plus      {^+}
+\def \inrel#1   {\ \underline{#1} \ }
+\def \pipe      {\, >\!\!> \, }
+\def \extract   {\ires}
+\def \bcount    {\sharp}
+\def \subbageq  {\sqsubseteq}
+\def \uminus    {\tt uminus}    % This one isn't supported by oz.sty

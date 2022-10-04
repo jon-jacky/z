@@ -1,0 +1,362 @@
+<html>
+<head>
+<link rel="stylesheet" href="zed-nomargin.css" type="text/css">
+<title>Glossary of Z notation</title>
+</head>
+
+<body>
+
+<h1><a name="top">Glossary of Z notation</a></h1>
+
+
+<p>
+Based on appendix A in 
+<a href="../z-book/index.html">
+The Way of Z</a>.
+</p>
+
+<p>
+Links to more <a href="z-examples.html">Z examples</a>.
+</p>
+
+<p class="informal">
+This page looks best when this <var class="zed"><img height=11 width=9 alt="\power" src="zimg/power-m.gif"></var> and this <var class="zed">X</var> are 
+about the same size: <var class="zed"><img height=11 width=9 alt="\power" src="zimg/power-m.gif"> X</var>.  See these <a href="z-viewing-tips.html">viewing tips</a>.
+</p>
+
+<hr>
+
+<a name="nameref" href="#names">Names</a><br>
+<a name="defref" href="#defs">Definitions</a><br>
+<a name="logicref" href="#logic">Logic</a><br>
+<a name="setref" href="#sets">Sets and expressions</a><br>
+<a name="relref" href="#rel">Relations</a><br>
+<a name="funcref" href="#func">Functions</a><br>
+<a name="numref" href="#num">Numbers</a><br>
+<a name="seqref" href="#seq">Sequences</a><br>
+<a name="axref" href="#axdef">Axiomatic definition</a><br>
+<a name="schref" href="#schema">Schema</a><br>
+<a name="genref" href="#gendef">Generic Definition</a><br>
+<a name="calcref" href="#schcalc">Schema Calculus</a><br>
+<a name="conref" href="#con">Conventions</a><br>
+
+<p>
+<a name="otherref" href="#ack">Other Z pages</a><br>
+<a name="ackref" href="#ack">Acknowledgements</a><br>
+
+<hr>
+
+<blockquote>
+
+<h4><a name="names" href="#nameref">Names</a></h4>
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=110><var class="zed">a,b</var></td><td><var class="zed"><b>identifiers</b></td></tr>
+<tr> <td><var class="zed">d,e</var></td><td><var class="zed"><b>declarations (e.g., </b>a: A; b, ...: B ...<b>)</b></td></tr>
+<tr> <td><var class="zed">f,g</var></td><td><var class="zed"><b>functions</b></td></tr>
+<tr> <td><var class="zed">m,n</var></td><td><var class="zed"><b>numbers</b></td></tr>
+<tr> <td><var class="zed">p,q</var></td><td><var class="zed"><b>predicates</b></td></tr>
+<tr> <td><var class="zed">s,t</var></td><td><var class="zed"><b>sequences</b></td></tr>
+<tr> <td><var class="zed">x,y</var></td><td><var class="zed"><b>expressions</b></td></tr>
+<tr> <td><var class="zed">A,B</var></td><td><var class="zed"><b>sets</b></td></tr>
+<tr> <td><var class="zed">C,D</var></td><td><var class="zed"><b>bags</b></td></tr>
+<tr> <td><var class="zed">Q,R</var></td><td><var class="zed"><b>relations</b></td></tr>
+<tr> <td><var class="zed">S,T</var></td><td><var class="zed"><b>schemas</b></td></tr>
+<tr> <td><var class="zed">X</var></td><td><var class="zed"><b>schema text (e.g., </b>d</var>, <var class="zed">d | p<b>, or </b>S<b>)</b></td></tr>
+</table>
+</div>
+
+<h4><a name="defs" href="#defref">Definitions</a></h4>
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=110><var class="zed">a == x</var></td><td><var class="zed"><b> Abbreviation definition</b></td></tr>
+<tr> <td><var class="zed">a ::= b | ...</var></td><td><var class="zed"><b>Free type definition</b></td></tr>
+<tr> <td><var class="zed">[a]</var></td><td><var class="zed"><b>Introduction of a given set (or </b>[a,...]<b>)</b></td></tr>
+<tr> <td><var class="zed">a _</var></td><td><var class="zed"><b>Prefix operator</b></td></tr>
+<tr> <td><var class="zed">_ a</var></td><td><var class="zed"><b>Postfix operator</b></td></tr>
+<tr> <td><var class="zed">_ a _</var></td><td><var class="zed"><b>Infix operator</b></td></tr>
+</table>
+</div>
+
+<h4><a name="logic" href="#logicref">Logic</a></h4>
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=110><var class="zed">true</var></td><td><var class="zed"><b>Logical true constant</b></td></tr>
+<tr> <td><var class="zed">false</var></td><td><var class="zed"><b>Logical false constant</b></td></tr>
+<tr> <td><var class="zed"><img width=7 height=7 alt="\lnot" src="zimg/lnot-m.gif"> p</var></td><td><var class="zed"><b>Logical negation, <em>not</em></b></td></tr>
+<tr> <td><var class="zed">p <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> q</var></td><td><var class="zed"><b>Logical conjunction, <em>and</em></b></td></tr>
+<tr> <td><var class="zed">p <img width=8 height=7 alt="\lor" src="zimg/lor-m.gif"> q</var></td><td><var class="zed"><b>Logical disjunction, <em>or</em></b></td></tr>
+<tr> <td><var class="zed">p <img width=13 height=7 alt="\implies" src="zimg/implies-m.gif"> q</var></td><td><var class="zed"><b>Logical implication</b></td></tr>
+<tr> <td><var class="zed">p <img width=13 height=7 alt="\iff" src="zimg/iff-m.gif"> q</var></td><td><var class="zed"><b>Logical equivalence</b></td></tr>
+<tr> <td><var class="zed"><img width=9 height=10 alt="\forall" src="zimg/forall-m.gif"> X <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> q</var></td><td><var class="zed"><b>Universal quantification</b></td></tr>
+<tr> <td><var class="zed"><img width=6 height=10 alt="\exists" src="zimg/exists-m.gif"> X <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> q</var></td><td><var class="zed"><b>Existential quantification</b></td></tr>
+<tr> <td><var class="zed">(<b>let</b> a == x; ... <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> p)</var></td><td><var class="zed"><b>Local definition</b></td></tr>
+</table>
+</div>
+
+<h4><a name="sets" href="#setref">Sets and expressions</a></h4>
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=110><var class="zed">x = y</var></td><td><var class="zed"><b>Equality</b></td></tr>
+<tr> <td><var class="zed">x <img width=7 height=7 alt="\neq" src="zimg/neq-m.gif"> y</var></td><td><var class="zed"><b>Inequality</b></td></tr>
+<tr> <td><var class="zed">x <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> A</var></td><td><var class="zed"><b>Set membership</b></td></tr>
+<tr> <td><var class="zed">x <img width=7 height=11 align=absbottom alt="\notin" src="zimg/notin-m.gif"> A</var></td><td><var class="zed"><b>Non-membership</b></td></tr>
+<tr> <td><var class="zed"><img width=11 height=11 alt="\emptyset" src="zimg/emptyset-m.gif"></var></td><td><var class="zed"><b>Empty set</b></td></tr>
+<tr> <td><var class="zed">A <img width=9 height=10 align=absbottom alt="\subseteq" src="zimg/subseteq-m.gif"> B</var></td><td><var class="zed"><b>Set inclusion</b></td></tr>
+<tr> <td><var class="zed">A <img width=9 height=7 alt="\subset" src="zimg/subset-m.gif"> B</var></td><td><var class="zed"><b>Strict set inclusion</b></td></tr>
+<tr> <td><var class="zed">{ x, y, ... }</var></td><td><var class="zed"><b>Set display</b></td></tr>
+<tr> <td><var class="zed">{&nbsp; X <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> x &nbsp;}</var></td><td><var class="zed"><b>Set comprehension</b></td></tr>
+<tr> <td><var class="zed">(<img width=8 height=10 alt="\lambda" src="zimg/lambda-m.gif"> X <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> x)</var></td><td><var class="zed"><b>Lambda expression</b></td></tr>
+<tr> <td><var class="zed">(<b>let</b> a == x; ... <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> y)</var></td><td><var class="zed"><b>Local definition</b></td></tr>
+<tr> <td><var class="zed"><b>if</b> p <b>then</b> x <b>else</b> y</var></td><td><var class="zed"><b>Conditional expression</b></td></tr>
+<tr> <td><var class="zed">(x,y, ...)</var></td><td><var class="zed"><b>Tuple</b></td></tr>
+<tr> <td><var class="zed">(x,y)</var></td><td><var class="zed"><b>Pair</b></td></tr>
+<tr> <td><var class="zed">A <img width=7 height=7 alt="\cross" src="zimg/cross-m.gif"> B <img width=7 height=7 alt="\cross" src="zimg/cross-m.gif"> ...</var></td><td><var class="zed"><b>Cartesian product</b></td></tr>
+<tr> <td><var class="zed"><img height=11 width=9 alt="\power" src="zimg/power-m.gif"> A</var></td><td><var class="zed"><b>Power set</b></td></tr>
+<tr> <td><var class="zed">A <img width=10 height=7 alt="\cap" src="zimg/cap-m.gif"> B</var></td><td><var class="zed"><b>Set intersection</b></td></tr>
+<tr> <td><var class="zed">A <img width=10 height=7 alt="\cup" src="zimg/cup-m.gif"> B</var></td><td><var class="zed"><b>Set union</b></td></tr>
+<tr> <td><var class="zed">A \ B</var></td><td><var class="zed"><b>Set difference</b></td></tr>
+<tr> <td><var class="zed">first&nbsp;x</var></td><td><var class="zed"><b>First element of an ordered pair</b></td></tr>
+<tr> <td><var class="zed">second&nbsp;x</var></td><td><var class="zed"><b>Second element of an ordered pair</b></td></tr>
+<tr> <td><var class="zed"># A</var></td><td><var class="zed"><b>Number of elements in a set</b></td></tr>
+</table>
+</div>
+
+<h4><a name="rel" href="#relref">Relations</a></h4>
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=110><var class="zed">A <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> B</var></td><td><var class="zed"><b>Binary relation (</b><img height=11 width=9 alt="\power" src="zimg/power-m.gif"> (A <img width=7 height=7 alt="\cross" src="zimg/cross-m.gif"> B)<b>)</b></td></tr>
+<tr> <td><var class="zed">a <img height=9 width=10 alt="\mapsto" src="zimg/mapsto-m.gif"> b</var></td><td><var class="zed"><b>Maplet (</b>(a,b)<b>)</b></td></tr>
+<tr> <td><var class="zed"><b>dom</b> R</var></td><td><var class="zed"><b>Domain of a relation</b></td></tr>
+<tr> <td><var class="zed"><b>ran</b> R</var></td><td><var class="zed"><b>Range of a relation</b></td></tr>
+<tr> <td><var class="zed">Q <img width=6 height=12 alt="\comp" src="zimg/comp-m.gif" align=absbottom> R</var></td><td><var class="zed"><b>Forward relational composition</b></td></tr>
+<tr> <td><var class="zed">Q <img width=7 height=7 alt="\circ" src="zimg/circ-m.gif"> R</var></td><td><var class="zed"><b>Backward relational composition (</b>R <img width=6 height=12 alt="\comp" src="zimg/comp-m.gif" align=absbottom> Q<b>)</b></td></tr>
+<tr> <td><var class="zed">A <img height=11 width=10 alt="\dres" src="zimg/dres-m.gif"> R</var></td><td><var class="zed"><b>Domain restriction</b></td></tr>
+<tr> <td><var class="zed">A <img height=11 width=10  alt="\ndres" src="zimg/ndres-m.gif"> R</var></td><td><var class="zed"><b>Domain anti-restriction</b></td></tr>
+<tr> <td><var class="zed">A <img height=11 width=10 alt="\rres" src="zimg/rres-m.gif"> R</var></td><td><var class="zed"><b>Range restriction</b></td></tr>
+<tr> <td><var class="zed">A <img height=11 width=10 alt="\nrres" src="zimg/nrres-m.gif"> R</var></td><td><var class="zed"><b>Range anti-restriction</b></td></tr>
+<tr> <td><var class="zed">R <img height=14 width=7 alt="\limg" src="zimg/limg-m.gif" align=absbottom> A <img height=14 width=7 alt="\rimg" src="zimg/rimg-m.gif" align=absbottom></var></td><td><var class="zed"><b>Relational image</b></td></tr>
+<tr> <td><var class="zed">R <sup>~</sup></var></td><td><var class="zed"><b>Inverse of relation</b></td></tr>
+<tr> <td><var class="zed">R <sup>+</sup></var></td><td><var class="zed"><b>Transitive closure</b></td></tr>
+<tr> <td><var class="zed">Q <img width=9 height=9 alt="\oplus" src="zimg/oplus-m.gif"> R</var></td><td><var class="zed"><b>Relational overriding</b></td></tr>
+<tr> <td><var class="zed">a <u>R</u> b</var></td><td><var class="zed"><b>Infix relation</b></td></tr>
+</table>
+</div>
+
+<h4><a name="func" href="#funcref">Functions</a></h4>
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=110><var class="zed">A <img width=14 height=8 alt="\pfun" src="zimg/pfun-m.gif"> B</var></td><td><var class="zed"><b>Partial functions</b></td></tr>
+<tr> <td><var class="zed">A <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> B</var></td><td><var class="zed"><b>Total functions</b></td></tr>
+<tr> <td><var class="zed">A <img width=14 height=8 alt="\pinj" src="zimg/pinj-m.gif"> B</var></td><td><var class="zed"><b>Partial injections</b></td></tr>
+<tr> <td><var class="zed">A <img  width=14 height=8 alt="\inj" src="zimg/inj-m.gif"> B</var></td><td><var class="zed"><b>Total injections</b></td></tr>
+<tr> <td><var class="zed">A <img width=14 height=8 alt="\bij" src="zimg/bij-m.gif"> B</var></td><td><var class="zed"><b>Bijections</b></td></tr>
+<tr> <td><var class="zed">f&nbsp;x</var></td><td><var class="zed"><b>Function application (or </b>f(x)<b>)</b></td></tr>
+</table>
+</div>
+
+<h4><a name="num" href="#numref">Numbers</a></h4>
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=110><var class="zed"><img height=11 width=10 alt="\num" src="zimg/num-m.gif"></var></td><td><var class="zed"><b>Set of integers</b></td></tr>
+<tr> <td><var class="zed"><img height=11 width=10 alt="\nat" src="zimg/nat-m.gif"></var></td><td><var class="zed"><b>Set of natural numbers </b>{ 0, 1, 2, ... }</td></tr>
+<tr> <td><var class="zed"><img height=11 width=10 alt="\nat" src="zimg/nat-m.gif"><sub><font size=-3>1</font></sub></var></td><td><var class="zed"><b>Set of strictly positive numbers </b>{ 1, 2, ... }</td></tr>
+<tr> <td><var class="zed">m+n</var></td><td><var class="zed"><b>Addition</b></td></tr>
+<tr> <td><var class="zed">m-n</var></td><td><var class="zed"><b>Subtraction</b></td></tr>
+<tr> <td><var class="zed">m*n</var></td><td><var class="zed"><b>Multiplication</b></td></tr>
+<tr> <td><var class="zed">m <b>div</b> n</var></td><td><var class="zed"><b>Division</b></td></tr>
+<tr> <td><var class="zed">m <b>mod</b> n</var></td><td><var class="zed"><b>Remainder (modulus)</b></td></tr>
+<tr> <td><var class="zed">m <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> n</var></td><td><var class="zed"><b>Less than or equal</b></td></tr>
+<tr> <td><var class="zed">m &lt; n</var></td><td><var class="zed"><b>Less than</b></td></tr>
+<tr> <td><var class="zed">m <img width=7 height=9 alt="\geq" src="zimg/geq-m.gif"> n</var></td><td><var class="zed"><b>Greater than or equal</b></td></tr>
+<tr> <td><var class="zed">m &gt; n</var></td><td><var class="zed"><b>Greater than</b></td></tr>
+<tr> <td><var class="zed">m .. n</var></td><td><var class="zed"><b>Number range</b></td></tr>
+<tr> <td><var class="zed">min&nbsp;A</var></td><td><var class="zed"><b>Minimum of a set of numbers</b></td></tr>
+<tr> <td><var class="zed">max&nbsp;A</var></td><td><var class="zed"><b>Maximum of a set of numbers</b></td></tr>
+</table>
+</div>
+
+<h4><a name="seq" href="#seqref">Sequences</a></h4>
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=110><var class="zed">seq A</var></td><td><var class="zed"><b>Set of finite sequences</b></td></tr>
+<tr> <td><var class="zed">seq<sub><font size=-3>1</font></sub> A</var></td><td><var class="zed"><b>Set of non-empty finite sequences</b></td></tr>
+<tr> <td><var class="zed">iseq A</var></td><td><var class="zed"><b>Set of finite injective sequences</b></td></tr>
+<tr> <td><var class="zed"><img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"></var></td><td><var class="zed"><b>Empty sequence</b></td></tr>
+<tr> <td><var class="zed"><img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> x, y, ... <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"></var></td><td><var class="zed"><b>Sequence display</b></td></tr>
+<tr> <td><var class="zed">s <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> t</var></td><td><var class="zed"><b>Sequence concatenation</b></td></tr>
+<tr> <td><var class="zed">head&nbsp;s</var></td><td><var class="zed"><b>First element of a sequence</b></td></tr>
+<tr> <td><var class="zed">tail&nbsp;s</var></td><td><var class="zed"><b>All but the head element of a sequence</b></td></tr>
+<tr> <td><var class="zed">last&nbsp;s</var></td><td><var class="zed"><b>Last element of a sequence</b></td></tr>
+<tr> <td><var class="zed">front&nbsp;s</var></td><td><var class="zed"><b>All but the last element of a sequence</b></td></tr>
+<tr> <td><var class="zed">s <b>in</b> t</var></td><td><var class="zed"><b>Sequence segment relation</b></td></tr>
+</table>
+</div>
+
+<h4><a name="axdef" href="#axref">Axiomatic definition</a></h4>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>d</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>p</td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+
+<h4><a name="schema" href="#schref">Schema</a></h4>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">S</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>d</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>p</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+<h4><a name="gendef" href="#genref">Generic Definition</a><br></h4>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{gendef}" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">[a, ...]</td>
+     <td><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10 height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=3><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td width=10 height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2>d</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2>p</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{gendef}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+<h4><a name="schcalc" href="#calcref">Schema Calculus</a><br></h4>
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=110><var class="zed">S <img height=11 width=11 alt="\defs" src="zimg/defs-m.gif"> [&nbsp; X &nbsp;]</var></td><td><var class="zed"><b>Horizontal schema</b></td></tr>
+<tr> <td><var class="zed">[&nbsp; T; ... | ... &nbsp;]</var> </td><td><var class="zed"><b>Schema inclusion</b></td></tr>
+<tr> <td><var class="zed">z.a</var></td><td><var class="zed"><b>Component selection (given </b>z:S<b>)</b></td></tr>
+<tr> <td><var class="zed"><img width=5 height=10 alt="\theta" src="zimg/theta-m.gif"> S</var></td><td><var class="zed"><b>Binding</b></td></tr>
+<tr> <td><var class="zed"><img width=7 height=7 alt="\lnot" src="zimg/lnot-m.gif"> S</var></td><td><var class="zed"><b>Schema negation</b></td></tr>
+<tr> <td><var class="zed">S <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> T</var></td><td><var class="zed"><b>Schema conjunction</b></td></tr>
+<tr> <td><var class="zed">S <img width=8 height=7 alt="\lor" src="zimg/lor-m.gif"> T</var></td><td><var class="zed"><b>Schema disjunction</b></td></tr>
+<tr> <td><var class="zed">S <img width=6 height=12 alt="\semi" align=absbottom src="zimg/comp-m.gif"> T</var></td><td><var class="zed"><b>Schema composition</b></td></tr>
+<tr> <td><var class="zed">S &gt;&gt; T</var></td><td><var class="zed"><b>Schema piping</b></td></tr>
+</table>
+</div>
+
+<h4><a name="con" href="#conref">Conventions</a><br></h4>
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=110><var class="zed">a?</var></td><td><var class="zed"><b>Input to an operation</b></td></tr>
+<tr> <td><var class="zed">a!</var></td><td><var class="zed"><b>Output from an operation</b></td></tr>
+<tr> <td><var class="zed">a</var></td><td><var class="zed"><b>State component before an operation</b></td></tr>
+<tr> <td><var class="zed">a'</var></td><td><var class="zed"><b>State component after an operation</b></td></tr>
+<tr> <td><var class="zed">S</var></td><td><var class="zed"><b>State schema before an operation</b></td></tr>
+<tr> <td><var class="zed">S'</var></td><td><var class="zed"><b>State schema after an operation</b></td></tr>
+<tr> <td><var class="zed"><img width=7 height=10 alt="\Delta" src="zimg/Delta-m.gif"> S</var></td><td><var class="zed"><b>Change of state</b></td></tr>
+<tr> <td><var class="zed"><img width=9 height=10 alt="\Xi" src="zimg/Xi-m.gif"> S</var></td><td><var class="zed"><b>No change of state</b></td></tr>
+</table>
+</div>
+
+</blockquote>
+
+<hr>
+
+<h4><a name="other" href="#otherref">Other Z pages</a></h4>
+
+<p>
+<a href="toolkit.html">Z mathematical tool-kit</a>
+defines the operators shown in this glossary.
+</p>
+
+<p>
+<a href="z-examples.html">Z examples</a> in web pages.
+</p>
+
+<p>
+<a href="z2html/z2html.html"><b>Z2HTML</b> tool</a> for translating 
+LaTeX documents with Z markup to HTML web pages.
+</p>
+
+<p>
+<a href="http://www.comlab.ox.ac.uk/archive/z.html">Z home page</a>
+with FAQ and links to publications, tools, and meetings.
+</p>
+
+
+<p>
+Back to <a href="#top">top</a>
+</p>
+
+<hr>
+
+<h4><a name="ack" href="#ackref">Acknowledgements</a></h4>
+
+This page is based on the more complete
+<A HREF="http://www.zuser.org/pub/zglossary.ps.Z">
+PostScript glossary</A> 
+by 
+<a href="http://www.sbu.ac.uk/~bowenjp/">
+Jonathan Bowen</a>
+at the 
+<a href="http://www.zuser.org/z/">Z home page</a>.
+
+<HR>
+
+<ADDRESS>
+<A HREF="http://staff.washington.edu/~jon/">Jonathan Jacky</A> /
+<A HREF="http://www.radonc.washington.edu/">Department of Radiation Oncology</A>
+ 
+Box 356043<br>
+<a href="http://www.washington.edu/">University of Washington</a> /
+Seattle, Washington 98195-6043 / USA<BR>
+Tel (206) 598-4117 / Fax (206) 598-6218<BR>
+<p>
+E-mail: jon@u.washington.edu
+</ADDRESS>
+
+</body>
+</html>

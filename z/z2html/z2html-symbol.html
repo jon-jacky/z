@@ -1,0 +1,83 @@
+<html>
+<head>
+<link rel="stylesheet" href="../zed.css" type="text/css">
+<title>Z2HTML (Symbol Font Version)</title>
+</head>
+
+<body>
+
+<h1><a name="top"><b>Z2HTML (Symbol Font Version)</b></a></h1>
+
+<p>
+Back to the <a href="z2html.html"><b>Z2HTML</b> home page</a>.
+</p>
+
+<hr>
+
+<p>
+Most systems provide a <b>symbol</b> font that provides some
+of the mathematical symbols used by Z.  
+For example, the character entity for the implication arrow
+<img width=13 height=7 alt="\implies" src=zimg/implies-m.gif>
+is <b>&amp;#222;</b>
+</p>
+
+<p>
+This font does not provide all the Z symbols, so 
+images are still needed.  
+</p>
+
+<p>
+It can require some configuration effort to make the symbol font
+accessible to the browser, even when the page contains
+correctly-formed <b>font face</b> tags.  For example, with Netscape
+under Unix-like operating systems it seems to be necessary to add this
+line to your <b>.Xdefaults</b> file:
+</p>
+
+<blockquote>
+<tt>Netscape*documentFonts.charset*adobe-fontspecific:   iso-8859-1</tt>
+</blockquote>
+
+<p>
+Even when the browser can find the symbol font, printing the page or saving
+it as PostScript may not work properly.
+</p>
+
+<p>
+Moreover, the symbol font cannot be made to work in text-only browsers 
+such as <b>Lynx</b> and there is no way to provide <b>alt</b> text.
+</p>
+
+<p>
+In view of these difficulties, I do not recommend using the symbol font.
+</p>
+
+<p>
+Nevertheless, I experimented with a symbol font version of
+<b>z2html.sed</b>.  Here is <a
+href="z2html-symbol.txt">z2html-symbol.sed</a>.  
+</p>
+
+<p>
+Here is the <a href="../z-test-symbol.html">test page</a>, translated
+by the symbol font version.
+</p>
+
+<HR>
+
+<ADDRESS>
+<A HREF="http://www.radonc.washington.edu/prostaff/jon/">Jonathan Jacky</A> /
+<A HREF="http://www.radonc.washington.edu/">Department of Radiation Oncology</A>
+ 
+Box 356043<br>
+<a href="http://www.washington.edu/">University of Washington</a> /
+Seattle, Washington 98195-6043 / USA<BR>
+Tel (206) 598-4117 / Fax (206) 598-6218<BR>
+<p>
+E-mail: jon@u.washington.edu
+</ADDRESS>
+
+
+</body>
+</html>

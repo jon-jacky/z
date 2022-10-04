@@ -1,0 +1,163 @@
+% intro-slides.tex (root is intro.tex)
+
+\pagestyle{empty}
+
+\begin{slide}{}
+
+\begin{center}
+
+INTRODUCING Z 
+
+Jonathan Jacky 
+
+Radiation Oncology, Box 356043 \\
+University of Washington \\
+Seattle, Washington  98195-6043 \\
+USA
+
+\vspace{1.0in}
+%http://www.radonc.washington.edu/prostaff/jon
+jon@radonc.washington.edu
+\end{center}
+
+\vspace{1.0in}
+\small{\copyright Jonathan Jacky 1997 \\
+Do not copy without author's permission}
+
+\end{slide}
+
+\begin{slide}{}
+FORMAL METHODS
+
+Apply logic and simple mathematics \\
+to computing.
+
+Use formulas (symbols and rules).
+
+Gain understanding through analysis rather than experiments (testing).
+
+Can be applied to behavior (specification), structure (design,
+``refinement''), implementation (verification).
+
+Are most useful in projects that are novel, difficult, or critical.
+\end{slide}
+
+\begin{slide}{}
+GOALS OF FORMAL METHODS
+
+Discover errors by analysis (earlier) instead of by testing or
+customer experiences (later).
+
+Document development thoroughly to permit more objective
+technical evaluation and review (even automated analysis, machine
+checking).
+
+\end{slide}
+
+\begin{slide}{}
+FORMAL METHODS ARE {\em NOT} \dots
+
+Project management methods.
+
+Useful for a nontechnical audience (customers, etc.)
+
+Writing the program twice.
+
+Replacements for all testing.
+
+Replacements for creativity, judgment, experience.
+
+Infallible (but some products can be {\em checked} more conclusively).
+
+Automatic (but some products can be {\em checked} by machine).
+
+Cost-effective for many routine projects.
+
+\end{slide}
+
+\begin{slide}{}
+WHAT IS A SPECIFICATION LANGUAGE
+
+Formal syntax (like every programming language)
+
+Formal semantics (unlike most programming languages):
+you can {\em calculate} whether two formulas (specifications,
+programs) mean the same thing by {\em formula manipulation}.
+
+Describe states directly (not just state transitions).
+
+Not necessarily executable.
+
+Support automated analysis.
+
+\end{slide}
+
+\begin{slide}{}
+WHAT IS Z
+
+Notational conventions for logic and simple mathematics.
+
+Discrete mathematics with declarations and structure (``paragraphs'').
+
+``Model-based'', with states and operations.
+
+A notation, not a method.
+
+Not specialized for any application.
+
+Not a tool (but many tools available).
+
+Not executable --- Z is not a programming language!
+\end{slide}
+
+\begin{slide}{}
+Z FEATURES
+
+Non-ASCII (pictorial) symbols.
+
+Relational calculus (data structures).
+
+Schema calculus (large specifications).
+
+Mathematical tool-kit (pre-defined objects and operators).
+
+Literature, reference manual, draft ANSI/ISO standard.
+
+Tools: typesetting, syntax and type checking,
+theorem proving, detetecting counterexamples.
+
+Related notations (B, VDM, Object-oriented dialects).
+
+\end{slide}
+
+
+\begin{slide}{}
+APPLICATIONS OF FM
+
+Some large projects have been fielded successfully:
+
+IBM CICS transaction processing (Z)
+
+Inmos Transputer FPU (Z, Occam)
+
+Tektronix oscilloscopes (Z)
+
+Paris Metro (B)
+
+UK air traffic control (VDM)
+
+\end{slide}
+
+\begin{slide}{}
+DIFFICULTIES OF FM
+
+Mathematical notation.
+
+Abstraction (``story problems'').
+
+Not executable (no trial-and-error).
+
+More effort in early project stages.
+
+Start from scratch.
+\end{slide}

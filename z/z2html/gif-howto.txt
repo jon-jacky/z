@@ -1,0 +1,118 @@
+Using GIMP to create Z symbol GIF's
+
+GIMP is the Gnu Image Manipulation Program.  It comes included with
+Red Hat Linux 5.2.
+
+(Here "click" means left-click unless otherwise noted.)
+
+cd into the directory where you want to deposit the .gif files.
+
+Start GIMP:
+
+ % gimp &
+
+The GIMP announcement window appears briefly, then disappears.
+The GIMP tool panel appears and remains.
+
+At the top of the GIMP tool panel, click on File.  The file menu appears.
+
+Click on new.  The New Image panel appears.
+
+In Width and Height (for 14 pt text the
+widest Z arrows are 14 pixels wide, and the tallest characters (brackets) are 
+14 pixels high.
+
+In Image Type, click on RGB.  In Fill type, click on Transparent.
+
+Click on OK.  A tiny image window appears.  
+
+Pull on a corner of the image window to enlarge it to a square about
+as tall as the tool panel.
+
+Click on the magnifying glass on the tool panel to select the
+magnifier tool.
+
+Click on the tiny image in the center of the (enlarged) image panel.
+It gets larger.  Keep clicking until it doesn't get any larger.  It
+almost fills the image panel and each pixel appears like a square on a
+checkerboard.   The title at the top of the window says
+"Untitled-nn.0 (RGB-alpha)".
+
+Anywhere in the image window hold down the right mouse button.  A menu
+appears.  Move the cursor down to Image.  Another menu appears.  Move
+the cursor over it and down to Indexed.  Relase the right mouse button.
+The Indexed Color Conversion panel appears. (You have to do this step
+for each image, "Indexed" doesn't become the default for the session).
+
+On the Indexed Color Conversion panel, clock on "Use black/white (1-bit)
+palette".  Click on OK.   The panel disappears.  
+The title on the image panel now says "(indexed-alpha)".
+
+At this point you usually use a text tool to put a character in the
+image panel.  You simply convert the character to a GIF, or use it
+as a starting point for further editing.
+
+Click on the "T" on the tools panel to select the text tool.
+
+Click on the upper left corner pixel of the image panel.  The Text Tool
+panel appears.
+
+On the Text Tool panel, in the font list on the left side, click on
+the font you want (for example "symbol").  In the upper right corner,
+click on Points (not pixels) and enter the point size (for example
+14).  Click on each of Foundry, etc. and in each case select the
+appropriate entry from the menu.  Enter border 0.
+
+In the text entry cell at the bottom of the Text Tool panel, enter the
+text (usually just one character) you want to convert to a GIF (or use
+as a starting point for editing).  If the character is mapped on the
+keyboard you can just type it (typing D while the symbol font is
+selected enters the Greek capital Delta, for example).  If the
+character is not mapped on the keyboard it is harder.  I haven't found
+any way to enter the character's octal or hex code in GIMP.  Instead I
+use the "xlsfonts | grep symbol" command to find the full name of the
+symbol font, then "xfd -fn ..." to display the font and the octal code
+of each character, then use Emacs to insert that octal code into a
+text file (C-q, then type the three-digit octal code, then RETURN),
+cat the text file to a terminal window, something strange-looking
+appears, then use the mouse to cut and paste that something into the
+GIMP Text Tool panel.  In the Text Tool, the something strange 
+appears as the symbol you wanted!
+
+When the Text Tool shows the character (symbol) you want, click on OK.
+The symbol appears hugely magnified in the image window, surrounded by
+a "crawling ants" border.  If the character is not centered where you
+need it, grab it with the cursor and drag it (I've had trouble with
+this dragging part, for some reason I haven't discovered, it doesn't
+always work.  It's easier to just plop the character in the center of
+the image and then crop it.)
+
+You may wish to edit the image.  Select the single-pixel brush.  In
+the image window, hold down the right mouse button.  A menu appears.
+Move the cursor over Dialogs (the last entry).  Another menu appears.
+Move the cursor over Brushes and release the right mouse button.  
+The Brush Selection panel appears.  Click on the little dot in the upper
+right corner.  The text "Circle (01) (1 x 1)" appears.
+
+Draw in the image.  On the tools panel, click on the pencil.  Move the
+cursor over one of the pixels (checkerboard squares) in the image
+window.  Click.  The pixel becomes black.  On the tools panel, click on the
+eraser.  Move the cursor over one of the black pixels and click.  The
+pixel becomes transparent again.  That's how you draw.
+
+In the Tools panel, click on the X-acto knife picture to select
+the Crop tool.  
+
+In the image window, move the cursor over the upper left pixel of the
+area you want to keep.  Press down the left mouse button and hold it down
+as you drag the cursor to the lower right pixel of the area.  Release the
+mouse.  The Crop panel appears.  Click on OK.  The image is cropped.
+
+To write out the image, put the cursor in the image window and hold down the 
+right mouse button.  Hold down the button as you move the cursor over File.
+Another menu appears, continue to hold down the button and move the cursor over
+Save As.  Relase the button.  The Save Image panel appears.
+
+Type in the image file name you want, ending in ".gif".
+
+Click on OK.  The Save As GIF panel appears.  Click on OK.  The GIF is saved.

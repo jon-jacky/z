@@ -1,0 +1,196 @@
+<html>
+<head>
+<link rel="stylesheet" href="../zed.css" type="text/css">
+<title>Obtaining and Installing Z2HTML</title>
+</head>
+
+<body>
+
+<h1><a name="top">Obtaining and Installing <b>Z2HTML</b></a></h1>
+<p>
+<b>Z2HTML</b> is just a few scripts, a directory of images for the Z
+symbols, and a stylesheet.  Use the scripts to translate your LaTeX
+source to HTML.  The HTML pages contain links to the images.  The
+stylesheet controls the appearance of the Z text.
+</p>
+
+<p>
+<a href="#scripts">Scripts</a><br>
+<a href="#images">Images</a><br>
+<a href="#stylesheet">Stylesheet</a><br>
+</p>
+
+<p>
+Back to the <a href="z2html.html"><b>Z2HTML</b> home page</a>.
+</p>
+
+<hr>
+
+<h2><a name="scripts">Scripts</a></h2>
+
+
+<p>
+The <b>z2html.sed</b> script is the first pass; it translates the Z
+LaTeX macros and some other LaTeX commands to HTML.  
+</p>
+
+<p>
+The <b>paragraph.awk</b> script is the second pass; it puts paragraph
+tags around each informal paragraph with so they don't all run
+together in the browser.  It also puts paragraph tags between
+consecutive Z formulas to provide some space.
+</p>
+
+<p>
+The <b>z2html</b> shell command
+invokes these two scripts in a pipeline, taking the name of the LaTeX
+source file from the command line.
+</p>
+
+<p>
+The <b>toc.sed</b> script creates a table of contents from the HTML
+output of <b>z2html.sed</b>.
+</p>
+
+<p>
+The scripts are just text files.  Use your browser's <b>Save As...</b>
+function to copy them.  Here they are:
+</p>
+
+<p>
+<ul>
+<li><a href="z2html.txt">z2html.sed</a></li>
+<li><a href="paragraph.txt">paragraph.awk</a></li>
+<li><a href="z2html-cmd.txt">z2html</a></li>
+<li><a href="toc.txt">toc.sed</a></li>
+</ul>
+</p>
+
+<p>
+Here are links to a <a href="z2html-nostyle.html">no-style-sheet</a> version
+and a <a href="z2html-symbol.html">symbol-font</a> version.
+</p>
+
+<p>
+(Note that the file at the link shown as <b>z2html.sed</b> is named
+<b>z2html.txt</b> so your browser will display it.  Ditto for the
+others. Be sure to rename the files when you copy them to your
+system).
+</p>
+
+<p>
+Obviously, you must run the scripts on a system that provides
+<b>sed</b> and <b>awk</b>.  If you want to use the <b>z2html</b> shell
+command it must also provide a Unix-like shell with pipes.
+</p>
+
+<p>
+The scripts were developed under Linux (Red Hat 5.2) and have also
+been tested under HP-UX 10.20.  The <b>z2html.sed</b> script does not
+work with the <b>sed</b> shipped with HP-UX -- it requires GNU
+<b>sed</b>.  However the <b>paragraph.awk</b> script does work with HP-UX
+<b>awk</b> -- it does not require GNU <b>awk</b> (<b>gawk</b>).
+</p>
+
+<hr>
+
+<h2><a name="images">Images</a></h2>
+
+<p>
+The <b>Z2HTML</b> tool represents the Z symbols with images.  The
+<b>z2html.sed</b> script translates each Z symbol command in the LaTeX
+source to an <b>img</b> link to an image file in the <b>zimg</b>
+directory.
+</p>
+
+<p>
+You can download this gzipped tar file of the entire <a href="zimg.tar.gz">zimg
+directory</a> (less than 4.5 kbytes).
+</p>
+
+<p>
+All of the Z symbol images linked to pages translated by <b>Z2HTML</b>
+have names like <b>power-m.gif</b>, where <b>power</b> is the name of
+the LaTeX command and <b>-m</b> indicates medium size.  The <b>-m</b>
+medium symbol images were designed to look best with the <b>14 point
+Helvetica</b> font with Netscape 4 under Linux on a 1024 x 768 pixel
+display (usual for 17 inch monitors).  They look alright with 12 point
+Helvetica also.  
+</p>
+
+<p>
+The several <b>black-*.gif</b> and <b>clear.gif</b> images are used
+to make the borders and spaces in the Z boxes.
+</p>
+
+<p>
+The <b>zimg</b> directory also contains <b>power-s.gif</b> and several
+other <b>-s</b> (small) images designed to match the 12 point
+Helvetica font.  The <b>Z2HTML</b> tool does not use any of these small
+images, and there are no plans to make a complete set.  Once there were
+plans to make an <b>-l</b> (large) set to match the 18 point font.
+</p>
+
+<p>
+If you would like to make your own symbol images, here are some <a
+href="gif-howto.txt">instructions</a>.
+</p>
+
+<p>
+In every directory on the web server where you install the translated
+HTML output, there must be a <b>zimg</b> subdirectory that contains all 
+the symbol image files.  The easiest way to provide this on Unix-like 
+systems is to make a symbolic link in each directory to a single <b>zimg</b>
+directory.
+</p>
+
+<hr>
+
+<h2><a name="stylesheet">Stylesheet</a></h2>
+
+<p>
+Pages translated by <b>Z2HTML</b> contain a link to an external
+stylesheet named <b>zed.css</b>.  Use the stylesheet to control the
+appearance of the Z text.  For example, you can specify the font and
+size of the Z text to match the symbol images.  Here is the version 
+used at this site:
+<p>
+
+<p>
+<ul>
+<li><a href="zed.txt">zed.css</a></li>
+</ul>
+</p>
+
+
+</p>
+Follow this link for an explanation and other examples of 
+<a href="z-stylesheet.html">Z stylesheets</a>.
+</p>
+
+<p>
+In every directory on the web server where you install the translated
+HTML output, you should also put a copy of <b>zed.css</b>.  Again, the
+easiest way is to make a symbolic link in each directory to a single
+stylesheet.
+</p>
+
+Back to <a href="#top">top</a>
+
+<HR>
+
+<ADDRESS>
+<A HREF="http://www.radonc.washington.edu/prostaff/jon/">Jonathan Jacky</A> /
+<A HREF="http://www.radonc.washington.edu/">Department of Radiation Oncology</A>
+ 
+Box 356043<br>
+<a href="http://www.washington.edu/">University of Washington</a> /
+Seattle, Washington 98195-6043 / USA<BR>
+Tel (206) 598-4117 / Fax (206) 598-6218<BR>
+<p>
+E-mail: jon@u.washington.edu
+</ADDRESS>
+
+
+</body>
+</html>

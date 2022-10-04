@@ -1,0 +1,2 @@
+# z2html script, parameter is full input file name including .tex or whatever
+cat $1 | sed -f z2html.sed | awk -f paragraph.awk

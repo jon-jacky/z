@@ -1,0 +1,353 @@
+<html>
+
+<head>
+<link rel="stylesheet" href="zed.css" type="text/css">
+<title>Z lecture notes: Synthesis</title>
+</head>
+
+<body>
+
+<p class="informal">
+<h3>SYNTHESIS</h3>
+</p>
+
+
+
+<p>
+Based on chapter 10 in
+<a href="../z-book/index.html">
+The Way of Z</a>.
+</p>
+
+<p>
+Links to more <a href="z-lectures.html">Z lectures</a>.
+</p>
+
+<p class="informal">
+This page looks best when this <var class="zed"><img height=11 width=9 alt="\power" src="zimg/power-m.gif"></var> and this <var class="zed">X</var> are 
+about the same size: <var class="zed"><img height=11 width=9 alt="\power" src="zimg/power-m.gif"> X</var>.  See these <a href="z-viewing-tips.html">viewing tips</a>.
+</p>
+
+<hr>
+
+<p class="informal">
+Sets (functions, relations, ...) and logic are all we need to write
+small formal descriptions.
+</p>
+
+<p class="informal">
+Well-chosen notational conventions can make mathematical texts
+easier to read.
+</p>
+
+<p class="informal">
+Formal descriptions are not just paraphrased natural language.
+Writing useful formal descriptions requires design judgment.
+</p>
+
+<hr>
+
+<p class="informal">
+SET COMPREHENSION
+</p>
+
+<p class="informal">
+Combine declaration, predicate, expression.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> {&nbsp; declaration | predicate <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> expression &nbsp;} </td></tr>
+</table>
+</div>
+ 
+<p class="informal">
+can be thought of this way
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed">{&nbsp; source | filter <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> pattern &nbsp;} </td></tr>
+</table>
+</div>
+
+
+<p class="informal">
+The expression and predicate are optional.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> <img height=11 width=10 alt="\nat" src="zimg/nat-m.gif"> == {&nbsp; i: <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> | i <img width=7 height=9 alt="\geq" src="zimg/geq-m.gif"> 0 &nbsp;} </td></tr>
+</table>
+</div>
+
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> ODD == { i: <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> 2*i+1 } </td></tr>
+</table>
+</div>
+
+
+<p class="informal">
+If the expression is the <em>characteristic tuple</em>, it can be
+omitted.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> line == {&nbsp; x,y: <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> | y = m*x+b &nbsp;} </td></tr>
+</table>
+</div>
+
+<p class="informal">
+means the same as
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> line == {&nbsp; x,y: <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> | y = m*x+b <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> (x,y) &nbsp;} </td></tr>
+</table>
+</div>
+
+<hr>
+
+<p class="informal">
+SPECIFICATIONS
+</p>
+
+<p class="informal">
+Set comprehensions are specifications in 
+miniature.
+</p>
+
+<p class="informal">
+A prime number is an integer larger than 1 that is only divisible by
+itself and 1. Informally,
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> PRIME == { 2, 3, 5, 7, 11, 13, 17, ... } </td></tr>
+</table>
+</div>
+
+<p class="informal">
+Paraphrasing the English
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed">PRIME == {&nbsp; n: <img height=11 width=10 alt="\nat" src="zimg/nat-m.gif"> | n &gt; 1 <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> <img width=7 height=7 alt="\lnot" src="zimg/lnot-m.gif"> (<img width=6 height=10 alt="\exists" src="zimg/exists-m.gif"> m: 2 .. n-1 <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> n <b>mod</b> m = 0) &nbsp;}</td></tr>
+</table>
+</div>
+
+<p class="informal">
+Can't we do better? A prime is <em>not</em> a product of numbers larger
+than 1.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"><img height=11 width=10 alt="\nat" src="zimg/nat-m.gif"><sub><font size=-3>2</font></sub> == <img height=11 width=10 alt="\nat" src="zimg/nat-m.gif"> \ { 0, 1 }</td></tr>
+<tr> <td class="zed"><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td class="zed">PRIME == <img height=11 width=10 alt="\nat" src="zimg/nat-m.gif"><sub><font size=-3>2</font></sub> \ {&nbsp; n,m: <img height=11 width=10 alt="\nat" src="zimg/nat-m.gif"><sub><font size=-3>2</font></sub> <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> n * m &nbsp;}</td></tr>
+</table>
+</div>
+
+<p class="informal">
+We can make specifications clearer by moving away from a literal
+paraphrase of the English, and using set operators instead of negation and
+quantification.
+</p>
+
+<hr>
+
+<p class="informal">
+LAMBDA EXPRESSION
+</p>
+
+<p class="informal">
+<em>Lambda expressions</em> define functions.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> (<img width=8 height=10 alt="\lambda" src="zimg/lambda-m.gif"> declaration | predicate <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> expression) </td></tr>
+</table>
+</div>
+ 
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> isqr == (<img width=8 height=10 alt="\lambda" src="zimg/lambda-m.gif"> i: <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> i*i) </td></tr>
+</table>
+</div>
+
+<p class="informal">
+means the same as this set comprehension.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> isqr == {&nbsp; i: <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> i <img height=9 width=10 alt="\mapsto" src="zimg/mapsto-m.gif"> i*i &nbsp;} </td></tr>
+</table>
+</div>
+
+<p class="informal">
+Both mean the same as 
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>isqr: <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> <img height=11 width=10 alt="\nat" src="zimg/nat-m.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=9 height=10 alt="\forall" src="zimg/forall-m.gif"> i: <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> isqr&nbsp;i = i*i</td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+<p class="informal">
+Lambda expressions enable us to use functions without
+writing declarations.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> 9 = (<img width=8 height=10 alt="\lambda" src="zimg/lambda-m.gif"> i: <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> i*i)&nbsp;3 </td></tr>
+</table>
+</div>
+
+<hr>
+
+<p class="informal">
+RESTRICTED QUANTIFIERS
+</p>
+
+<p class="informal">
+<em>Restricted quantifiers</em> abbreviate common predicates.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> <img width=9 height=10 alt="\forall" src="zimg/forall-m.gif"> i: ns | odd(i) <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> i <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> nmax </td></tr>
+</table>
+</div>
+
+<p class="informal">
+means
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> <img width=9 height=10 alt="\forall" src="zimg/forall-m.gif"> i: ns <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> odd(i) <img width=13 height=7 alt="\implies" src="zimg/implies-m.gif"> i <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> nmax </td></tr>
+</table>
+</div>
+
+<p class="informal">
+and
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> <img width=6 height=10 alt="\exists" src="zimg/exists-m.gif"> i: ns | odd(i) <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> i <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> nmax </td></tr>
+</table>
+</div>
+
+<p class="informal">
+means 
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> <img width=6 height=10 alt="\exists" src="zimg/exists-m.gif"> i: ns <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> odd(i) <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> i <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> nmax </td></tr>
+</table>
+</div>
+
+<p class="informal">
+In general
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td class="zed">(<img width=9 height=10 alt="\forall" src="zimg/forall-m.gif"> d | p <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> q) <img width=13 height=7 alt="\iff" src="zimg/iff-m.gif"> (<img width=9 height=10 alt="\forall" src="zimg/forall-m.gif"> d <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> p <img width=13 height=7 alt="\implies" src="zimg/implies-m.gif"> q)</td></tr>
+<tr> <td class="zed"><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td class="zed">(<img width=6 height=10 alt="\exists" src="zimg/exists-m.gif"> d | p <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> q) <img width=13 height=7 alt="\iff" src="zimg/iff-m.gif"> (<img width=6 height=10 alt="\exists" src="zimg/exists-m.gif"> d <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> p <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> q)</td></tr>
+</table>
+</div>
+
+<hr>
+
+<p class="informal">
+CONVENIENCES AND SHORTCUTS
+</p>
+
+<p class="informal">
+<em>Local definitions</em> factor out common expressions.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed">(<b>let</b> r == iroot(a) <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> r*r <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> a &lt; (r+1)*(r+1))</td></tr>
+</table>
+</div>
+
+<p class="informal">
+means 
+</p>
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed">        iroot(a) * iroot(a) <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> a &lt; (iroot(a)+1) * (iroot(a)+1)</td></tr>
+</table>
+</div>
+
+
+<p class="informal">
+<em>Conditional expressions</em> simplify two-way case analyses.
+</p>
+
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> | x | = <b>if</b> x <img width=7 height=9 alt="\geq" src="zimg/geq-m.gif"> 0 <b>then</b> x <b>else</b> -x </td></tr>
+</table>
+</div>
+
+<p class="informal">
+means
+</p>
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed">(x <img width=7 height=9 alt="\geq" src="zimg/geq-m.gif"> 0 <img width=8 height=7 alt="\land" src="zimg/land-m.gif">| x | = x) <img width=8 height=7 alt="\lor" src="zimg/lor-m.gif"> (x &lt; 0 <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> | x | = -x)</td></tr>
+</table>
+</div>
+
+
+<p>
+Back to <a href="z-lectures.html">Z lectures</a>.
+</p>
+
+<HR>
+
+<ADDRESS>
+<A HREF="http://staff.washington.edu/~jon/">Jonathan Jacky</A> /
+<a href="http://www.washington.edu/">University of Washington</a> /
+Seattle, Washington / USA<br>
+E-mail: jon@u.washington.edu
+</ADDRESS>
+
+
+
+</body>
+</html>

@@ -1,0 +1,227 @@
+% binding-slides.tex (root is binding.tex)
+
+\pagestyle{empty}
+
+\begin{slide}{}
+SCHEMA TYPES AND BINDINGS
+
+A schema defines a new type whose instances are record-like objects
+called {\em bindings}.
+
+There are only four kinds of data types in Z.
+
+{\em Basic types}, $[X]$, instances are individuals.
+
+{\em Set types}, $\power X$, instances are {\em sets}.
+
+{\em Cartesian product types}, $X \cross Y$, instances are {\em tuples}.
+
+{\em Schema types}, $\lblot x: X; y: Y \rblot$, instances are {\em bindings}.
+
+Schema types and bindings enable Z to model large systems
+and support an object-oriented style.
+\end{slide}
+
+\begin{slide}{}
+CARTESIAN PRODUCT TYPES
+
+Declare the Cartesian product type $DATE$.
+
+\begin{zed} DATE == DAY \cross MONTH \cross YEAR \end{zed}
+Instances of $DATE$ are tuples.
+
+\begin{axdef}
+	landing, opening: DATE
+\where
+	landing = (20, 7, 1969) \\
+	opening = (9, 11, 1989)
+\end{axdef}
+But nothing prevents tuples that indicate impossible dates.
+
+\begin{axdef}
+	d: DATE
+\where
+	d = (29, 2, 1997) \\
+\end{axdef}
+Cartesian product types cannot express constraints between components.
+\end{slide}
+
+\begin{slide}{}
+SCHEMA TYPES
+
+Can express contraints between components.
+
+\begin{zed}
+	days == \langle 31, 28, 31, 30, 31, 30, \dots,  30, 31 \rangle
+\end{zed}
+
+\begin{schema}{TypicalDate}
+	day: 1 \upto 31 \\
+	month: 1 \upto 12 \\
+	year: \num 
+\where
+	day \leq days~month
+\end{schema}
+
+%%prerel leap
+\begin{zed}
+	(leap \_) == \{~ y: \num @ 4*y ~\} \setminus \\
+\t2		(\{~ y: \num @ 100*y ~\} \setminus \{~ y: \num @ 400*y ~\})
+\end{zed}
+
+\begin{schema}{Feb29}
+	month, day, year: \num
+\where
+	month = 2 \\
+	day = 29 \\
+	leap~year
+\end{schema}
+
+\begin{zed} Date \defs TypicalDate \lor Feb29 \end{zed} 
+
+\end{slide}
+
+\begin{slide}{}
+SCHEMA TYPE SIGNATURE
+
+The schema type is determined by the {\em signature}: names and types
+(but not the order) of state variables.  
+
+\begin{schema}{TypicalDate}
+	day: 1 \upto 31 \\
+	month: 1 \upto 12 \\
+	year: \num 
+\where
+	day \leq days~month
+\end{schema}
+The signature is visible
+after {\em normalizing}.
+
+\begin{schema}{TypicalDate}
+	day, month,year: \num
+\where
+	day \in 1 \upto 31 \\
+	month \in 1 \upto 12 \\
+	day \leq days~month
+\end{schema}
+The schema type is $\lblot day, month, year: \num \rblot$.  
+
+\end{slide}
+
+\begin{slide}{}
+USING SCHEMA TYPES
+
+Schema references can appear in declarations.
+The {\em selector} dot indicates particular state variables.
+
+\begin{axdef}
+	landing: Date
+\where
+	landing.day = 20 \\
+	landing.month = 7 \\
+	landing.year = 1969
+\end{axdef} 
+or
+
+\begin{schema}{MultiEditor}
+	active: NAME \\
+	buffer: NAME \pfun Editor
+\where
+	active \in \dom buffer
+\end{schema}
+Schema references can be used as set valued expressions.
+
+\end{slide}
+
+\begin{slide}{}
+SCHEMA TYPE NOTATION
+
+According to {\em The Z Notation: A Reference Manual (ZRM)},
+the notation for schema types and bindings is not part of Z itself.
+
+This is not Z, according to the {\em ZRM}.
+
+\begin{axdef}
+	landing: \lblot day, month, year:\num \rblot
+\where
+	landing = \langle day \bind 20, \\
+\t2		month \bind 7, year \bind 1969 \rangle
+\end{axdef} 
+
+This alternative must be used instead.
+
+\begin{axdef}
+	landing: Date
+\where
+	landing.day = 20 \\
+	landing.month = 7 \\
+	landing.year = 1969
+\end{axdef} 
+
+\end{slide}
+
+\begin{slide}{}
+BINDING FORMATION OPERATOR, $\theta$
+
+$\theta S$ (theta $S$) is the (nameless) instance of schema type
+$S$ which is in scope. Instead of
+
+\begin{axdef}
+	weekday: Date \fun 0 \upto 6
+\where
+\forall d: Date @ weekday(d) = (d.day + \dots) \mod 7
+\end{axdef}
+we can write
+
+\begin{axdef}
+	weekday: Date \fun 0 \upto 6
+\where
+\forall Date @ weekday(\theta Date) = (day + \dots) \mod 7
+\end{axdef}
+Instead of 
+\begin{schema}{\Xi Editor}
+        \Delta Editor
+\where
+        left' = left \\
+        right' = right
+\end{schema}
+we can write
+
+\begin{zed}
+\Xi Editor \defs [~ \Delta Editor | \theta Editor' = \theta Editor~]
+\end{zed}
+
+\end{slide}
+
+\begin{slide}{}
+SCHEMAS AS RELATIONS
+
+We can use $\theta$ to define the binary relation
+corresponding to an operation schema.
+
+\begin{schema}{Precedes}
+	\Delta Date
+\where
+	(year < year') \lor \\
+	(year = year' \land month < month') \lor \\
+	(year = year' \land month = month' \land day < day') 
+\end{schema}
+
+\begin{zed} 
+	precedes == \{~ Precedes @ (\theta Date, \theta Date') ~\}
+\end{zed}
+Now $precedes$ is a binary relation on $Date$.
+
+\begin{schema}{Biography}
+	name: NAME \\
+	birth, death: Date \\
+	\dots
+\where
+	birth \inrel{precedes} death \\
+	\dots
+\end{schema}
+
+\end{slide}
+
+
+

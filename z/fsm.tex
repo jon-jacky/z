@@ -1,0 +1,135 @@
+% fsm.tex
+
+\section*{Finite state machine}
+
+(Excerpts from Chapter 6, "From prose to Z: control console", pages
+39 - 48 in <a href="../z-book/index.html">The Way of Z</a>.  Sections
+explaining the motivation are omitted here.)
+
+\section*{State transition diagram}
+
+We can draw a {\em state transition diagram} to illustrate 
+a {\em finite state machine} model.
+
+(Insert diagram here)
+
+States are indicated by bubbles; transitions between states by arrows.
+The arrows are labelled with the events that cause state transitions.
+Thus, in the {\bf PATIENTS} state pressing the {\bf ENTER} key causes
+a transition to the {\bf FIELDS} state, but in the {\bf FIELDS} state
+pressing {\bf ENTER} gets you to {\bf SETUP}.
+
+We can trace all possible treatment sequences by
+following the arrows around the diagram. 
+
+\section*{State transition table}
+
+The state transition diagram is a picture of our state machine model.
+There are other ways to represent the same model.  
+Here is the {\em state transition table}.  
+
+(Insert table here)
+
+Entries in the table indicate
+the next state that is reached when the event indicated by the column
+heading occurs during the state indicated by the row heading.
+
+This table is a bit more explicit than the state transition diagram because
+it makes it clear when events are ignored.  For example, pressing the
+{\bf SELECT PATIENT} key in the {\bf BEAM ON} mode has no effect 
+(causes no state
+change); this is indicated by the hyphen {\bf ---} in the table.  Including
+all of these in the diagram would make it too cluttered.  As notations grow
+more formal, they become more explicit and rely less on unwritten
+assumptions.
+
+\section*{Z notation}
+
+Finally, we express the state machine model in Z (Fig.~\ref{fig:z}).
+Don't worry about the details of the notation for now.  You should be
+able to see that the function $transitions$ models the state
+transition table.   For example, the expression 
+\mbox{$(patients,enter) \mapsto fields$} corresponds to the single
+transition in the first row of the
+table: when the $patients$ screen is displayed, pressing $enter$
+displays the $fields$ screen.  Likewise, 
+\mbox{$(fields, select\_patient) \mapsto patients,(fields, enter) \mapsto setup$}
+represents the two transitions in the second row of the table.
+
+\begin{zed}
+        STATE ::= patients | fields | setup | ready | beam\_on
+\also
+ EVENT ::= select\_patient | select\_field | enter | start | stop | ok | intlk
+\also
+        FSM == (STATE \cross EVENT) \pfun STATE
+\end{zed}
+
+\begin{axdef}
+        no\_change, transitions, control: FSM
+\where
+        control = no\_change \oplus transitions
+\also
+        no\_change = \{~ s: STATE; e: EVENT @ (s, e) \mapsto s ~\}
+\also
+        transitions = \{~ (patients, enter) \mapsto fields, \\
+\also
+\t2             (fields, select\_patient) \mapsto patients,
+                        (fields, enter) \mapsto setup, \\
+\also
+\t2             (setup, select\_patient) \mapsto patients,
+                        (setup, select\_field) \mapsto fields, \\
+\t3			(setup, ok) \mapsto ready, \\
+\also
+\t2             (ready, select\_patient) \mapsto patients,
+                        (ready, select\_field) \mapsto fields, \\
+\t3			(ready, start) \mapsto beam\_on, 
+			(ready, intlk) \mapsto setup, \\
+\also
+\t2             (beam\_on, stop) \mapsto ready, 
+                        (beam\_on, intlk) \mapsto setup ~\}
+\end{axdef}
+
+This is the most explicit version yet. The definition of $no\_change$ spells
+out what was left to convention before: in certain states, certain inputs do
+not cause a state change.
+
+This example already illustrates two of the most powerful concepts in formal
+methods: using compact symbolic expressions to represent lots of cases in a
+little space, and using operators to build up complex formulas from simpler
+ones.
+
+State transition tables are often very sparse: most of the entries are
+empty "nothing changes" cells that make the tables large and
+difficult to read.  In Z we don't have to enumerate all the
+$no\_change$ transitions as we did in the table --- we can do it
+symbolically; $no\_change$ is actually a state machine that does
+nothing.  We define a second machine, $transitions$, that includes
+only the transitions where something actually happens.  Then we use
+the Z {\em override} operator $\oplus$ to combine the two.  The
+expression \mbox{$no\_change \oplus transitions$} describes the state
+machine that behaves as $no\_change$, except when there is a relevant
+entry in $transitions$. 
+
+More importantly, the diagram and the table are specialized notations that
+only work for finite state machines.  We cannot use them  to attack the
+hard parts of the problem that I left out of this toy example.
+For example, what really distinguishes the state {\bf READY} from
+{\bf SETUP}?  We glossed over this --- we merely said the system becomes
+ready when the $ok$ event occurs.  This mysterious $ok$ event does not
+come from a key or button; we left it undefined.  But we must define
+it; this transition is the central safety-critical event in the
+program because it closes the relay that allows the beam to turn on.
+
+In {\bf READY}, all the settings match their prescribed values; the $ok$
+event occurs when the system achieves this condition. (In fact, some
+settings must match exactly, while others are permitted to vary within a
+tolerance; some settings that don't match can be overridden, while others
+cannot.  And so on.) We cannot represent this with our diagrams or tables
+because it involves dozens of settings that vary over continuous ranges.  We
+need to model {\em values} and {\em relations} between values.  We will see
+how when we develop a more complete model of this program in
+chapters~21 and~22.
+
+
+
+ 

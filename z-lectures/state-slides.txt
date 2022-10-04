@@ -1,0 +1,64 @@
+% state-slides.tex (root is state.tex)
+
+\pagestyle{empty}
+
+\begin{slide}{}
+STATE
+
+A {\em state} is a {\em situation} or ``state of affairs''.
+
+We model a state as an assignment of {\em values} to a collection of 
+named {\em variables}.
+
+States can represent assumptions (preconditions),
+goals (results, postconditions), or safety requirements (invariants).
+
+State can be divided into fixed configuration (constants) and volatile
+components (state variables).
+
+Programming languages do not describe states
+directly; they can only describe state {\em transitions}.
+
+\end{slide}
+
+
+\begin{slide}{}
+
+STATE TRANSITIONS
+
+Programming languages describe state transitions.
+
+\begin{verbatim}
+  int iroot(int arg)
+  /* Integer square root */
+  {
+    int i, term, sum;
+
+    term = 1; sum = 1;
+    for (i = 0; sum <= arg; i++) {
+        term = term + 2;   
+        sum = sum + term;  
+    }
+    return i; 
+  }
+\end{verbatim}
+
+\end{slide}
+
+\begin{slide}{}
+
+STATES
+
+Specification languages describe states directly.
+
+
+\begin{axdef}
+        iroot: \nat \fun \nat 
+\where
+	\forall a: \nat @ \\
+\t1		iroot(a) * iroot(a) \leq a < \\
+\t2			(iroot(a)+1) * (iroot(a)+1)
+\end{axdef}
+
+\end{slide}
+

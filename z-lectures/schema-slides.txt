@@ -1,0 +1,368 @@
+% schema-slides.tex (root is schema.tex)
+
+
+\pagestyle{empty}
+
+\begin{slide}{}
+SCHEMAS
+
+Math in a box, with a name attached.
+
+Unique to Z.
+
+Schema calculus builds large schemas from smaller ones.
+
+Model states and operations.
+
+Can be used as declarations, predicates, expressions, types, sets \dots
+
+\end{slide}
+
+\begin{slide}{}
+STATE SCHEMA
+
+Simple text editor with limited memory.
+
+\begin{zed}
+	[CHAR]
+\also
+	TEXT == \seq CHAR
+\end{zed} 
+
+\begin{axdef}
+	maxsize: \nat
+\where
+	maxsize \leq 65535
+\end{axdef} 
+The editor state is modelled by two {\em state variables}, the texts
+to the left and right of the cursor.
+
+\begin{schema}{Editor}
+	left, right: TEXT 
+\where
+	\# (left \cat right) \leq maxsize
+\end{schema}
+The editor starts up empty.
+
+\begin{zed}Init \defs [~ Editor | left = right = \langle \rangle ~] \end{zed}
+
+\end{slide}
+
+\begin{slide}{}
+OPERATION SCHEMA
+
+The $Insert$ operation inserts a printing character to the left of the
+cursor.
+
+\begin{axdef}
+	printing: \power CHAR
+\end{axdef}
+
+\begin{schema}{Insert}
+	\Delta Editor \\
+	ch?: CHAR
+\where
+	ch? \in printing \\
+	left' = left \cat \langle ch? \rangle \\
+	right' = right
+\end{schema}
+
+Delta in $\Delta Editor$ indicates state change.
+
+Unprimed $left$, primed $left'$ represent before and after.
+
+Question mark $ch?$ indicates input.
+
+\end{slide}
+
+\begin{slide}{}
+PRECONDITIONS, PARTIAL OPERATIONS
+
+The $Forward$ operation moves the cursor forward.
+
+
+\begin{axdef}
+	right\_arrow: CHAR
+\where
+	right\_arrow \notin printing
+\end{axdef}
+
+
+\begin{schema}{Forward}
+	\Delta Editor \\
+	ch?: CHAR
+\where	
+	ch? = right\_arrow \\
+	right \neq \langle \rangle \\
+	left' = left \cat \langle head(right) \rangle \\
+	right' = tail(right)
+\end{schema}
+The {\em precondition} is the predicate that must be true for the
+operation to be defined, involving only inputs and unprimed ``before''
+variables.
+$Forward$ is a {\em partial} operation. It does not 
+cover the situation where the cursor is already at the end of the
+buffer, $right = \langle \rangle$
+
+\end{slide}
+
+\begin{slide}{}
+SCHEMA CALCULUS, TOTAL OPERATIONS
+
+In $EOF$ states the cursor is at end-of-file.
+
+\begin{schema}{EOF}
+        Editor
+\where
+        right = \langle \rangle
+\end{schema}
+
+Box up $right\_arrow$ for schema expressions.
+\begin{schema}{RightArrow}
+	ch?: CHAR
+\where
+	ch? = right\_arrow
+\end{schema}
+Xi in $\Xi Editor$ indicates no change in state.
+
+\begin{zed}
+        T\_Forward \defs Forward \\
+\t2		\lor (EOF \land RightArrow \land \Xi Editor)
+\end{zed} 
+$T\_Forward$ is a {\em total} operation that is defined in all
+$Editor$ states.
+
+\end{slide}
+
+\begin{slide}{}
+SCHEMA INCLUSION, EXPANSION
+
+Schemas can be used like macros.
+
+\begin{schema}{Editor}
+	left, right: TEXT 
+\where
+	\# (left \cat right) \leq maxsize
+\end{schema} 
+
+\begin{schema}{Init}
+        Editor
+\where
+        left = right = \langle \rangle
+\end{schema} 
+Any {\em included} schema name (or {\em schema reference})
+can be {\em expanded} by replacing the name by the text.
+
+\begin{schema}{Init}
+	left, right: TEXT 
+\where
+	\# (left \cat right) \leq maxsize \\
+        left = right = \langle \rangle
+\end{schema}
+
+\end{slide}
+
+
+\begin{slide}{}
+DECORATION, $\Delta$, $\Xi$
+
+{\em Decorations} give identifiers conventional meanings (prime $'$
+indicates ``after'').  Decorating a schema name decorates all its
+state variables.
+
+\begin{schema}{Editor'}
+	left', right': TEXT
+\where
+	\# (left' \cat right') \leq maxsize
+\end{schema} 
+$\Delta$ indicates the operation schema that includes the
+before state and the after state.
+
+\begin{zed}\Delta Editor \defs [~ Editor; Editor' ~] \end{zed}
+$\Xi$ indicates the operation where before and after states are the
+same.
+
+\begin{schema}{\Xi Editor}
+	\Delta Editor
+\where
+	left' = left \\
+	right' = right
+\end{schema}
+
+\end{slide}
+
+
+\begin{slide}{}
+SCHEMA CALCULUS
+
+Merge declarations, combine predicates.
+
+% To expand a {\em schema expression} merge declarations, combine
+% predicates using the same logical connective used as the {\em schema
+% operator}
+
+\begin{schema}{Quotient}
+	n, d, q, r: \nat
+\where
+	d \neq 0 \\
+	n = q*d + r
+\end{schema} 
+
+\begin{schema}{Remainder}
+	r, d: \nat
+\where
+	r < d
+\end{schema}
+
+\begin{zed} Division \defs Quotient \land Remainder \end{zed}
+means the same as
+
+
+\begin{schema}{Division}
+	n,d,q,r: \nat
+\where
+	d \neq 0 \\
+	r < d \\
+	n = q*d + r
+\end{schema} 
+
+\end{slide}
+
+\begin{slide}{}
+SCHEMA CALCULUS AND TOTAL OPERATIONS
+
+Any schema expression can be expressed as a single schema box.
+
+\begin{zed}
+	T\_Forward \defs Forward \\
+\t2		\lor (EOF \land RightArrow \land \Xi Editor) 
+\end{zed}
+means the same as
+
+\begin{schema}{T\_Forward}
+	left, right, left', right': TEXT \\
+	ch?: CHAR 
+\where
+	\# (left \cat right) \leq maxsize \\
+	\# (left' \cat right') \leq maxsize \\
+	ch? = right\_arrow \\
+	((right \neq \langle \rangle \\
+\t1		\land left' = left \cat \langle head~right \rangle \\
+\t1		\land right' = tail~right) \lor \\
+	(right = \langle \rangle \land left' = left \land right' = right))
+\end{schema}
+
+\end{slide}
+
+\begin{slide}{}
+OTHER SCHEMA CALCULUS OPERATORS
+
+There is a schema operator for every logical connective and
+quantifier.
+
+Conjunction and disjunction are most useful.
+
+Schema negation is uninituitive, not very useful.
+
+Two operators are not based on logical connectives:
+
+\begin{tabbing}
+xxxxxxxxxxx \= \kill \\ 
+$S \semi T$ \> Schema composition \\
+$S \pipe T$ \> Schema piping \\
+\end{tabbing}
+
+Composition is like relational composition and piping is like
+conjunction, {\em not} sequencing.  
+
+Z is not a programming language!
+
+
+\end{slide}
+
+\begin{slide}{}
+
+SCHEMAS AS DECLARATIONS, PREDICATES
+
+Schemas can be used like macros to write compact formulas.
+
+``When an editor is in its initial state, the cursor is at the end of
+the file''
+
+\begin{zed} \forall Editor | Init @ EOF \end{zed}
+
+This expands to an ordinary predicate.
+
+\begin{zed}
+\forall left, right: TEXT | \\
+\t1	\# (left \cat right) \leq maxsize @ \\
+\t2	left = right = \langle \rangle \implies right = \langle \rangle
+\end{zed}
+
+\end{slide}
+
+\begin{slide}{}
+GENERIC DEFINITIONS
+
+A definition of sequence concatenation $(\_ \cat \_)$ that applied to
+only one type would not be very useful.
+
+\begin{axdef}
+	\_ \cat \_ : TEXT \cross TEXT \fun TEXT % no parens needed
+\where
+	\dots
+\end{axdef} 
+The tool-kit provides this {\em generic definition}.
+
+\begin{gendef}[X]
+	\_ \cat \_ : \seq X \cross \seq X \fun \seq X
+\where
+	\dots
+\end{gendef} 
+$X$ is a {\em formal generic parameter} that can be {\em instantiated}
+with an {\em actual generic parameter}.
+
+Generic definitions can use patterns.
+
+\begin{zed} X \rel Y == \power (X \cross Y) \end{zed}
+Generic definitions can extend the Z notation.
+
+\end{slide}
+
+\begin{slide}{}
+GENERIC SCHEMAS
+
+{\em Generic schemas} have type parameters.
+
+\begin{schema}{Pool}[RESOURCE]
+	owner: RESOURCE \pfun USER \\
+	free: \power RESOURCE
+\where
+	(\dom owner) \cup free = RESOURCE \\
+	(\dom owner) \cap free = \emptyset
+\end{schema} 
+$RESOURCE$ could be instantiated with
+different types for memory pages, disk blocks, etc.
+
+\end{slide}
+
+\begin{slide}{}
+FREE TYPES
+
+Free types can model {\em recursive data types} used to build linked
+structures. 
+
+Example: define syntax of simple arithmetic expressions on natural
+numbers, such as $2+3$ and $(12 \div (2+3)) - 7$:
+
+\begin{syntax}
+	OP & ::= & plus | minus | times | divide 
+\also
+	EXP & ::= & const \ldata \nat \rdata \\
+	    & | & binop \ldata OP \cross EXP \cross EXP \rdata
+\end{syntax}
+
+\end{slide}
+
+
+

@@ -1,0 +1,307 @@
+\section{The Z Mathematical Tool-kit} \label{ch:toolkit}
+
+The Z mathematical tool-kit is a collection of types and operators
+somewhat like a standard library of types and functions in a
+programming language.
+
+The definitions in the tool-kit build up all the Z operators from
+a few fundamental constructs in logic and set theory.
+
+The tool-kit uses generic definitions very heavily: $X$, $Y$, and $Z$
+stand for any type, $S$ and $T$ are sets of any type, and $Q$ and $R$
+are binary relations between any two types.  The toolkit also makes
+extensive use of patterns in abbreviation definitions, for example it
+defines the binary relation symbol $\rel$ by $X \rel Y == \power (X \cross Y)$.
+
+These selections from the tool-kit are based on the 
+{\em Reference Manual}.  They define all the operators used in 
+{\em The Way of Z}, and a few more that are needed to define them.
+In a few places I've used English paraphrases for predicates, where
+the formal definition uses constructs or concepts not defined here.
+
+\newpage
+
+\section*{Sets}
+
+\subsection*{Glossary}
+
+\begin{tabular}{l c l}
+$\emptyset$ & ~-~ & Empty set: a set that has no elements \\
+$x \notin S$ & ~-~ & Non-membership: $x$ is not an element of $S$ \\
+$S \subseteq T$ & ~-~ & Subset: all elements of $S$ belong to $T$ \\
+$S \subset T$ & ~-~ & Proper subset: $S$ is a subset of $T$ and $S$ is not equal to $T$ \\
+$S \cup T$ & ~-~ & Union: the set of elements in either $S$ or $T$ \\
+$S \cap T$ & ~-~ & Intersection: the set of elements in both $S$ and $T$ \\
+$S \setminus T$ & ~-~ & Set difference: the set of elements in $S$ that are not in $T$ \\
+\end{tabular}
+
+\subsection*{Definitions}
+
+\begin{zed} \emptyset[X] == \{~ x: X | false ~\} \end{zed}
+
+\begin{gendef}[X]
+	\_ \subseteq \_, \_ \subset \_ : \power X \rel \power X \\ 
+   	\_ \cup \_ , \_ \cap \_, \_ \setminus \_: \power X \cross \power X \fun \power X \\
+\where
+	\forall x: X; y: Y; S, T: \power X @ 
+\also
+\t1	x \notin S \iff \lnot (x \in X) \land
+\also
+\t1	(S \subseteq T \iff (\forall x: X @ x \in S \implies x \in T)) \land
+\also
+\t1	(S \subset T \iff S \subseteq T \land S \neq T) \land
+\also 
+\t1	S \cup T = \{~ x: X | x \in S \lor X \in T ~\} \land
+\also 
+\t1	S \cap T = \{~ x: X | x \in S \land X \in T ~\} \land
+\also 
+\t1	S \setminus T = \{~ x: X | x \in S \land X \notin T ~\}
+\also
+\end{gendef}
+
+\newpage
+
+\section*{Pairs and binary relations I}
+
+\subsection*{Glossary}
+
+\begin{tabular}{l c l}
+$(x,y)$	  & ~-~ & The pair $x$,$y$ \\
+$x \mapsto y$ & ~-~ & Maplet: $x$ maps to $y$, same as $(x,y)$ \\
+$first~p$ & ~-~ & First element of pair $p$ \\
+$second~p$ & ~-~ & Second element of pair $p$ \\
+$\id X$ & ~-~ & Identity relation \\
+$X \rel Y$ & ~-~ & Binary relation \\
+$\dom R$ & ~-~ & Domain: the set of first elements of all pairs in $R$ \\
+$\ran R$ & ~-~ & Range: the set of second elements of all pairs in $R$ \\
+\end{tabular}
+
+\subsection*{Definitions}
+
+\begin{zed} 
+	X \rel Y == \power (X \cross Y)
+\also
+	\id X == \{ x: X @ x \mapsto x \}
+\end{zed}
+
+\begin{gendef}[X,Y]
+	first: X \cross Y \fun X \\
+	second: X \cross Y \fun Y \\
+	\_ \mapsto \_ : X \cross Y \fun X \cross Y \\
+	\dom: (X \rel Y) \fun \power X \\
+	\ran: (X \rel Y) \fun \power Y \\
+\where
+	\forall x: X; y: Y; R: X \rel Y @ \\
+\also
+\t1	first(x,y) = x \land
+\also
+\t1	second(x,y) = y \land
+\also
+\t1	x \mapsto y = (x,y) \land
+\also
+\t1	\dom R = \{~ x: X; y: Y | x \inrel{R} y @ x ~\} \land	
+\also
+\t1	\ran R = \{~ x: X; y: Y | x \inrel{R} y @ y ~\}
+\also
+\end{gendef}
+
+\newpage
+
+\section*{Pairs and binary relations II}
+
+\subsection*{Glossary}
+
+\begin{tabular}{l c l}
+$S \dres R$ & ~-~ & Domain restriction: the pairs in $R$ whose first element is in $S$ \\
+$R \rres T$ & ~-~ & Range restriction: the pairs in $R$ whose second element is in $T$ \\
+$S \dres R$ & ~-~ & Domain antirestriction: the pairs in $R$ whose first element is not in $S$ \\
+$R \rres T$ & ~-~ & Range antirestriction: the pairs in $R$ whose second element is not in $T$ \\
+$R \inv$ & ~-~ & Relational inverse: the  pairs in $R$, \\
+	&  & but with first and second elements exchanged \\
+$R \limg S \rimg$ & ~-~ & Relational image: the second elements of pairs \\
+		&  & in $R$ whose first element is in $S$. \\
+$R \oplus Q$ & ~-~ & Overriding: all pairs in $R$ or $Q$, \\
+	& & except pairs in $R$ whose first element is also in $Q$. \\
+$R \plus$ & ~-~ & Transitive closure of $R$ \\
+\end{tabular}
+
+\subsection*{Definitions}
+
+\begin{gendef}[X,Y]
+	\_ \dres \_, \_ \ndres \_ : \power X \cross (X \rel Y) \fun X \rel Y \\
+	\_ \rres \_, \_ \nrres \_ : (X \rel Y)  \cross  \power Y \fun X \rel Y \\
+	\_ \inv : (X \rel Y) \fun (Y \rel X) \\
+	\_ \limg \_ \rimg : (X \rel Y) \cross \power X \fun \power Y \\
+	\_ \oplus \_ : (X \rel Y) \cross (X \rel Y) \fun (X \rel Y) \\
+	\_ \plus : (X \rel X) \fun (X \rel X)
+\where
+	\forall x: X; y: Y; S: \power X; T: \power Y; Q, R: X \rel Y @ \\
+\also
+\t1 S \dres R = \{~ x: X; y: Y | x \in S \land x \inrel{R} y @ x \mapsto y ~\} \land	
+\also
+\t1 S \ndres R = \{~ x: X; y: Y | x \notin S \land x \inrel{R} y @ x \mapsto y ~\} \land	
+\also
+\t1 R \rres T = \{~ x: X; y: Y | x \inrel{R} y \land y \in T @ x \mapsto y ~\} \land	
+\also
+\t1 R \nrres T = \{~ x: X; y: Y | x \inrel{R} y \land y \notin T @ x \mapsto y ~\} \land	
+\also	
+\t1	R \inv = \{~ x: X; y: Y | x \inrel{R} y @ y \mapsto x ~\} \land \\
+\also 
+\t1 R \limg S \rimg = \{~ x: X; y: Y | x \in S \land x \inrel{R} y @ y ~\} \land	
+\also
+\t1	Q \oplus R = ((\dom R) \ndres Q) \cup R
+\also
+\t1	\mbox{\dots predicate for $\_ \plus$ omitted \dots}
+\also
+\end{gendef}
+
+
+\newpage
+
+\section*{Pairs and binary relations III}
+
+\subsection*{Glossary}
+
+\begin{tabular}{l c l}
+$Q \comp R$ & ~-~ & Relational composition: $Q$ composed with $R$ \\
+$R \circ Q$ & ~-~ & Backward relational composition, same as $Q \comp R$ \\
+\end{tabular}
+
+\subsection*{Definitions}
+
+\begin{gendef}[X,Y,Z]
+	\_ \comp \_ : (X \rel Y) \cross (Y \rel Z) \fun (X \rel Z) \\
+	\_ \circ \_ : (Y \rel Z) \cross (X \rel Y) \fun (X \rel Z) \\
+\where
+	\forall Q: X \rel Y; R: Y \rel Z @ \\
+\t3		Q \comp R = R \circ Q = \{~ x: X; y: Y; z: Z | x \inrel{Q} y \land y \inrel{R} z @ x \mapsto z ~\}
+\end{gendef}
+
+\newpage
+
+\section*{Numbers and arithmetic}
+
+\subsection*{Glossary}
+
+\begin{tabular}{l c l}
+$\num$ & ~-~ & The set of integers \\
+$\nat$ & ~-~ & The set of natural numbers, starting with zero \\
+$\nat_1$ & ~-~ & The set of strictly positive numbers, starting with one \\
+$+,-,*$ & ~-~ & Arithmetic operators: addition, subtraction, multiplication \\
+$\div,\mod$ & ~-~ & Arithmetic operators: integer division and remainder (modulus) \\
+$<,\leq$ & ~-~ &  Comparison: less than, less than or equal \\
+$>, \geq$ & ~-~ & Comparison: greater than, greater than or equal \\
+$i \upto j$ & ~-~ & Number range: the set of numbers starting with $i$ up through $j$ \\
+$min~S$ & ~-~ & Mininum: the smallest element in $S$, if any \\
+$max~S$ & ~-~ & Maximum: the largest element in $S$, if any \\
+$\# S$	& ~-~ & Size: the number of elements in $S$ \\
+$\power_1$ & ~-~ & Non-empty sets \\
+$\finset$ & ~-~ & Finite sets \\
+\end{tabular}
+
+\subsection*{Definitions}
+
+\begin{zed} 
+	[\num]
+\also
+	\nat == \{~ n: \num | n \geq 0 ~\}
+\also
+	\nat_1 == \nat \setminus \{ 0 \}
+\also
+	\power_1 X == \{~ S: \power X | S \neq \emptyset ~\}
+\also
+	\finset X == \{~ S: \power X | \mbox{\dots $S$ is finite \dots} ~\}
+\end{zed}
+
+\begin{axdef}
+	\_ + \_, \_ - \_, \_* \_ : \num \cross \num \fun \num \\
+      \_ \div \_, \_ \mod \_ : \num \fun (\num \setminus \{ 0 \}) \fun \num \\
+	\_ - : \num \fun \num \\
+	\_ < \_, \_ \leq \_, \_ \geq \_, \_ > \_ : \num \rel \num \\
+	\_ \upto \_ : \num \rel \num \fun \power \num \\
+	\#: \finset X \fun \nat \\
+	min, max: \power_1 \num \pfun \num
+\where
+	\forall a,b: \num @ a \upto b = \{~ i: \num | a \leq i \leq b ~\} \\
+\also
+\t1	\mbox{\dots predicates for other operators omitted \dots}
+\end{axdef}
+
+\newpage
+
+\section*{Functions}
+
+\subsection*{Glossary}
+
+\begin{tabular}{l c l}
+$X \pfun Y$ & ~-~ & Partial function: some members of $X$ are paired with a member of $Y$ \\
+$X \fun Y$ & ~-~ & Total function: every member of $X$ is paired with a member of $Y$ \\
+$X \pinj Y$ & ~-~ & Partial injection:  some members of $X$ are paired with different members of $Y$ \\
+$X \inj Y$ & ~-~ & Total injection: every member of $X$ is paired with a different member of $Y$ \\
+$X \bij Y$ & ~-~ & Bijection: every member of $X$ is paired with a different member of $Y$, \\
+	& & covering all $Y$'s \\
+\end{tabular}
+
+\subsection*{Definitions}
+
+\begin{zed}
+ X \pfun Y == \{~ f: X \rel Y | \mbox{Each member of $X$ appears no more than once.} ~\}
+\also
+ X \fun Y == \{~ f: X \pfun Y | \dom f = X ~\}
+\also
+ X \pinj Y == \{~ f: X \pfun Y | \mbox{Each member of $X$ is paired with a different member of $Y$.} ~\}
+\also
+ X \inj Y == (X \pinj Y) \cap (X \fun Y)
+\also
+ X \bij Y == \mbox{ \dots definition omitted \dots }
+\end{zed}
+
+\newpage
+
+\section*{Sequences}
+
+\subsection*{Glossary}
+
+\begin{tabular}{l c l}
+$\seq X$ & ~-~ & Sequence: the set of all sequences of $X$'s \\
+$\seq_1 X$ & ~-~ & Non-empty sequence: the set of all sequences of $X$'s \\
+	&  & with at least one element \\
+$\iseq X$ & ~-~ & Injective sequence: the set of all sequences of $X$'s \\
+	&  & where each element of $X$ appears only once \\
+$s \cat t$ & ~-~ & Concatenation: sequence $s$ with sequence $t$ appended \\
+$head~s$ & ~-~ & Head: the first element of sequence $s$ \\
+$last~s$ & ~-~ & Last: the last element of sequence $s$ \\
+$front~s$ & ~-~ & Front: all but the last element of sequence $s$ \\
+$tail~s$ & ~-~ & Tail: all but the first element of sequence $s$ \\
+$s \inseq t$ & ~-~ & Segment relation: the sequence $s$ appears in sequence $t$
+\end{tabular}
+
+\subsection*{Definitions}
+
+\begin{zed}
+	\seq X == \{~ f: \nat \ffun X | \dom f = 1 \upto \# f ~\}
+\also
+	\seq_1 X == \{~ f: \seq X | \# f > 0 ~\}
+\also
+	\iseq X == \seq X \cap (\nat \pinj X)
+\end{zed}
+
+\begin{gendef}[X]
+	head, last : \seq_1 X \fun X \\
+	tail, front : \seq_1 X \fun \seq X \\
+	\_ \cat \_ : \seq X \cross \seq X \fun seq X \\
+	\_ \inseq \_ : \seq X \rel \seq X \\
+\where
+	\forall s: \seq_1 X; u,v: \seq X @ \\
+\also 
+\t1	head(s) = s(1) \land
+\also
+\t1	last(s) = s(\# s) \land
+\also
+\t1	u \cat v = u \cup \{~ i: \dom v @ i + \#u \mapsto v(i) ~\}
+\also
+\t1	u \inseq v \iff (\exists s,t: \seq X @ s \cat u \cat t = v) 
+\also
+\t1	\mbox{\dots predicates for other operators omitted \dots}
+\also
+\end{gendef}

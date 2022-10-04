@@ -1,0 +1,553 @@
+<html>
+
+<head>
+<link rel="stylesheet" href="zed.css" type="text/css">
+<title>Z lecture notes: Schema Types and Bindings</title>
+</head>
+
+<body>
+
+
+
+<p class="informal">
+<h3>SCHEMA TYPES AND BINDINGS</h3>
+</p>
+
+
+
+<p>
+Based on chapter 13 in 
+<a href="../z-book/index.html">
+The Way of Z</a>.
+</p>
+
+<p>
+Links to more <a href="z-lectures.html">Z lectures</a>.
+</p>
+
+<p class="informal">
+This page looks best when this <var class="zed"><img height=11 width=9 alt="\power" src="zimg/power-m.gif"></var> and this <var class="zed">X</var> are 
+about the same size: <var class="zed"><img height=11 width=9 alt="\power" src="zimg/power-m.gif"> X</var>.  See these <a href="z-viewing-tips.html">viewing tips</a>.
+</p>
+
+<hr>
+
+
+<p class="informal">
+A schema defines a new type whose instances are record-like objects
+called <em>bindings</em>.
+</p>
+
+<p class="informal">
+There are only four kinds of data types in Z.
+</p>
+
+<p class="informal">
+<em>Basic types</em>, <var class="zed">[X]</var>, instances are individuals.
+</p>
+
+<p class="informal">
+<em>Set types</em>, <var class="zed"><img height=11 width=9 alt="\power" src="zimg/power-m.gif"> X</var>, instances are <em>sets</em>.
+</p>
+
+<p class="informal">
+<em>Cartesian product types</em>, <var class="zed">X <img width=7 height=7 alt="\cross" src="zimg/cross-m.gif"> Y</var>, instances are <em>tuples</em>.
+</p>
+
+<p class="informal">
+<em>Schema types</em>, <var class="zed"><img width=5 height=14 align=absbottom alt="\lblot" src="zimg/lblot-m.gif"> x: X; y: Y <img width=5 height=14 align=absbottom alt="\rblot" src="zimg/rblot-m.gif"></var>, instances are <em>bindings</em>.
+</p>
+
+<p class="informal">
+Schema types and bindings enable Z to model large systems
+and support an object-oriented style.
+</p>
+
+<hr>
+
+<p class="informal">
+CARTESIAN PRODUCT TYPES
+</p>
+
+<p class="informal">
+Declare the Cartesian product type <var class="zed">DATE</var>.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> DATE == DAY <img width=7 height=7 alt="\cross" src="zimg/cross-m.gif"> MONTH <img width=7 height=7 alt="\cross" src="zimg/cross-m.gif"> YEAR </td></tr>
+</table>
+</div>
+
+<p class="informal">
+Instances of <var class="zed">DATE</var> are tuples.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>landing, opening: DATE</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>landing = (20, 7, 1969) </td></tr>
+<tr> <td></td><td class="zed" colspan=2>opening = (9, 11, 1989)</td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+<p class="informal">
+But nothing prevents tuples that indicate impossible dates.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>d: DATE</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>d = (29, 2, 1997) </td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+<p class="informal">
+Cartesian product types cannot express constraints between components.
+</p>
+
+<hr>
+
+<p class="informal">
+SCHEMA TYPES
+</p>
+
+<p class="informal">
+Can express contraints between components.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed">days == <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> 31, 28, 31, 30, 31, 30, ...,  30, 31 <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"></td></tr>
+</table>
+</div>
+
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">TypicalDate</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>day: 1 .. 31 </td></tr>
+<tr> <td></td><td class="zed" colspan=2>month: 1 .. 12 </td></tr>
+<tr> <td></td><td class="zed" colspan=2>year: <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> </td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>day <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> days&nbsp;month</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed">(leap _) == {&nbsp; y: <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> 4*y &nbsp;} \ ({&nbsp; y: <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> 100*y &nbsp;} \ {&nbsp; y: <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> 400*y &nbsp;})</td></tr>
+</table>
+</div>
+
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">Feb29</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>month, day, year: <img height=11 width=10 alt="\num" src="zimg/num-m.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>month = 2 </td></tr>
+<tr> <td></td><td class="zed" colspan=2>day = 29 </td></tr>
+<tr> <td></td><td class="zed" colspan=2>leap&nbsp;year</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> Date <img height=11 width=11 alt="\defs" src="zimg/defs-m.gif"> TypicalDate <img width=8 height=7 alt="\lor" src="zimg/lor-m.gif"> Feb29 </td></tr>
+</table>
+</div>
+ 
+<hr>
+
+<p class="informal">
+SCHEMA TYPE SIGNATURE
+</p>
+
+<p class="informal">
+The schema type is determined by the <em>signature</em>: names and types
+(but not the order) of state variables.  
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">TypicalDate</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>day: 1 .. 31 </td></tr>
+<tr> <td></td><td class="zed" colspan=2>month: 1 .. 12 </td></tr>
+<tr> <td></td><td class="zed" colspan=2>year: <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> </td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>day <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> days&nbsp;month</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+<p class="informal">
+The signature is visible
+after <em>normalizing</em>.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">TypicalDate</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>day, month,year: <img height=11 width=10 alt="\num" src="zimg/num-m.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>day <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> 1 .. 31 </td></tr>
+<tr> <td></td><td class="zed" colspan=2>month <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> 1 .. 12 </td></tr>
+<tr> <td></td><td class="zed" colspan=2>day <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> days&nbsp;month</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+<p class="informal">
+The schema type is <var class="zed"><img width=5 height=14 align=absbottom alt="\lblot" src="zimg/lblot-m.gif"> day, month, year: <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> <img width=5 height=14 align=absbottom alt="\rblot" src="zimg/rblot-m.gif"></var>.  
+</p>
+
+<hr>
+
+<p class="informal">
+USING SCHEMA TYPES
+</p>
+
+<p class="informal">
+Schema references can appear in declarations.
+The <em>selector</em> dot indicates particular state variables.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>landing: Date</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>landing.day = 20 </td></tr>
+<tr> <td></td><td class="zed" colspan=2>landing.month = 7 </td></tr>
+<tr> <td></td><td class="zed" colspan=2>landing.year = 1969</td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+ 
+<p class="informal">
+or
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">MultiEditor</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>active: NAME </td></tr>
+<tr> <td></td><td class="zed" colspan=2>buffer: NAME <img width=14 height=8 alt="\pfun" src="zimg/pfun-m.gif"> Editor</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>active <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> <b>dom</b> buffer</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+<p class="informal">
+Schema references can be used as set valued expressions.
+</p>
+
+<hr>
+
+<p class="informal">
+SCHEMA TYPE NOTATION
+</p>
+
+<p class="informal">
+According to <em>The Z Notation: A Reference Manual (ZRM)</em>,
+the notation for schema types and bindings is not part of Z itself.
+</p>
+
+<p class="informal">
+This is not Z, according to the <em>ZRM</em>.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>landing: <img width=5 height=14 align=absbottom alt="\lblot" src="zimg/lblot-m.gif"> day, month, year:<img height=11 width=10 alt="\num" src="zimg/num-m.gif"> <img width=5 height=14 align=absbottom alt="\rblot" src="zimg/rblot-m.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>landing = <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> day :> 20, month :> 7, year :> 1969 <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"></td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+ 
+
+<p class="informal">
+This alternative must be used instead.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>landing: Date</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>landing.day = 20 </td></tr>
+<tr> <td></td><td class="zed" colspan=2>landing.month = 7 </td></tr>
+<tr> <td></td><td class="zed" colspan=2>landing.year = 1969</td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+ 
+<hr>
+
+<p class="informal">
+BINDING FORMATION OPERATOR, <var class="zed"><img width=5 height=10 alt="\theta" src="zimg/theta-m.gif"></var>
+</p>
+
+<p class="informal">
+<var class="zed"><img width=5 height=10 alt="\theta" src="zimg/theta-m.gif"> S</var> (theta <var class="zed">S</var>) is the (nameless) instance of schema type
+<var class="zed">S</var> which is in scope. Instead of
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>weekday: Date <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> 0 .. 6</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=9 height=10 alt="\forall" src="zimg/forall-m.gif"> d: Date <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> weekday(d) = (d.day + ...) <b>mod</b> 7</td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+<p class="informal">
+we can write
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>weekday: Date <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> 0 .. 6</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=9 height=10 alt="\forall" src="zimg/forall-m.gif"> Date <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> weekday(<img width=5 height=10 alt="\theta" src="zimg/theta-m.gif"> Date) = (day + ...) <b>mod</b> 7</td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+<p class="informal">
+Instead of 
+</p>
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed"><img width=9 height=10 alt="\Xi" src="zimg/Xi-m.gif"> Editor</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>        <img width=7 height=10 alt="\Delta" src="zimg/Delta-m.gif"> Editor</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>        left' = left </td></tr>
+<tr> <td></td><td class="zed" colspan=2>        right' = right</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+<p class="informal">
+we can write
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"><img width=9 height=10 alt="\Xi" src="zimg/Xi-m.gif"> Editor <img height=11 width=11 alt="\defs" src="zimg/defs-m.gif"> [&nbsp; <img width=7 height=10 alt="\Delta" src="zimg/Delta-m.gif"> Editor | <img width=5 height=10 alt="\theta" src="zimg/theta-m.gif"> Editor' = <img width=5 height=10 alt="\theta" src="zimg/theta-m.gif"> Editor&nbsp;]</td></tr>
+</table>
+</div>
+<hr>
+
+<p class="informal">
+SCHEMAS AS RELATIONS
+</p>
+
+<p class="informal">
+We can use <var class="zed"><img width=5 height=10 alt="\theta" src="zimg/theta-m.gif"></var> to define the binary relation
+corresponding to an operation schema.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">Precedes</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=7 height=10 alt="\Delta" src="zimg/Delta-m.gif"> Date</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>(year &lt; year') <img width=8 height=7 alt="\lor" src="zimg/lor-m.gif"> </td></tr>
+<tr> <td></td><td class="zed" colspan=2>(year = year' <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> month &lt; month') <img width=8 height=7 alt="\lor" src="zimg/lor-m.gif"> </td></tr>
+<tr> <td></td><td class="zed" colspan=2>(year = year' <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> month = month' <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> day &lt; day') </td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0> 
+<tr> <td class="zed">precedes == {&nbsp; Precedes <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> (<img width=5 height=10 alt="\theta" src="zimg/theta-m.gif"> Date, <img width=5 height=10 alt="\theta" src="zimg/theta-m.gif"> Date') &nbsp;}</td></tr>
+</table>
+</div>
+
+<p class="informal">
+Now <var class="zed">precedes</var> is a binary relation on <var class="zed">Date</var>.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">Biography</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>name: NAME </td></tr>
+<tr> <td></td><td class="zed" colspan=2>birth, death: Date </td></tr>
+<tr> <td></td><td class="zed" colspan=2>...</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>birth <u>precedes</u> death </td></tr>
+<tr> <td></td><td class="zed" colspan=2>...</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+<p>
+Back to <a href="z-lectures.html">Z lectures</a>.
+</p>
+
+<HR>
+
+<ADDRESS>
+<A HREF="http://staff.washington.edu/~jon/">Jonathan Jacky</A> /
+<a href="http://www.washington.edu/">University of Washington</a> /
+Seattle, Washington / USA<br>
+E-mail: jon@u.washington.edu
+</ADDRESS>
+
+
+</body>
+</html>

@@ -1,0 +1,572 @@
+<html>
+
+<head>
+<link rel="stylesheet" href="zed.css" type="text/css">
+<title>Z lecture notes: Elements</title>
+</head>
+
+<body>
+
+
+
+<p class="informal">
+<h3>ELEMENTS OF Z</h3>
+</p>
+
+<p>
+Based on chapter 8 in
+<a href="../z-book/index.html">
+The Way of Z</a>.
+</p>
+
+<p>
+Links to more <a href="z-lectures.html">Z lectures</a>.
+</p>
+
+<p class="informal">
+This page looks best when this <var class="zed"><img height=11 width=9 alt="\power" src="zimg/power-m.gif"></var> and this <var class="zed">X</var> are 
+about the same size: <var class="zed"><img height=11 width=9 alt="\power" src="zimg/power-m.gif"> X</var>.  See these <a href="z-viewing-tips.html">viewing tips</a>.
+</p>
+
+<hr>
+
+<p class="informal">
+Three basic constructs:
+</p>
+
+
+<p class="informal">
+<em>Declarations</em> introduce <em>variables</em>.
+</p>
+
+<p class="informal">
+<em>Expressions</em> describe <em>values</em> that variables can assume.
+</p>
+
+<p class="informal">
+<em>Predicates</em> place <em>constraints</em> on the values that
+variables do assume.
+</p>
+
+
+<hr>
+
+<p class="informal">
+SETS 
+</p>
+
+<p class="informal">
+Set display
+</p>
+
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=5>
+<tr> <td><var class="zed">{ 1, 2, 3, 4, 5, 6 } </var></td><td align=right> </td></tr>
+<tr> <td><var class="zed">{ 4, 5, 6, 1, 2, 3 } </var></td><td align=right> </td></tr>
+<tr> <td><var class="zed">{ 4, 5, 5, 6, 1, 1, 1, 2, 3 } </var></td><td align=right> </td></tr>
+<tr> <td><var class="zed">{ red, yellow, green } </var></td><td align=right> </td></tr>
+<tr> <td><var class="zed">{ yellow, red, green, 1, 2 } </var></td><td align=right> &nbsp; &nbsp; Type error! </td></tr>
+</table>
+</div>
+
+
+<p class="informal">
+Set names
+</p>
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=5>
+<tr> <td><var class="zed"><img height=11 width=10 alt="\num" src="zimg/num-m.gif"> </var></td><td align=right> </td></tr>
+<tr> <td><var class="zed">DICE </var></td><td align=right> </td></tr>
+<tr> <td><var class="zed">LAMP </var></td><td align=right></td></tr>
+</table>
+</div>
+
+
+<p class="informal">
+Set expressions
+</p>
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=5>
+<tr> <td><var class="zed">1 .. 6 </var></td><td align=right> </td></tr>
+<tr> <td><var class="zed">{&nbsp; i: <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> | 1 <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> i <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> 6 &nbsp;} </var></td><td align=right></td></tr>
+</table>
+</div>
+
+
+<hr>
+
+<p class="informal">
+TYPES
+</p>
+
+<p class="informal">
+Every object belongs to a set called its <em>type</em>.
+</p>
+
+<p class="informal">
+
+<var class="zed">1</var>, <var class="zed">2</var>, <var class="zed">...</var> all belong to the type <var class="zed"><img height=11 width=10 alt="\num" src="zimg/num-m.gif"></var>.
+
+<p class="informal">
+
+<var class="zed">red</var>, <var class="zed">green</var> belong to the type <var class="zed">COLOR</var>.
+
+</p>
+
+<p class="informal">
+Every type must be introduced in a <em>declaration</em>.
+There are two ways to declare types.
+</p>
+
+<p class="informal">
+<em>Free types</em> are like enumerations.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0> 
+<tr> <td class="zed">   COLOR ::= red | green | blue | yellow </td></tr>
+<tr> <td class="zed"><img width=30 height=1 align=bottom alt="    " src="zimg/clear.gif">| cyan | magenta | white | black</td></tr>
+</table>
+</div>
+
+
+<p class="informal">
+<em>Basic types</em> can include indefinitely many 
+elements.
+</p>
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=5>
+<tr> <td><var class="zed"><img height=11 width=10 alt="\num" src="zimg/num-m.gif"> </var></td><td align=right> </td></tr>
+<tr> <td><var class="zed">[NAME] </var></td><td align=right> </td></tr>
+<tr> <td><var class="zed">[PROCESS, FILE] </var></td><td align=right></td></tr>
+</table>
+</div>
+
+<hr>
+
+<p class="informal">
+VARIABLES
+</p>
+
+<p class="informal">
+A <em>variable</em> is a name for an object: its <em>value</em>.  
+Variables are introduced in <em>declarations</em>.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><var class="zed">x: S</var> &nbsp; &nbsp; The value of <var class="zed">x</var> belongs to set <var class="zed">S</var> </td></tr>
+</table>
+</div>
+
+<p class="informal">
+<em>Axiomatic definitions</em> declare <em>global variables</em> and can
+include optional <em>constraints</em>.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>d<sub><font size=-3>1</font></sub>,d<sub><font size=-3>2</font></sub>: DICE </td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>d<sub><font size=-3>1</font></sub> + d<sub><font size=-3>2</font></sub> = 7 </td></tr>
+<tr> <td></td><td class="zed" colspan=2>d<sub><font size=-3>1</font></sub> &lt; d<sub><font size=-3>2</font></sub></td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+<p class="informal">
+<em>Constants</em> are variables that are constrained to one value
+(<var class="zed"><img height=11 width=9 alt="\power" src="zimg/power-m.gif"> S</var> means <em>set of <var class="zed">S</var></em>).
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>DICE: <img height=11 width=9 alt="\power" src="zimg/power-m.gif"> <img height=11 width=10 alt="\num" src="zimg/num-m.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>DICE = 1 .. 6</td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+<p class="informal">
+<em>Abbreviation definitions</em> can also declare 
+constants.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> DICE == 1 .. 6 </td></tr>
+</table>
+</div>
+
+
+<hr> 
+
+<p class="informal">
+TYPES, SETS AND NORMALIZATION
+</p>
+
+<p class="informal">
+Types are sets, but not all sets are types.
+</p>
+
+<p class="informal">
+<var class="zed">ODD, EVEN, PRIME</var> are just sets, <var class="zed"><img height=11 width=10 alt="\num" src="zimg/num-m.gif"></var> is their type.
+</p>
+
+<p class="informal">
+Any set can appear in a declaration.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>e: EVEN </td></tr>
+<tr> <td></td><td class="zed" colspan=2>o: ODD </td></tr>
+<tr> <td></td><td class="zed" colspan=2>p: PRIME </td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+ 
+<p class="informal">
+In a <em>normalized</em> declaration, we write the 
+<em>signature</em>
+to show the type.
+</p>
+
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>e,o,p: <img height=11 width=10 alt="\num" src="zimg/num-m.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>e <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> EVEN </td></tr>
+<tr> <td></td><td class="zed" colspan=2>o <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> ODD </td></tr>
+<tr> <td></td><td class="zed" colspan=2>p <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> PRIME </td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+ 
+<p class="informal">
+The type determines which variables can be combined in expressions.
+</p>
+
+<hr>
+
+<p class="informal">
+EXPRESSIONS AND OPERATORS, 
+ARITHMETIC
+</p>
+
+<p class="informal">
+<em>Expressions</em> have <em>values</em>.
+The simplest expressions are constants and variables.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td> <var class="zed">1</var>, <var class="zed">2</var>, <var class="zed">red</var>, <var class="zed">x</var>, <var class="zed">d<sub><font size=-3>1</font></sub></var>,  <var class="zed">DICE</var>, <var class="zed"><img height=11 width=10 alt="\num" src="zimg/num-m.gif"></var>, ... </td></tr>
+</table>
+</div>
+ 
+<p class="informal">
+<em>Operators</em> build larger expressions from smaller ones.
+Arithmetic provides familiar examples.
+</p>
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><var class="zed">m+n</var> </td> <td> &nbsp; Addition </td></tr>
+<tr> <td><var class="zed">m-n</var> </td> <td> &nbsp; Subtraction </td></tr>
+<tr> <td><var class="zed">m*n</var> </td> <td> &nbsp; Multiplication </td></tr>
+<tr> <td><var class="zed">m <b>div</b> n</var> </td> <td> &nbsp; Division </td></tr>
+<tr> <td><var class="zed">m <b>mod</b> n</var> </td> <td> &nbsp; Remainder (modulus) </td></tr>
+<tr> <td><var class="zed">m <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> n</var> </td> <td> &nbsp; Less than or equal </td></tr>
+<tr> <td><var class="zed">m .. n</var> </td> <td> &nbsp; Number range (up to)</td></tr>
+<tr> <td><var class="zed">min&nbsp;A</var> </td> <td> &nbsp; Minimum of a set of numbers </td></tr>
+<tr> <td><var class="zed">max&nbsp;A</var> </td> <td> &nbsp; Maximum of a set of numbers </td></tr>
+</table>
+</div>
+
+
+
+<p class="informal">
+SET OPERATORS
+</p>
+
+<p class="informal">
+The <em>size</em> operator <var class="zed">#</var> counts elements.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed">  # { red, yellow, blue, green, red } = 4 </td></tr>
+</table>
+</div>
+
+<p class="informal">
+The <em>union</em> operator <var class="zed"><img width=10 height=7 alt="\cup" src="zimg/cup-m.gif"></var> combines sets.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed">{ 1, 2, 3 } <img width=10 height=7 alt="\cup" src="zimg/cup-m.gif"> { 2, 3, 4 } = { 1, 2, 3, 4 } </td></tr>
+</table>
+</div>
+
+<p class="informal">
+The <em>difference</em> operator <var class="zed">\</var> removes the 
+elements of one set from
+another.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed">  { 1, 2, 3, 4 } \ { 2, 3 } = { 1, 4 } </td></tr>
+</table>
+</div>
+
+<p class="informal">
+The <em>intersection</em> operator <var class="zed"><img width=10 height=7 alt="\cap" src="zimg/cap-m.gif"></var> finds the elements common to
+both sets.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed">{ 1, 2, 3 } <img width=10 height=7 alt="\cap" src="zimg/cap-m.gif"> { 2, 3, 4 } = { 2, 3 } </td></tr>
+</table>
+</div>
+
+<p class="informal">
+Set operators work with sets of any type, but
+</p>
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0> { 1, 2, 3 } <img width=10 height=7 alt="\cup" src="zimg/cup-m.gif"> { red, green } &nbsp; &nbsp; Type error! </table>
+</div>
+
+
+
+<hr>
+
+<p class="informal">
+PREDICATES
+</p>
+
+<p class="informal">
+Predicates <em>constrain</em> values.  Many
+have the form <var class="zed">e<sub><font size=-3>1</font></sub>&nbsp;R&nbsp;e<sub><font size=-3>2</font></sub></var>, where <var class="zed">e<sub><font size=-3>1</font></sub></var> and <var class="zed">e<sub><font size=-3>2</font></sub></var>
+are expressions.
+</p>
+
+<p class="informal">
+Equality, <var class="zed">x</var> and <var class="zed">y</var> have the same value.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> x = y </td></tr>
+</table>
+</div>
+
+
+<p class="informal">
+Arithmetic relations, <var class="zed">n</var> is less than <var class="zed">m</var>.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> n &lt; m </td></tr>
+</table>
+</div>
+
+
+<p class="informal">
+Set membership, <var class="zed">x</var> is a member of <var class="zed">S</var>.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> x <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> S </td></tr>
+</table>
+</div>
+
+
+<p class="informal">
+Subset, members of <var class="zed">S</var> are members of <var class="zed">T</var>.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> S <img width=9 height=10 align=absbottom alt="\subseteq" src="zimg/subseteq-m.gif"> T </td></tr>
+</table>
+</div>
+
+
+<p class="informal">
+Predicates are not expressions.  They do not have values, they are
+<em>true</em> or <em>false</em>.
+</p>
+
+<hr>
+
+<p class="informal">
+PUTTING THE ELEMENTS TOGETHER
+</p>
+
+<p class="informal">
+A train moves at a constant velocity of sixty miles per hour for four hours.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>distance, velocity, time: <img height=11 width=10 alt="\nat" src="zimg/nat-m.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>distance = velocity * time </td></tr>
+<tr> <td></td><td class="zed" colspan=2>velocity = 60 </td></tr>
+<tr> <td></td><td class="zed" colspan=2>time = 4 </td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+<p class="informal">
+How far does the train travel?
+</p>
+
+<p class="informal">
+Philip works on the adhesives team in the materials group, which is part of
+the research division.  
+</p>
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>philip: PERSON </td></tr>
+<tr> <td></td><td class="zed" colspan=2>adhesives, materials, research, </td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif">manufacturing: <img height=11 width=9 alt="\power" src="zimg/power-m.gif"> PERSON</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>adhesives <img width=9 height=10 align=absbottom alt="\subseteq" src="zimg/subseteq-m.gif"> materials </td></tr>
+<tr> <td></td><td class="zed" colspan=2>materials <img width=9 height=10 align=absbottom alt="\subseteq" src="zimg/subseteq-m.gif"> research </td></tr>
+<tr> <td></td><td class="zed" colspan=2>philip <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> adhesives </td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+ 
+<p class="informal">
+Is Philip in the research division?
+</p>
+
+<hr>
+
+<p class="informal">
+ELEMENTS OF Z: DISCUSSION
+</p>
+
+<p class="informal">
+1. Compare this Z 
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> DICE == 1 .. 6 </td></tr>
+</table>
+</div>
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>d<sub><font size=-3>1</font></sub>,d<sub><font size=-3>2</font></sub>: DICE </td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>d<sub><font size=-3>1</font></sub> + d<sub><font size=-3>2</font></sub> = 7 </td></tr>
+<tr> <td></td><td class="zed" colspan=2>d<sub><font size=-3>1</font></sub> &lt; d<sub><font size=-3>2</font></sub></td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+<p class="informal">
+with this C.
+</p>
+
+<p class="informal">
+&nbsp; &nbsp; <tt>typedef int DICE;</tt><br>
+&nbsp; &nbsp; <tt>DICE d1, d2;</tt>
+</p
+
+<p class="informal">
+2. Compare this basic type and definition 
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> [X] </td></tr>
+</table>
+</div>
+
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td width=10></td><td class="zed"> x,y: X </td></tr>
+<tr><td><img width=1 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+<p class="informal">
+with this free type.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> X ::= x | y </td></tr>
+</table>
+</div>
+
+<p>
+Back to <a href="z-lectures.html">Z lectures</a>.
+</p>
+
+<HR>
+
+<ADDRESS>
+<A HREF="http://staff.washington.edu/~jon/">Jonathan Jacky</A> /
+<a href="http://www.washington.edu/">University of Washington</a> /
+Seattle, Washington / USA<br>
+E-mail: jon@u.washington.edu
+</ADDRESS>
+
+</body>
+</html>

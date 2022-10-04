@@ -1,0 +1,2351 @@
+\section{Introduction}
+
+This report presents portions of a formal specification for a real
+medical device, a radiation therapy machine. This specification,
+rather than the informal prose description, serves as the primary
+reference source for programming and test plannning.  A
+paper~\cite{jacky95b} describes the development of part of the program
+based on the contents of this report.
+
+This formal specification is based on a thorough informal (English
+prose) specification presented as Chapters 2 and 8 in~\cite{jacky92}.
+Here we attempt to formalize the requirements in that
+source.  We have included many cross-references.  Decimal numbers and
+integers (as in 8.4, 191) refer to chapter, section and page numbers
+in~\cite{jacky92}, respectively.
+
+The formal specification is expressed in the Z
+notation~\cite{spivey92}.  We have corrected syntax and type errors
+detected by a checker~\cite{spivey92a}.
+
+\section{Overview} 
+
+Much of the apparent complexity in the prose requirements arises from
+the interaction of several subsystems which, by themselves, are
+simpler.  In the formal specification we partition the system
+into subsystems and describe simple operations on each.  For each
+operation on the system as a whole, we define a separate operation on
+each affected subsystem.  The complex behaviors of the whole system
+emerge when we compose these simpler operations together.  
+
+Each subsystem is modelled by a Z state schema and a number of operation
+schemas on that state. This partition can itself be represented in Z.
+
+%%unchecked  % none of these defined yet
+\begin{schema}{TherapyControl}
+	Session \\
+	Field \\
+	Intlk \\
+	\dots \\
+	Console \\
+\end{schema}
+$Session$ (section~\ref{sect:session}) models those aspects of the
+treatment session that are related to the prescription database
+(section~\ref{sect:prescr} models the database itself).  $Field$
+(section~\ref{sect:field}) models the many settings that characterize
+a single field.  $Intlk$ (section~\ref{sect:intlk}) models software
+interlocks and other flags that indicate readiness. $Console$
+(section~\ref{sect:ui}) models the user interface.
+Section~\ref{sect:compose} combines operations from $Session$, $Field$
+and $Console$.
+
+Related operations in different subsystems are distinguished by
+suffix: $ExptModeS$, $ExptModeF$, and $ExptModeC$ are operations in
+the $Session$, $Field$ and $Console$ subsystems, respectively.  
+
+Each user interface operation in the $Console$ subsystem ensures that
+corresponding operations in the $Session$ and $Field$ subsystems are only
+invoked when their preconditions are satisfied.  Therefore only the
+$Console$ operations need to be total; usually there is no need to
+define total operations in the $Session$ and $Field$ subsystems.  For
+example the $ExptModeC$ operation in the $Console$ subsystem checks the
+precondition that only physicists can invoke this operation; in
+$Console$ we define what happens when an operator who is not a
+physicist attempts to enter experiment mode.  Therefore $ExptModeS$
+and $ExptModeF$ can assume that this precondition has been satisfied
+and need not cover the other cases.
+
+\section{System configuration} \label{sect:config}
+
+Fixed aspects of the system configuration are represented by Z global
+constants: sets, functions and relations.  This section introduces
+some of these constants.  It should be possible to accommodate some
+configuration changes simply by changing their values.
+
+\subsection{Settings and registers} \label{sect:settings}
+
+The state of the therapy machine is largely determined by the values
+of named $items$.  At this writing the list of items is
+
+\begin{zed} 
+ITEM ::= nfrac | dose\_tot | dose | wedge | w\_rot | filter | leaf0 | leaf39 | \\
+\t3	gantry | collim | turnt | lat | longit | height | doseB | top | \\
+\t3	pt\_mode | pt\_factor | press | temp | d\_rate | t\_fac | \\
+\t3	calvolt1 | calvolt2 | p\_dose | p\_time | e\_time
+\end{zed}
+For brevity we omit formal declarations of the other collimator $leaves$,
+$leaf1 \upto leaf38$.
+
+There are many items but we can identify different subsets, where all
+of the members of each subset are treated the same way for some
+particular purpose.
+  
+$Settings$ are items which are included in field prescriptions.  Other
+items are kept in $registers$.  In particular $dose\_reg$ items
+include calibration factors and other items concerned with the
+dosimetry system\footnote{In the C implementation $setting$ and
+$dose\_reg$ are two different enumerations, separated so we can
+efficiently store and index zero-based C arrays.  We may add other
+register enumerations in the future, for example for the LCC
+calibration factors.}.
+
+\begin{axdef}
+	setting, dose\_reg: \power ITEM \\
+\end{axdef}
+At this writing
+
+\begin{zed}
+	\langle setting, dose\_reg \rangle \partition ITEM
+\also
+	dose\_reg = \{ pt\_mode, pt\_factor, press, temp, d\_rate, t\_fac, \\
+\t3		calvolt1, calvolt2, p\_dose, p\_time, e\_time \}
+\end{zed}
+{\em Scales} are items that are continously variable over some range;
+examples are gantry angle and every collimator leaf position.  
+{\em Selections} can only take on certain discrete values; examples are
+wedge and flattening filter selection.  {\em Counters} accumulate
+during treatment runs; examples are dose and the number of fractions.
+
+\begin{axdef}
+	scale, selection, counter: \power ITEM
+\end{axdef}
+At this writing
+
+\begin{zed}
+	\langle selection, scale, counter \rangle \partition ITEM
+\also
+	counter = \{ nfrac, dose\_tot, dose \} \\
+	selection = \{ wedge, w\_rot, filter, pt\_mode \} \\
+\end{zed}
+A field is prescribed by determining the values of certain of its
+settings.  Therapy fields are defined by the values of particular
+settings called {\em prescriptions}.  Experiment fields are defined by
+the values of settings called {\em presets} (8.2, 171 third bullet;
+Table 8.2, 173).  Readiness is determined by checking all the $preset$
+settings in experiment mode, and all the $prescr$ settings ($prescrip$
+except the linear table motions) in therapy mode (8.9.8, 194).
+Most settings are machine $motions$, and the actual values of most
+settings are measured by $sensors$.  The {\em calibration constants}
+are registers that are initially loaded with constants stored in the
+calibration database.  At this writing
+
+
+
+\begin{zed}
+	leaves == \{ leaf0, leaf39 \}
+\also
+	preset == leaves \cup \{wedge, w\_rot, filter \}
+\also
+	motion == preset \cup \{ gantry, collim, turnt, lat, longit, height \}
+\also
+	prescrip == motion \cup counter 
+\also
+	prescr == prescrip \setminus \{ lat, longit, height \}
+\also
+	sensor == setting \setminus \{ nfrac, dose\_tot \}
+\also
+	cal\_const == \{ d\_rate, t\_fac, calvolt1, calvolt2 \}
+\end{zed}
+
+\subsection{Values} \label{sect:values}
+
+The value of every item can be represented by a number.
+
+\begin{zed}
+	VALUE == \num
+\end{zed}
+Each item will be implemented by an appropriate
+(possibly floating point) numeric type.  In this report it is
+sufficient to say they are all numbers, to indicate that we can
+do arithmetic with them.
+
+Each item can assume a particular range of $valid$ (physically
+achievable) values.  For example, the gantry angle can vary from 0 to
+359\footnote{In the implementation gantry angle varies from 0.0 to
+359.9. Decimal fractions are not built into Z.}; the available wedge
+selections are $no\_wedge$, 30, 45 and 60.  We use $valid$ to do range
+checking on numbers that the operator types in, and also on
+sensor readings, to check for faults\footnote{The
+C implementation includes one $valid$ array indexed by $setting$ and
+another (with a different name) indexed by $dose\_reg$.}.  Every
+setting~$s$ has some valid values, and there is always a minimum and a
+maximum valid value. We define
+an uninitialized or $blank$ value which is not valid for any setting.
+For each $scale$ item, there is a {\em tolerance} within which
+variations in value are acceptable.
+
+\begin{axdef}
+	blank: VALUE \\
+        tol: scale \fun VALUE \\
+	valid: ITEM \fun \finset_1 VALUE
+\where
+	\forall s: ITEM @ blank \notin valid~s \\
+\end{axdef}
+
+\section{Prescription database} \label{sect:prescr}
+
+The prescription database stores patients and fields.  We define a
+basic type for the names that identify them.
+
+\begin{zed}
+	[NAME]
+\also
+	PATIENT == NAME; FIELD == NAME
+\end{zed}
+An item's name usually corresponds to the text string that identifies
+it in screen displays and log files\footnote{We define one type for
+both kinds of names so the same specifications (and code) can be used
+to handle lists of patients and fields.  In the implementation,
+elements of $NAME$ are integer indices into arrays, usually of C
+structures that include the name string as one member.}.
+
+We distinguish a special value to indicate that no name has been
+selected.
+
+\begin{axdef}
+	no\_name: NAME \\
+\end{axdef}
+\begin{zed} no\_patient == no\_name; no\_field == no\_name \end{zed}
+In experiment mode, we store fields under {\em studies} which are
+analogous to patients.  In our model they have the same type.
+
+\begin{axdef}
+	studies,patients: \power PATIENT
+\where
+	no\_patient \notin studies \land no\_patient \notin patients
+\end{axdef}
+For each patient or study, several prescribed fields are
+stored\footnote{This differs from~\cite{jacky90d}, which describes a
+single collection of experiment fields.  Moreoever, for each
+experiment field we now store the same $prescrip$ settings as for
+therapy fields, although we only check the $preset$ settings for
+agreement with the stored prescription}.  We must check against
+delivering too many fractions or monitor units from the same field
+(8.9.4, 187 -- 188), so the accumulated values of the counters are
+also stored (for patient fields only).
+
+\begin{zed}
+	ACCUMULATION == counter \fun VALUE
+\also
+ 	PRESCRIPTION == prescrip \fun VALUE
+\end{zed}
+
+\begin{axdef}	
+	Preset: studies \fun (FIELD \pfun PRESCRIPTION) \\
+	Prescribed: patients \fun (FIELD \pfun PRESCRIPTION) \\
+	Accumulated: patients \fun (FIELD \pfun ACCUMULATION) \\
+\where
+	\forall s: studies @ no\_field \notin \dom (Preset~s) \\
+	\forall p: patients @ no\_field \notin \dom (Prescribed~p)
+			\land \dom~(Prescribed~p) = \dom~(Accumulated~p) 
+\end{axdef}
+
+The $exceeded$ predicate tests whether the prescribed fractional dose,
+total dose or number of fractions have already been delivered.
+
+%%prerel exceeded
+
+\begin{axdef}
+	exceeded \_ : ACCUMULATION \rel PRESCRIPTION
+\where
+	\forall counters: ACCUMULATION; fields: PRESCRIPTION @ \\
+	\t1 exceeded(counters,fields) \iff (\exists c: counter @ counters~c \geq fields~c)
+\end{axdef}
+In the following discussion consider field $f$ of patient $p$; let
+$prescribed = Prescribed~p~f$ and $accumulated = Accumulated~p~f$.
+The prescription includes the number of fractions $prescribed~n$ and
+the total dose $prescribed~dose\_tot$.  We also keep track of the
+number of fractions accumulated to date $accumulated~n$, the number of
+monitor units delivered since the beginning of the day
+$accumulated~dose$ and the total number of monitor units accumulated
+to date $accumulated~dose\_tot$ (8.9.4, Fig. 83, 186).
+
+% check syntax of higher order function appl.
+%% \begin{zed} pf == \{ p: PATIENT; f: FIELD @ Prescribed~p~f \} \end{zed}
+
+\subsection{Operators} \label{sect:opers}
+
+Our $OPERATOR$ type includes the operator's username and password.  A
+special value indicates no operator has logged in.  Physicists are
+operators who are authorized to use the equipment in its experiment
+mode (8.2, 170).
+
+\begin{zed} [OPERATOR] \end{zed}
+
+\begin{axdef}
+	no\_operator: OPERATOR \\
+	operators, physicists: \power OPERATOR
+\where
+	physicists \subseteq operators
+\end{axdef}
+
+\section{Session} \label{sect:session}
+
+In this section we model those aspects of the treatment session that
+are related to the prescription database.  In
+section~\ref{sect:compose}, we will combine the operations defined
+here with user interface operations described in
+section~\ref{sect:ui}.
+
+\subsection{Session state}
+
+The $Session$ state is determined by the treatment $mode$, the
+$operator$ on duty, the currently selected $patient$ and $field$, the
+accessible $names$ (patients or studies), and the accessible
+prescribed $fields$ and their $counters$.  We first define
+$SessionVars$ which declares all the state variables and provides
+predicates to ensure that the operator is authorized for the mode, and
+the names are consistent with the mode.
+
+\begin{zed}
+	MODE ::= therapy | experiment
+\end{zed}
+
+\begin{schema}{SessionVars}
+	mode: MODE \\
+	operator: OPERATOR \\
+	patient: PATIENT \\
+	field: FIELD \\
+	names: \power PATIENT \\
+	fields: FIELD \pfun PRESCRIPTION \\
+	counters: FIELD \pfun ACCUMULATION \\
+\where
+	operator = no\_operator \lor operator \in operators \\
+	mode = experiment \implies operator \in physicists \\
+	names = \IF mode = therapy \THEN patients \ELSE studies
+\end{schema}
+Next, we define two cases.  When no patient is selected, no
+prescribed fields are accessible; no field can be selected.
+
+\begin{schema}{NoPatient}
+	SessionVars
+\where
+	patient = no\_patient \\
+	field = no\_field \\
+	fields = \emptyset \\
+	counters = \emptyset \\
+\end{schema}
+When a patient is selected, that patient's fields are accessible.
+If a field is selected, it must be one of these.
+
+\begin{schema}{PrescribedPatient}
+	SessionVars
+\where
+	patient \neq no\_patient \\
+	patient \in names \\
+	field = no\_field \lor field \in \dom fields \\
+	fields = \IF mode = therapy \THEN Prescribed~patient \ELSE Preset~patient \\
+	mode = therapy \implies counters = Accumulated~patient \\
+\end{schema}
+Together these define the $Session$ state.
+
+\begin{zed} Session \defs PrescribedPatient \lor NoPatient \end{zed}
+The $Session$ subsystem starts up in therapy mode with no operator and
+no patient.
+
+\begin{schema}{InitSession}
+	NoPatient
+\where
+	mode = therapy \\
+	operator = no\_operator \\
+\end{schema}
+None of the $Session$ state variables are sensor inputs; all are under
+program control.
+
+\subsection{Operations on Session}
+
+In the following subsections we model the operations on $Session$.  We
+will put together the operations defined in different states in
+section~\ref{sect:compose}, below.
+
+\subsubsection{Experiment mode} \label{sect:expt-mode-s}
+
+Physicists can toggle the session from therapy mode to experiment mode
+and back\footnote{This is a change from the original requirements
+in~\cite{jacky90d}, where {\bf Experiment Mode} switches to experiment
+mode but {\bf Select Patient} switches back to therapy mode.}. The
+user interface ensures that only physicists can invoke this operation,
+so there is no need here to define a total operation that describes
+what happens when an operator who is not a physicist attempts this
+operation.  After switching modes, no patient (study) and no field are
+selected (8.9.6, 190 -- 191).
+
+\begin{schema}{ExptModeS}
+	\Delta Session \\
+\where
+	operator \in physicists \\
+	NoPatient' \\
+	(mode',names') = \IF mode = therapy \THEN (experiment,studies) \\
+\t9						\ELSE (therapy,patients) \\
+	operator' = operator
+\end{schema}
+
+\subsubsection{Store Field}
+
+{\bf Store Field} (8.9.5, 189 -- 188) accepts a new field name, which
+becomes the selected field and is also added to the list of
+fields\footnote{The prose~\cite{jacky92} also requires that the new
+field be added to the prescription database for the current patient.
+We do not model this formally (in fact we model the prescription
+database as a constant).  The precondition $patient \neq no\_patient$
+is not explicit in the prose.}.
+
+\begin{schema}{StoreFieldS}
+	\Delta Session \\
+	field?: FIELD \\
+	prescribed': PRESCRIPTION \\
+	accumulated': ACCUMULATION \\
+\where
+	patient \neq no\_patient \\
+	field' = field? \\
+	fields' = fields \cup \{ field' \mapsto prescribed' \} \\
+	mode = therapy \implies counters' = counters \cup \{ field' \mapsto accumulated' \} \\
+\also
+	mode' = mode \\
+	operator' = operator \\
+	patient' = patient \\
+	names' = names \\
+\end{schema}
+Here $prescribed'$ and $accumulated'$ are just place holders; their
+values are defined in the corresponding $Field$ operation
+$StoreFieldF$.
+
+\subsubsection{Login} \label{sect:login-session}
+
+{\bf Login} (2.5.2, 17 -- 20; 8.9.1, 183) accepts a new $operator?$.
+The user interface ensures that the new operator is authorized.
+
+\begin{schema}{NewOperator}
+	\Delta Session \\
+	operator?: OPERATOR
+\where
+	operator' = operator? \\
+	operator' \in operators
+\end{schema}
+There are two variations.  Usually the new operator is sufficiently
+privileged to keep the same mode.  Otherwise the session reverts to
+therapy mode with no patient and no field (8.9.6, 190).
+
+\begin{schema}{Privileged}
+	NewOperator
+\where
+	mode = therapy \lor operator' \in physicists \\
+\also
+	mode' = mode \\
+	patient' = patient \\
+	names' = names \\
+	field' = field \\
+	fields' = fields \\
+	counters' = counters 
+\end{schema}
+
+\begin{schema}{Unprivileged}
+	NewOperator
+\where
+        mode = experiment \\
+        operator \notin physicists \\
+	mode' = therapy \\
+	NoPatient'
+\end{schema}
+
+\begin{zed}
+LoginS \defs Privileged \lor Unprivileged
+\end{zed}
+
+\subsubsection{Select Patient}
+
+In {\bf Select Patient} (8.9.3, 184 -- 185) the patient's
+prescribed fields are loaded, but no field is selected
+\footnote{The prose~\cite{jacky90d} says that if the patient list is
+selected in experiment mode, the session reverts to therapy mode
+(8.9.3, 184 last paragraph).  We have dropped this requirement.}.  The
+user interface ensures that the new patient is in the prescription
+database.
+
+\begin{schema}{SelectPatientS}
+	\Delta Session \\
+	patient?: PATIENT
+\where
+	patient? \in names \\
+	patient' = patient? \\
+	field' = no\_field \\
+	fields' = \IF mode = therapy \THEN Prescribed~patient' \ELSE Preset~patient' \\
+	mode = therapy \implies counters' = Accumulated~patient' \\
+\also
+	mode' = mode  \\
+	operator' = operator \\
+	names' = names
+\end{schema}
+
+\subsubsection{Select Field}
+
+{\bf Select Field} (8.9.4, 186 -- 189) changes the current field.
+The user interface ensures this operation cannot occur if there is no
+patient, and ensures that the new field is prescribed.
+
+\begin{schema}{SelectFieldS}
+	\Delta Session \\
+	field?: FIELD
+\where
+	patient \neq no\_patient \\
+	field? \in \dom fields \\
+	field' = field? \\
+\also
+	operator' = operator \\
+	mode' = mode \\
+	patient' = patient \\
+	fields' = fields \\
+	counters' = counters
+\end{schema}
+
+\section{Field} \label{sect:field}
+
+In this section, we look inside the machine state and deal
+with particular machine settings.  We model operations that involve
+the many settings that characterize a single field.
+
+\subsection{Field state}
+
+The $Field$ schema includes the state variables that represent
+settings for the currently selected $field$ and $mode$.  $Sensors$
+report $measured$ setting values.  $Prescribed$ setting values are
+read from the prescription database.
+
+$Computed$ and $calibrated$ item values are entered by the operator or
+calculated from prescribed settings and calibration constants; these
+are stored in $registers$.  Certain {\em calibration constants} are
+stored in files (8.9.13, 213 first full paragraph; 215 last
+paragraph).  $Counters$ hold setting values that are $accumulated$
+over successive runs.  For example, the $dose$ prescribed for a single
+fraction may be have to be delivered in two or more treatment runs.
+
+Some settings that do not match their prescribed values can be
+$overridden$ by the operator (8.4, 175 second paragraph; 8.8.1, 181).
+It is necessary to store the value of each setting when it is
+overridden (see the requirement in the last paragraph under
+``override'' on p.  181).  Only settings that are prescribed can be
+overridden.
+
+\begin{axdef}
+	cal\_factor: cal\_const \fun VALUE
+\end{axdef}
+
+\begin{schema}{Field}
+	prescribed: PRESCRIPTION \\
+	accumulated: ACCUMULATION \\
+	measured: sensor \fun VALUE \\
+	overridden: prescr \pfun VALUE \\
+	computed, calibrated: dose\_reg \fun VALUE \\
+\end{schema}
+The $measured$ settings are read from sensors so here we cannot write any
+predicates that constrain them.
+
+\subsection{Relation to Session state}
+
+A few operations on $Field$ read the $mode$ and $field$ state variables
+declared in $Session$.  In therapy mode, the $prescribed$ settings in
+the $Field$ state are those from the prescription database entry for
+the currently selected $mode$ and $field$ in the $Session$ state. (In
+experiment mode the prescribed settings are also loaded from the
+prescription database but may be changed subsequently.  In therapy
+mode the counters are loaded from the prescription database when the
+field is selected but may be changed subsequently.  See
+section~\ref{sect:sel-field-f}).
+
+\begin{schema}{PrescribedField}
+	Field \\
+	Session
+\where
+	field \neq no\_field \\
+	mode = therapy \implies prescribed = fields~field \\
+\end{schema}
+When no field has been selected, prescribed settings and counters have
+no values and the computed settings dose and time indicate no dose.
+(8.9.7, 192, second paragraph after the bullets).  No settings are
+overridden (8.9.8, 194; 8.9.9, 196; 8.9.10, 198).
+
+\begin{zed}
+	no\_prescrip == (\lambda p: prescrip @ blank)
+\also
+	no\_counter == (\lambda c: counter @ blank)
+\also
+	no\_dose\_reg == (\lambda d: dose\_reg @ blank)
+\also
+	no\_dose == \{ p\_dose \mapsto blank, p\_time \mapsto blank \} 
+\end{zed}
+
+\begin{schema}{NoFieldF}
+	Field \\
+\where
+	prescribed = no\_prescrip \\
+	accumulated = no\_counter \\
+	no\_dose \subseteq computed \\
+	overridden = \emptyset \\
+\end{schema}
+
+\begin{zed}
+	NoFieldS \defs [ Session | field = no\_field ]
+\also
+	NoField \defs NoFieldF \land NoFieldS
+\end{zed}
+$FieldSession$ expresses the combined invariant:
+
+\begin{zed}
+FieldSession \defs PrescribedField \lor NoField
+\end{zed}
+
+\subsection{Initialization}
+
+$Field$ begins with no field.  The calibration factors
+are initialized with the constants on file (8.9.13, 213, second
+paragraph after bullets) and the other registers hold no values.
+
+\begin{schema}{InitField}
+	NoFieldF
+\where
+	computed = calibrated = no\_dose\_reg \oplus cal\_factor
+\end{schema}
+
+\subsection{Operations on Field}
+
+In the following subsections we model the operations on $Field$.  We
+will put together the operations defined in different states in
+section~\ref{sect:compose}, below.
+
+\subsubsection{Select Patient}
+
+{\bf SelectPatient} also affects $Field$: when a patient is first selected,
+there is no field.
+
+
+\begin{schema}{SelectPatientF}
+	\Delta Field
+\where
+	NoFieldF' \\
+	computed' = computed \oplus no\_dose \\
+\also
+	calibrated' = calibrated \\
+\end{schema}
+
+\subsubsection{Select Field} \label{sect:sel-field-f}
+
+When a new field is selected, its prescribed settings are loaded and
+no settings are overridden.  This operation requires read-only access
+to the $fields$ state variable in the $Session$ schema.
+
+\begin{schema}{NewFieldF}
+	\Delta FieldSession \\
+\where
+	prescribed' = fields~field' \\
+	overridden' = \emptyset \\
+\end{schema}
+There are two variants of $SelectField$. Experiment mode is much
+simpler because there is no prescribed dose.  The prescribed settings
+are loaded.  The dose and time do not change (8.9.11, 202, second
+paragraph from bottom).
+
+\begin{schema}{SelectExptFieldF}
+	NewFieldF \\
+\where	
+	mode = experiment \\
+	computed' = computed \\
+	calibrated' = calibrated \\
+\end{schema}
+Selecting rectangular fields in experimental mode (8.9.4, 188 -- 189)
+is not modelled formally.
+
+In therapy mode, the dose for the treatment run and the treatment
+backup time are calculated.  Treatment backup time is calculated from
+the dose and two calibration factors, the machine's nominal dose rate
+$computed~d\_rate$ and the treatment time factor $computed~t\_fac$
+(8.9.11, 200, last paragraph; 202, second paragraph; 8.9.13, 213,
+first two paragraphs after bullets)\footnote{The backup time is given
+by $t\_backup = factor * dose / rate$. For example with prescribed
+dose 100.0 MU, dose rate 50.0 MU/min and factor 1.50 the backup time
+is 3.00 minutes.  We do not attempt to model this floating-point
+calculation in Z.}.
+
+\begin{zed}
+	DOSE == VALUE; RATE == VALUE; FACTOR == VALUE; TIME == VALUE
+\end{zed}
+
+\begin{axdef}
+	t\_backup: (DOSE \cross RATE \cross FACTOR) \pfun TIME
+\where
+	\forall d: valid~dose; r: valid~d\_rate; f: valid~t\_fac @ \\
+\t1	 (d,r,f) \in \dom t\_backup \land t\_backup(d,r,f) \in valid~p\_time
+\end{axdef}
+We keep track of the number of monitor units delivered since the
+beginning of the day $accumulated~dose$.  When the prescribed field
+settings are loaded, the computed dose is adjusted to deliver the
+remaining daily dose.  This makes it easy to set up another treatment
+run for the same field if the earlier attempts had to be interrupted for
+any reason, or were used to make a port film.  The treatment backup time is
+calculated from this adjusted dose, not the prescribed dose.
+
+The adjusted dose and corresponding backup time are stored in
+$computed~p\_dose$ and $calibrated~p\_time$ ($computed~p\_dose$ may
+differ from $prescribed~dose$).  There is also a register
+$computed~p\_time$ where the user may optionally enter a backup time
+different than $calibrated~p\_time$ (section~\ref{sect:editf}, below)
+(8.9.11, Fig. 8.8, 199; Fig. 8.9, 203; Fig 8.10, 207; Fig. 8.11, 208).
+
+\begin{schema}{DoseTime}
+	\Delta Field
+\where
+(\LET t == t\_backup(computed'~p\_dose,computed'~d\_rate,computed'~t\_fac) @ \\
+\t1	calibrated' = calibrated \oplus \{ ~p\_time \mapsto t \}) \\
+	computed'~p\_time = calibrated'~p\_time \\
+	\{ p\_dose, p\_time \} \ndres computed' = \{ p\_dose, p\_time \} \ndres computed
+\end{schema}
+	
+\begin{schema}{NewTherapyField}
+	NewFieldF \\
+	DoseTime \\
+\where
+	mode = therapy \\
+	accumulated' = counters~field' \\ 
+\end{schema}
+There are two cases.  The normal case occurs when the user interface
+confirms that the prescribed fractional
+dose, total dose and number of fractions are not yet $exceeded$. The
+dose is read from the prescription, and no
+settings are overridden (8.9.4, 187).
+
+\begin{schema}{SelectTherapyFieldF}
+	NewTherapyField \\
+\where
+	computed'~p\_dose = prescribed~dose - accumulated~dose \\
+	overridden' = \emptyset
+\end{schema}
+Together these make the simple case
+
+\begin{zed}
+	SelectSimpleFieldF \defs SelectExptFieldF \lor SelectTherapyFieldF
+\end{zed}
+The other case occurs when the user interface acquires the preset dose
+from the operator (often when one or more of the counter settings is
+$exceeded$.  If this differs from the prescribed dose then dose is
+overridden, and any exceeded settings are also overridden (8.9.4,
+188).
+
+\begin{schema}{SelectComplexFieldF}
+	NewTherapyField \\
+	dose?: VALUE
+\where
+computed'~p\_dose = dose? \\
+(\LET ovr == 
+ (\lambda c: counter | accumulated'~c \geq prescribed'~c @ accumulated~c) @ \\
+\t1  overridden' = \IF dose? = prescribed'~dose \\
+\t5			\THEN ovr \ELSE ovr \cup \{ dose \mapsto dose? \})
+\end{schema}
+Here we have made a few small changes from the prose requirements.
+According to the prose (8.9.4, 187 -- 188), the {\bf Select Field}
+operation includes a dialog with the operator to enter a new dose or
+treatment time in some cases.  In our formal specification it is
+necessary for the operator to explicitly select the {\bf Edit}
+operation after {\bf Select Field} in order to enter a new dose or
+treatment time.  These minor adjustments achieve the intent of the
+prose and simplify the program.  As required by the prose, our
+$SelectComplexFieldF$ overrides exceeded settings (after operator
+confirmation, enforced by the user interface)\footnote{We also
+considered the slightly simpler alternative of omitting the operator
+confirmation and leaving $overridden = \emptyset$ in the $exceeded$
+case.  In that alternative, the $Intlk$ subsystem
+(section~\ref{sect:intlk}) would make the offending settings
+$not\_ready$ to prevent the field being delivered unless the operator
+explicitly edits or overrides those settings.}.
+
+\subsubsection{Edit setting}  \label{sect:editf}
+
+The edit operation updates a $prescribed$ or $computed$ item value.
+
+\begin{schema}{EditF}
+	\Delta Field \\
+	item?: ITEM \\
+	value?: VALUE 
+\where
+	accumulated' = accumulated \\
+	calibrated' = calibrated
+\end{schema}
+The prose actually describes four {\bf Edit} operations.  Some
+features are common to all.  The first variation is for preset
+settings; the user interface ensures this can be invoked in experiment
+mode only (8.8.1, 180).  The prescribed value is changed, and that
+setting is no longer overridden.
+
+\begin{schema}{EditPresetF}
+	EditF
+\where
+	item? \in preset \\
+	prescribed' = prescribed \oplus \{ item? \mapsto value? \} \\
+	overridden' = \{ item? \} \ndres overridden \\
+\also
+	computed' = computed \\
+\end{schema}
+The second variation is for calibration factors; again, the user
+interface only provides this in experiment mode
+(8.9.3, 215).  Calibration factors that users can edit are
+modelled as $computed$ settings in $registers$.  Calibration factors
+are never considered overridden.
+
+\begin{schema}{EditCalF}
+	EditF
+\where
+	item? \in dose\_reg \setminus \{ p\_dose, p\_time \} \\
+	computed' = computed \oplus \{ item? \mapsto value? \} \\
+\also
+	prescribed' = prescribed \\
+	overridden' = overridden
+\end{schema}
+The third variation is for dose (8.9.11, 201--202). The computed (not
+prescribed) value is changed, and the dose is considered overridden
+(8.9.4, 188; 8.9.11, 202).  The treatment times are recalculated.
+
+\begin{schema}{EditDoseF}
+	EditF \\
+	DoseTime \\
+\where
+	item? = p\_dose \\
+	computed'~p\_dose = value? \\
+	overridden' = overridden \oplus \{ dose \mapsto value? \} \\
+\also
+	prescribed' = prescribed \\
+\end{schema}
+The fourth and last variation is treatment backup time, which can be
+edited in both modes (8.9.11, 202). Here again the computed value is
+changed; time is not a prescribed setting, so it cannot be
+overridden.
+
+\begin{schema}{EditTimeF}
+	EditF
+\where
+	item? = p\_time \\
+	computed' = computed \oplus \{ p\_time \mapsto value? \} \\
+\also
+	prescribed' = prescribed \\
+	overridden' = overridden \\
+\end{schema}
+Here is the combined operation:
+
+\begin{zed}
+EditSettingF \defs 
+ EditCalF \lor EditPresetF \lor EditDoseF \lor EditTimeF
+\end{zed}
+$EditSettingF$ is not a total operation (it does not handle all
+possible values of $ITEM$) but the user interface ensures that
+its preconditions are always satisfied.
+
+We now provide the $EditDoseF$ and $EditTimeF$ operations instead of
+the dialog after {\bf Select Field} proposed in~\cite{jacky92}
+(8.9.4, 187 -- 188).
+
+\subsubsection{Override}
+
+Certain items can be overridden.
+
+\begin{schema}{OverF}
+	\Delta Field \\
+	item?: ITEM 
+\where
+	prescribed' = prescribed \\
+	accumulated' = accumulated \\
+	computed' = computed \\
+	calibrated' = calibrated
+\end{schema}
+We add a newly overridden setting and its currently measured value
+to the $overridden$ function (8.4, 175 second paragraph; 8.8.1, 181).
+If the setting is already overridden, the override is cancelled.
+
+\begin{schema}{OverrideSetting}
+	OverF
+\where
+	item? \in prescr \\
+overridden' = \\
+\t1 \IF item? \notin \dom overridden \\
+\t2	\THEN overridden \oplus \{ item? \mapsto measured~item? \} \\
+\t2	\ELSE \{ item? \} \ndres overridden
+\end{schema}
+Dose and time are special cases; overriding either makes dose
+overridden with its accumulated (not measured) value as
+the overridden value.  The counters 
+total dose $dose\_tot$ and number of fractions
+$nfrac$ can only be overridden (after operator confirmation) as part
+of the $SelectFieldF$ operation.
+
+\begin{schema}{OverrideDose}
+	OverF
+\where
+	item? \in \{ p\_dose, p\_time \} \\
+overridden' = \\
+\t1 \IF dose \notin \dom overridden \\
+\t2	\THEN overridden \oplus \{ dose \mapsto accumulated~dose \} \\
+\t2	\ELSE \{ dose \} \ndres overridden
+\end{schema}
+
+\begin{zed} OverrideF \defs OverrideSetting \lor OverrideDose \end{zed}
+
+\subsubsection{Store Field}
+
+This operation (8.9.5, 189 -- 190) makes the prescribed settings equal
+to the actual machine settings, except there is no prescribed dose and
+the number of fractions is set to one.  The accumulators are reset to
+zero.
+
+\begin{zed}
+	zero\_counter == (\lambda c: counter @ 0)
+\end{zed}
+
+\begin{schema}{StoreFieldF}
+	\Delta FieldSession \\
+\where
+	computed' = computed \oplus no\_dose \\
+	prescribed' = prescribed \oplus  (prescrip \dres measured) 
+			\oplus no\_counter \oplus \{ nfrac \mapsto 1 \} \\
+	accumulated' = zero\_counter \\
+	overridden' = \emptyset
+\also
+	calibrated' = calibrated \\
+\end{schema}
+
+% The domain of ``measured'' includes elements not in the domain of ``prescribed''
+
+\subsubsection{Experiment Mode}
+
+This operation toggles modes with no field.  There are
+no dose and time (8.9.11, 202, second paragraph from bottom).
+
+\begin{schema}{ExptModeF}
+	\Delta Field
+\where
+	NoFieldF' \\
+	computed' = computed \oplus no\_dose
+\also
+	calibrated' = calibrated
+\end{schema}
+
+\subsection{Calibration factors}
+
+\subsubsection{Dosimetry calibration}
+
+Dosimetry calibration factors, including the dose rate and treatment
+time factor used to calculate the backup time, appear on the 
+{\bf Dosimetry Calibration} display (8.9.13, 213 -- 214)\footnote{Called
+{\bf Cal Factors} in~\cite{jacky92}, since renamed to distinguish it
+from the forthcoming {\bf LCC Calibration} etc.}.
+The $calibrated$ values in the left column are read from
+files or measured by sensors, while the $computed$ values in the right
+column are computed by the control program or entered by the operator
+using the $EditCalF$ operation.
+
+The pressure-temperature correction factors are used to adjust the
+standard calibration voltages for the dosimetry system (8.9.13, 213 --
+215).  The $calibrated~calvolt1$ and $calibrated~calvolt2$ represent
+the standard calibration voltages on file (8.9.13, 213, second
+paragraph from bottom), while $computed~calvolt1$ (etc.) represent the
+calibration voltages actually in effect, which are obtained by
+adusting the standard calibration voltage by a barometric
+pressure/temperature correction factor (8.9.13, 213 bottom paragraph,
+214 top paragraph)\footnote{The pressure-temperature factor is given
+by $pt\_factor = (press/1013) \times (295/(temp+273))$, where $press$
+and $temp$ are in mbar and deg. C, respectively. We do not attempt to
+model this floating-point calculation in Z.}.
+
+\begin{zed} PRESSURE == VALUE; TEMPERATURE == VALUE \end{zed}
+
+\begin{axdef}
+	pt\_formula: (PRESSURE \cross TEMPERATURE) \pfun FACTOR
+\where
+	\forall p: valid~press; t: valid~temp @ \\
+\t1	 (p,t) \in \dom pt\_formula \land pt\_formula(p,t) \in valid~pt\_factor
+\end{axdef}
+The $computed~press$ and $computed~temp$ are the pressure and
+temperature entered by the operator, and while $calibrated~temp$ and
+$calibrated~press$ are measured continously by sensors. The
+$computed~pt\_factor$ stores the 
+{\em barometric pressure/temperature correction factor of the day} 
+calculated from the readings entered by
+the operator (8.9.13, 214, third paragraph), while
+$calibrated~pt\_factor$ stores the 
+{\em automatic pressure/temperature correction factor} 
+calculated from sensor readings (8.9.13, 214,
+fourth paragraph).  The {\em pressure-temperature} interlock
+(section~\ref{sect:intlk}) accounts for the possibility that the
+pressure or temperature values might be invalid or expired.
+
+The operator sets $computed~pt\_mode = automatic$ to use the 
+{\em automatic pressure/temperature correction factor}, 
+and $computed~pt\_mode = manual$ to
+use the correction factor that is based on the manually entered values (8.9.13,
+214, fifth paragraph).
+
+\begin{axdef}
+	automatic, manual: VALUE 
+\end{axdef}
+The $ScanPT$ operation computes the correction factors and updates
+the registers with the new values.
+
+\begin{schema}{ScanPT}
+	\Delta Field
+\where
+	calibrated'~pt\_factor = pt\_formula(calibrated~press,calibrated~temp)\\
+	computed'~pt\_factor = pt\_formula(computed~press,computed~temp) \\
+\also
+	(\LET pt\_corr == \IF computed~pt\_mode = automatic \\  
+\t5		\THEN calibrated'~pt\_factor \ELSE computed'~pt\_factor @ \\
+\t1		computed'~calvolt1 = pt\_corr * calibrated~calvolt1 \land \\
+\t1		computed'~calvolt2 = pt\_corr * calibrated~calvolt2) \\
+\also
+	\{ pt\_factor \} \ndres calibrated' = \{ pt\_factor \} \ndres calibrated \\
+	\{ pt\_factor, calvolt1, calvolt2 \} \ndres computed' = \{ pt\_factor, calvolt1, calvolt2 \} \ndres computed \\
+\also
+	prescribed' = prescribed \\
+	accumulated' = accumulated \\
+	overridden' = overridden
+\end{schema}
+$ScanPT$ is scheduled by the control program itself; it is not invoked
+by the user.
+
+\section{Software interlocks and status flags} \label{sect:intlk}
+
+(To come)
+
+\newpage
+
+\section{User interface} \label{sect:ui}
+
+The user may provide input at the workstation at any time (by typing,
+pressing function keys or cursor arrow keys --- in our implementation
+we do not use the mouse).  We model each keystroke and the actions
+it invokes as an $Event$ that accepts an $input?$ that may change the
+$Console$ state.
+
+%%unchecked
+\begin{schema}{Event}
+	\Delta Console \\
+	input?: INPUT
+\end{schema}
+We do not attempt to formalize any ``look and feel'' aspects of the
+user interface, such as the appearance of the display.  They are
+already described in sufficient detail in~\cite{jacky92}, chapters 2
+and 8.
+
+$INPUT$ is the set of inputs (keypresses) the user can
+provide\footnote{In the implementation, inputs are X window system
+events and the values of $INPUT$ correspond to X
+keysyms~\cite{nye88}.}.  Here is the list of inputs at this writing.
+
+\begin{zed} 
+INPUT ::= filter\_wedge | leaf\_collim | dose\_intlk | gantry\_psa | dose\_cal | \\
+\t3	startup | help | messages | select\_patient | select\_field | field\_summary | \\
+\t3	login | edit\_setting | edit\_dose\_reg | log\_message | store\_field | override\_cmd | \\
+\t3	cancel\_run | password |auto\_setup | expt\_mode | cancel | refresh | shutdown | \\
+\t3	 select | ret | character | backspace | delete\_key | \\ 
+\t3	left\_arrow | right\_arrow | up\_arrow | down\_arrow | ignored
+\end{zed}
+Many operations are invoked by pressing keys, so it is often
+convenient to identify operations with the corresponding input.
+Therefore we assign them to the same type.   Here is the list of 
+operations at this writing.
+
+\begin{axdef}
+	OP: \power INPUT
+\where
+OP = \{ filter\_wedge, leaf\_collim, dose\_intlk, gantry\_psa, dose\_cal, \\
+\t2 startup, help, messages, select\_patient, select\_field, field\_summary, \\
+\t2 login, edit\_setting, edit\_dose\_reg, log\_message, store\_field, override\_cmd, \\
+\t2 cancel\_run, password,auto\_setup, expt\_mode, cancel, refresh, shutdown, select \}
+\end{axdef}
+The user interface shows many displays, for example the login display
+(Fig 8.1, 178), the patient list display (Fig. 8.2, 185), the leaf
+collimator display (Fig. 8.7, 197) etc.  The operator can choose any
+display by pressing a key, so we can identify displays with these
+operations.
+
+\begin{axdef}
+	DISPLAY: \power OP
+\where
+DISPLAY = \{ filter\_wedge, leaf\_collim, dose\_intlk, gantry\_psa, dose\_cal, \\
+\t3	startup, help, messages, select\_patient, select\_field, \\
+\t3	field\_summary, login \}
+\end{axdef}
+
+\subsection{Console state}
+
+This section describes the variables in the $Console$ state.  
+
+The first variable indicates the mode of $interaction$.  If no
+interaction is in progress the console is $available$, or there
+may be a $dialog$ in progress where the user is typing text into a
+dialog box, or there may be a $menu$ displayed, or the user may be
+asked to $confirm$ some operation by providing a yes/no answer (this
+mode can also be used to present informational messages).
+
+\begin{zed}
+	INTERACTION ::= available | dialog | menu | confirm
+\end{zed}
+The $op$ variable keeps track of which top-level operation
+(described in~\cite{jacky92}) is underway.
+
+The $display$ variable indicates which of the screen designs pictured
+in the informal specification is currently visible on the display.
+The $display$ variable determines which items appear and helps
+determine which operations are available.  
+
+The $item$ state variable holds the item which the operator has
+selected from a tabular display, for example the setting which
+the operator is editing.
+
+The $nlist$ state variable holds the list of names (of patients or
+fields) that appear on a list display, and $list\_item$ indicates 
+the currently selected name.
+
+The $menu\_item$ state variable holds the index of the current menu
+selection (a small integer).
+
+\begin{axdef}
+	nmax: \nat
+\end{axdef}
+\begin{zed} SELECTION == \{ i: \nat | i \leq nmax \} \end{zed}
+The $buffer$ state variable models the (possibly incomplete) string
+that the user edits in dialog mode.
+
+\begin{zed}
+	[STRING]
+\end{zed}
+
+\begin{axdef}
+	empty: STRING
+\end{axdef}
+The $keyswitch$ must be unlocked to allow the console to be used (8.7, 179).
+
+\begin{zed}
+	KEYSWITCH ::= locked | unlocked
+\end{zed}
+Some operations are available only when a treatment is being set up,
+and are locked out while a treatment $run$ is in progress (8.8.2, 183).
+
+\begin{zed}
+	RUN ::= setup | running
+\end{zed}
+The $keyswitch$ and $run$ variables depend on sensor inputs; they are not
+constrained here.
+
+Together, these variables describe the state of the user interaction.
+
+\begin{schema}{Console}
+	keyswitch: KEYSWITCH \\
+	run: RUN \\
+	display: DISPLAY \\
+	op: OP \\
+	interaction: INTERACTION \\
+	item: ITEM \\
+	nlist: \power NAME \\
+	list\_item: NAME \\
+	menu\_item: SELECTION \\
+	buffer: STRING
+\end{schema}
+When the control program starts up, the login process begins
+(section~\ref{sect:login-console})\footnote{When the implementation
+starts up, the $startup$ screen appears first.  The login process does
+not begin until the various $Init\dots$ conditions are established.
+We do not model this formally.}.
+
+\begin{schema}{InitConsole}
+	Console
+\where
+	op = login \\
+	display = login \\
+	interaction = dialog \\
+	buffer = empty
+\end{schema}
+
+\subsection{Elements of user interaction} \label{sect:gui-elts}
+
+All user interactions are built up from a few elements. In this
+section we define the constants, states and operations that serve as
+building blocks.
+
+The {\em caption} type models messages or other output to the operator
+that appear temporarily at the console (in dialog boxes or perhaps
+even from the speaker, see 2.2.3, 9).  Captions are distinguished from
+{\em log messages} which appear in a different location on the console
+and are also stored in log files along with timestamps other
+information (2.2.4, 9).
+
+\begin{zed}[CAPTION, MESSAGE]\end{zed}
+$Ignore$ is the default do-nothing operation that is
+invoked when a key is pressed but the preconditions for the associated
+operation are not satisfied.  $Ignore$ does not change the state, but
+issues an alert (such as sounding the workstation bell) to notify the
+user that the input was received but the operation is not enabled.  
+
+\begin{axdef} alert: CAPTION \end{axdef}
+
+%% \begin{zed} Event \defs [~ \Delta Console; input?: INPUT ~] \end{zed}
+\begin{schema}{Ignore}
+	Event \\
+	\Xi Console \\
+	caption!: CAPTION
+\where
+	caption! = alert
+\end{schema}
+The keyswitch must be unlocked for any operation to occur.  When the keyswitch is
+locked, input is ignored:
+
+\begin{zed}	
+	Unlocked \defs [~ Console | keyswitch = unlocked ~]
+\also
+	EventUnlocked \defs Event \land Unlocked
+\end{zed}
+Many operations are invoked by pressing the $select$ key.
+
+\begin{zed} 
+	Select \defs [~ EventUnlocked | input? = select ~]
+\end{zed}
+It is convenient to describe the operations that can occur in each of
+the interaction modes.  Each mode is described in a following
+subsection.
+
+\subsubsection{Available}
+
+Most of the top-level operations described in~\cite{jacky92}
+can only be selected when the console is available.
+
+\begin{zed} Available \defs [~ Console | interaction = available ~] \end{zed}
+
+\begin{schema}{Op}
+	EventUnlocked
+\where
+	Available \\
+	input? \in OP \\
+\end{schema}
+Certain operations have stronger preconditions: they cannot occur when
+a run is in progress (8.8.2, 183).  A few operations occur only when a
+run is in progress (8.9.11, 209-210). 
+
+\begin{zed}
+	Setup \defs [~ Available | run = setup ~]
+\also
+	Running \defs [~ Available | run = running ~]
+\end{zed}
+When the console is available, the user may select a new $display$.
+The console remains available.
+
+\begin{schema}{SelectDisplay}
+	Op \\
+\where
+	input? \in DISPLAY \\
+	display' = input?  \\
+	op' = display' \\
+	Available' \\
+\end{schema}
+$SelectDisplay$ operations may change $item$ and $list\_item$ (see
+below) but do not change other state variables (for brevity we omit
+the $x' = x$ ``nothing changes'' predicates).
+
+When an interaction is in progress, the console is $Engaged$.
+The $Done$ operation schema describes what happens when an interaction
+completes: the console returns to the $Available$ state, and $op$
+returns to its value when the display was selected.
+
+\begin{zed} Engaged \defs [ Console | interaction \neq available ] \end{zed}
+
+\begin{schema}{Done}
+	EventUnlocked \\
+\where
+	Engaged \\
+	op' = display \\
+	display' = display \\
+	Available'
+\end{schema}
+
+The $Cancel$ operation is used to end an interaction without making
+permanent changes to the underlying machine state.
+
+\begin{zed} Cancel \defs [ Done | input? = cancel ] \end{zed}
+
+\subsubsection{Lists}
+
+Certain displays show a list of names (patients or fields).  When a
+list display is selected, $nlist$ is loaded, and the default $list\_item$
+is assigned. If the list is not empty, the $List$ state results (the
+patient list might be empty if there are no patients on file; the
+field list is always empty when there is no patient, and may be empty
+if there are no fields on file for the selected patient).
+
+\begin{axdef}
+	list: \power DISPLAY \\
+	default\_name: \power_1 NAME \fun NAME 
+\where 
+	\forall list: \power_1 NAME @ default\_name~list \in list
+\end{axdef}
+
+
+\begin{zed} 
+List \defs [~ Available | display \in list \land nlist \neq \emptyset \land list\_item \in nlist ~]
+\end{zed}
+
+\begin{schema}{SelectList}
+	SelectDisplay
+\where
+	input? \in list \\
+	((nlist = \emptyset \land list\_item' = no\_name) \\
+	\lor (List' \land list\_item' = default\_name~nlist'))
+\end{schema}
+Here $display \in list \land nlist \neq \emptyset$ distinguishes the
+$List$ state, and this test occurs explicitly in the implementation.
+In contrast, $list\_item \in nlist$ is an invariant.  It need not be
+coded as an explicit test but it must be maintained or else the
+implementation might abort (because $list\_item$ is used as an index
+into $nlist$).
+
+The console indicates $list\_item$ (for example by placing a highlight
+or cursor over that name in the list).  Subsequently the user can
+choose a new name from the list by using the up and down-arrow keys.
+The function $aname$ calculates the new name by ``dead
+reckoning'' from the old name, the list, and the arrow key (it is
+not necessary for the program to poll the console for the cursor
+position).  The list remains visible.
+
+\begin{zed} v\_arrow == \{ up\_arrow, down\_arrow \} \end{zed}
+
+\begin{axdef}
+	aname: (v\_arrow \cross NAME \cross \power_1 NAME) \fun NAME 
+\where
+	\forall a: v\_arrow; n: NAME; list: \power_1 NAME @ aname(a,n,list) \in list
+\end{axdef}
+
+\begin{zed}
+Continue \defs [~ \Delta Console | interaction' = interaction \land op' = op \land display' = display ~]
+\end{zed}
+\begin{schema}{GetListArrow}
+	EventUnlocked \\
+	\Delta List
+\where
+	input? \in v\_arrow \\
+	list\_item' = aname(input?,list\_item,nlist) \\
+	Continue \\
+\end{schema}
+This is a $Continue$ operation that does not change $interaction$,
+$op$, or $display$.  Here $list\_item$ is the only state variable that
+changes.  We do not completely specify $default\_name$ and $aname$; we
+leave that to the implementation.  Here we merely provide the
+predicates needed to ensure that the implementation does not abort.
+
+The user presses the $select$ key to choose the current $list\_item$
+for some purpose.  The selection is logged; $nmessage$ converts the
+name to a log message.
+
+\begin{axdef}
+	selected\_msg: NAME \fun MESSAGE
+\end{axdef}
+
+\begin{schema}{SelectName}
+	Select \\
+	name!: NAME \\
+	message!: MESSAGE \\
+\where
+	List \\
+	name! = list\_item \\
+	message! = selected\_msg~name!
+\end{schema}
+$GetListArrow$ and $SelectName$ are not total operations; they do not
+handle the case where $nlist = \emptyset$.  The latter case is handled
+by a default do-nothing operation, $IgnoreOthers$, which includes
+$Ignore$.  We do not define the precondition of this operation
+explicitly; we code the implementation so control reaches
+$IgnoreOthers$ when no other operations are enabled.
+
+
+\subsubsection{Tables}
+
+Certain displays show a table of items (settings for one subsystem,
+calibration factors etc.).  The constant $table\_items$ tells which
+items on each table can be selected for editing or overriding
+(additional items may be displayed as well).  When a tabular display
+is selected, the default $item$ is assigned, and the $Table$ state
+results.
+
+\begin{axdef}
+	table: \power DISPLAY
+\end{axdef}
+
+\begin{axdef}
+	default\_item: table \fun ITEM \\
+	table\_items: table \fun \power_1 ITEM \\
+\where 
+	\forall d: table @ default\_item~d \in table\_items~d
+\end{axdef}
+
+
+\begin{zed}
+Table \defs [~ Available | 
+		display \in table \land 
+		item \in table\_items~display ~]
+\end{zed}
+
+\begin{schema}{SelectTable}
+	SelectDisplay
+\where
+	input? \in table \\
+	item' = default\_item~display' \\
+	Table'
+\end{schema}
+Subsequently the user can indicate a new item on the table by using
+all four arrow keys.
+
+\begin{zed} arrow == \{ right\_arrow, left\_arrow \} \cup v\_arrow \end{zed}
+
+\begin{axdef}
+	asetting: (arrow \cross ITEM \cross table) \fun ITEM
+\where
+	\forall a: arrow; s: ITEM; d: table @ asetting(a,s,d) \in table\_items~d
+\end{axdef}
+
+\begin{schema}{GetSettingArrow}
+	EventUnlocked \\
+	\Delta Table
+\where
+	input? \in arrow \\
+	item' = asetting(input?,item,display) \\
+	Continue
+\end{schema}
+Here $item$ is the only state variable that changes.
+
+Items can be selected from tabular displays for editing or overriding.
+Editing or overriding is only enabled in the $Setup$ state (when a
+treatment run is not in progress, see 8.8.2, 183).  Pressing the
+$select$ key when certain tabular displays are present invokes an
+editing operation: $edit\_setting$ if the selected item is a $setting$
+and $edit\_dose\_reg$ if it is a $dose\_reg$ (notice that here $op'$ is
+{\em not} the same as $input?$).  Therefore it is necessary to
+separate $setting$ and $dose\_reg$ items on different
+tables\footnote{Because the implementation cannot distinguish
+$setting$ from $dose\_reg$ based on $item$ alone; $item$ values are
+just C {\tt enum} values (integers).}.
+
+\begin{axdef}
+	setting\_table, dose\_reg\_table: \power table
+\where
+	\forall d: setting\_table @ table\_items~d \subseteq setting \\
+	\forall d: dose\_reg\_table @ table\_items~d \subseteq dose\_reg \\
+\end{axdef}
+
+\begin{schema}{SelectItem}
+	Select
+\where
+	Setup \\
+	Table \\
+	item' = item \\
+	(op' = edit\_dose\_reg \land display \in dose\_reg\_table \lor \\
+	op' = edit\_setting \land display \in setting\_table)
+\end{schema}
+The postcondition here implies $Editing$, the invariant of the editing
+state\footnote{The implementation uses $op$ to determine whether
+$item$ is an index into $setting$ or $dose\_reg$.}.
+
+\begin{schema}{Editing}
+	Console
+\where
+	interaction \in \{ dialog, menu \} \\
+	(op = edit\_dose\_reg \land item \in dose\_reg \lor \\
+	op = edit\_setting \land item \in setting)
+\end{schema}
+The $Setup$ precondition of $SelectItem$ prevents the console entering
+the $Editing$ state when a run is in progress.  Other mechanisms
+prevent the machine from beginning a run while in the $Editing$ state.
+
+\subsubsection{Confirm}
+
+$Confirm$ interactions present a query (``Are you sure \dots ?'')  and
+wait for the user to provide a yes/no answer, indicated by the
+$select$ or $cancel$ keys (for example see 8.9.11, 210).  Each
+$Confirm$ operation presents a confirmation box (a sort of dialog box)
+with a $caption$ that identifies the operation, and the $query$.  The
+display under the confirmation box does not change.
+	
+\begin{zed}
+	Confirm \defs [~ Console | interaction = confirm ~]
+\end{zed}
+
+\begin{axdef} 
+	ocaption: OP \fun CAPTION \\
+\end{axdef}
+
+\begin{schema}{ConfirmOp}
+	Op \\
+	caption!, query!: CAPTION
+\where	
+	caption! = ocaption~op' \\
+	display' = display \\
+	Confirm' \\
+\end{schema}
+	
+\begin{zed}
+	AcceptConfirm \defs Confirm \land Select \land Done
+\end{zed}
+
+\subsubsection{Menu}
+
+When the console is $Available$ the user can invoke a menu, then make
+a selection from the menu.  Each menu includes a caption and a list of
+menu entries. The display does not change.
+
+\begin{axdef}
+	default\_selection: SELECTION
+\end{axdef}
+
+\begin{zed}Menu \defs [~ Editing | interaction = menu ~] \end{zed}
+
+\begin{schema}{MenuOp}
+	Op \\
+	caption!: CAPTION \\
+	menu!: \iseq CAPTION
+\where
+	menu\_item' = default\_selection \\
+	display' = display \\
+	Menu'
+\end{schema}
+Here $op$ also changes; the other state variables retain the same
+values.  
+
+Menus are used to choose new values for $selection$ items; valid
+$selection$ values are small integers.  Combining $MenuOp$ with
+$SelectItem$ yields the $MenuEdit$ operation. The menu shows the item
+name and a sequence of descriptive strings indexed by the
+corresponding item values. Here again, the $Editing$ postcondition of
+$SelectItem$ guarantees that $op$ can be used to help look up
+$selection\_values~item$.
+
+\begin{axdef}
+	setting\_info\_name: ITEM \fun CAPTION \\
+	setting\_value: selection \fun \iseq CAPTION \\
+\where
+	\forall s: selection @ \dom~(setting\_value~s) = valid~s
+\end{axdef}
+
+\begin{schema}{MenuEdit}
+	MenuOp \\
+	SelectItem \\
+\where
+	item \in selection \\
+	caption! = setting\_info\_name~item;
+	menu! = setting\_value~item
+\end{schema}
+There are functions to return the default menu selection and the new
+selection after each up or down-arrow keypress.
+
+\begin{axdef}
+	amenu: (v\_arrow \cross SELECTION \cross selection) \fun SELECTION
+\where
+\forall s: selection @ (\LET n == \# (valid~s) @ \\
+\t1	\forall a: v\_arrow; i: SELECTION @ default\_selection \leq n \land amenu(a,i,s) \leq n)
+\end{axdef}
+
+\begin{schema}{GetMenuArrow}
+	EventUnlocked \\
+	\Delta Menu
+\where
+	input? \in v\_arrow \\
+	menu\_item' = amenu(input?,menu\_item,item) \\
+	Continue 
+\end{schema}
+Here $item$ is the only variable that changes.
+
+The user presses $select$ to accept the current menu item and the
+console becomes available again.
+
+\begin{zed} AcceptMenu \defs Menu \land Select \land Done \end{zed}
+
+\begin{schema}{MenuSettingC}
+	AcceptMenu \\
+	item!: ITEM \\
+	value!: VALUE
+\where
+	Editing \\
+	item! = item \\
+	value! = menu\_item
+\end{schema}
+
+\subsubsection{Dialog}
+
+When the console is $Available$ the user can begin a dialog, then type
+and edit text in a dialog box.  The dialog box contains a $caption$
+and a $prompt$ that may include the values of other state variables.
+The display under the dialog box does not change.
+
+\begin{zed} Dialog \defs [~ Console | interaction = dialog ~] \end{zed}
+
+\begin{schema}{DialogOp}
+	Op \\
+	caption!, prompt!: CAPTION \\
+\where
+	caption! = ocaption~op' \\
+	display' = display \\
+	Dialog'
+\end{schema}
+Here only $interaction$, $buffer$, and $op$ change.  The $buffer$ may
+be emptied, or may be filled with a convenient default value.  We'll describe
+changes to $op$ later, with each dialog operation.
+
+The console remains in $Dialog$ while the user types and edits.
+The $GetChar$ operation gets a single character and
+updates the buffer as described by the $modify$ function (append
+printing characters to the end of $buffer$, and do the appropriate
+things with editing characters).
+
+\begin{axdef}
+	CHAR: \power INPUT
+\end{axdef}
+\begin{axdef}
+	modify: (STRING \cross CHAR) \fun STRING
+\end{axdef}
+
+\begin{schema}{GetChar}
+	EventUnlocked \\
+	\Delta Dialog
+\where
+	input? \in CHAR \\
+	buffer' = modify(buffer,input?) \\
+	Continue 
+\end{schema}
+Here $buffer$ is the only variable that changes.
+
+When a dialog is done, the dialog box disappears and the console
+becomes available again. At any time the user can $cancel$ the dialog
+and discard the input.  To submit the input, the user presses a
+$terminator$ key; the program can $Accept$ the input or $Reprompt$
+(the user may also $Cancel$ the dialog).
+
+\begin{axdef}
+	terminator: \power INPUT
+\end{axdef}
+
+\begin{schema}{Accept}
+	Done
+\where
+	Dialog \\
+	input? \in terminator
+\end{schema}
+
+\begin{schema}{Reprompt}
+	EventUnlocked \\
+	\Delta Dialog
+\where
+	input? \in terminator \\
+	buffer' = empty \\
+	Continue
+\end{schema}
+Here again, $buffer$ is the only variable that changes.
+
+Dialogs are frequently used to edit item values. Combining $DialogOp$
+with $SelectItem$ yields the $DialogEdit$ operation.  Dialog box
+editing begins if the selected item is not a $selection$ (does not
+have just a few discrete values).  The program captions the dialog box
+with the item name and the minimum and maximum valid item
+values\footnote{The dialog box caption also includes the units, but we
+do not model this formally.}.
+	
+\begin{zed} MIN == VALUE; MAX == VALUE \end{zed}
+
+\begin{axdef}
+	setting\_info: ITEM \cross MIN \cross MAX \fun CAPTION
+\end{axdef}
+
+\begin{schema}{DialogEdit}
+	DialogOp \\
+	SelectItem \\
+\where
+	item \notin selection \\
+	prompt! = (\LET v == valid~item @ setting\_info(item, min~v, max~v))
+\end{schema}
+The implementation uses the value of $op$ guaranteed by the $Editing$
+postcondition of $SelectItem$ to look up $valid~item$; there are
+separate $valid$ arrays for $dose\_reg$ and $setting$.
+
+When the user presses a terminator key, the program attempts to
+convert the buffer contents to a (numeric) value (non-numeric strings
+are always converted to an out-of-range value).  If the conversion
+succeeds and the value is valid for the item, the dialog ends and the
+item and its value are reported; otherwise, the program reprompts.
+
+\begin{axdef}
+	sval: STRING \fun VALUE
+\end{axdef}
+
+\begin{schema}{EditSettingC}
+	Accept \\
+	item!: ITEM \\
+	value!: VALUE
+\where
+	Editing \\
+	item! = item \\
+	(\LET v == sval~buffer @ v \in valid~item \land value! = v)
+\end{schema}
+
+\begin{zed}
+InvalidSetting \defs [~ Reprompt | Editing \land sval~buffer \notin valid~item ~]
+\end{zed}
+In the implementation it is convenient to combine these two
+operations\footnote{In $EditOrInvalidSetting$, the two outputs $item!$
+and $value!$ are not used in the $Invalid$ case.}.
+
+\begin{zed}
+	EditOrInvalidSetting \defs EditSettingC \lor InvalidSetting
+\end{zed}
+
+\subsection{Therapy console operations} \label{sect:therapy-ops}
+
+In this subsection we present the operations described
+in~\cite{jacky92}.  Several building block operations require no
+further elaboration: $SelectDisplay$, $SelectTable$, $GetListArrow$,
+$GetSettingArrow$, $Cancel$, $GetMenuArrow$, $MenuSettingC$,
+$GetChar$, and $EditOrInvalidSetting$ and are already complete.
+Others require further specialization in the following subsections.
+
+\subsubsection{Relation to Session state}
+
+A few $Console$ operations read (but do not change) variables from the
+$Session$ state (section~\ref{sect:session}).  When the $Console$
+shows the patient or field list, its $nlist$ state variable holds the
+patients or fields from the $Session$ state.  This is expressed by the
+$ConsoleSession$ invariant:
+
+\begin{schema}{ConsoleSession}
+	Console \\
+	Session
+\where
+	display = select\_patient \implies nlist = names \\
+	display = select\_field \implies nlist = \dom fields
+\end{schema}
+
+\subsubsection{Op operations}
+
+Several operations are based only on $Op$.  They are $Continue$
+operations because they do not involve any ongoing interaction, just a
+single keypress.
+
+\begin{zed} SimpleOp \defs Op \land Continue \end{zed}
+
+{\bf Experiment Mode} (8.9.6, 190):
+
+\begin{schema}{ExptModeC}
+	SimpleOp \\
+	\Xi Session \\
+	\Delta ConsoleSession \\
+\where
+	Setup \\
+	input? = expt\_mode \\
+	operator \in physicists \\
+\end{schema}
+{\bf Auto Setup} (8.8.1, 181):
+
+\begin{zed}
+auto\_setup\_display == \{ field\_summary, filter\_wedge, leaf\_collim, dose\_intlk \}
+\end{zed}
+\begin{schema}{AutoSetupC}
+	SimpleOp \\
+	\Xi ConsoleSession \\
+	subsystem!: auto\_setup\_display \\
+\where
+	Setup \\
+	field \neq no\_field \\
+	display \in auto\_setup\_display \\
+	input? = auto\_setup \\
+	subsystem! = display \\
+\end{schema}
+
+\subsubsection{SelectDisplay operations}
+
+There are a few simple displays that provide no selections or
+interactive editing, {\bf Field Summary} (8.9.7, 191) and
+the $help$ display (not discussed in~\cite{jacky92}):
+
+\begin{zed} simple\_display == \{  field\_summary, help \} \end{zed}
+
+\subsubsection{SelectList operations}
+
+The specializations of $SelectList$ are {\bf Select Patient}
+(8.9.3, 184) and {\bf Select Field} (8.9.4, 186).  The latter
+operation only makes sense when a patient has been selected:
+
+\begin{zed} list = \{ select\_patient, select\_field \} \end{zed}
+
+\begin{schema}{SelectPatientList}
+	SelectList \\
+	\Xi Session \\
+	\Delta ConsoleSession \\
+\where
+	input? = select\_patient \\
+	nlist' = names 
+\end{schema}
+
+\begin{schema}{SelectFieldList}
+	SelectList \\
+	\Xi Session \\
+	\Delta ConsoleSession \\
+\where
+	patient \neq no\_patient \\
+	input? = select\_field \\
+	nlist' = \dom fields
+\end{schema}
+
+\subsubsection{SelectTable operations}
+
+The $table$ displays are {\bf Gantry/PSA} (8.9.8, 193), 
+{\bf Filter/Wedge} (8.9.9, 194), {\bf Leaf Collimator} (8.9.10, 196), 
+{\bf Dosimetry/Therapy Interlocks} (8.9.11, 199) and 
+{\bf Calibration Factors} (8.9.13, 213):
+
+\begin{zed}
+table = \{ gantry\_psa,filter\_wedge,leaf\_collim,dose\_intlk,dose\_cal \}
+\end{zed}
+The constant $table\_items$ tells which items on each table can be
+selected for editing or overriding (additional items may be displayed as
+well).
+
+\begin{zed}
+	table\_items~ = \{ gantry\_psa \mapsto \{ gantry, collim, turnt \}, filter\_wedge \mapsto \{ filter, wedge, w\_rot \}, \\
+\t5			leaf\_collim \mapsto leaves, dose\_intlk \mapsto \{ p\_dose, p\_time \}, \\
+\t5		dose\_cal \mapsto\{ pt\_mode,press,temp,d\_rate,t\_fac \} \}
+\end{zed}
+It is necessary to separate $setting$ and $dose\_reg$ items on
+different tables:
+
+\begin{zed}
+	setting\_table = \{ gantry\_psa,filter\_wedge,leaf\_collim \}
+\also
+	dose\_reg\_table = \{ dose\_intlk, dose\_cal \}
+\end{zed}
+Now that these constants are defined, the previously defined
+$SelectTable$ operation requires no further specialization.
+
+\subsubsection{ConfirmOp operations}
+
+To begin {\bf Cancel Run} (8.9.11, 209 -- 210):
+
+\begin{axdef}
+	cancel\_run\_query: CAPTION
+\end{axdef}
+
+\begin{schema}{SelectCancelRun}
+	ConfirmOp \\
+\where	
+	Running \\
+	input? = cancel\_run \\
+	op' = input? \\
+	query! = cancel\_run\_query
+\end{schema}
+The complementary $AcceptConfirm$ operation is $CancelRunC$ (below).
+
+\subsubsection{MenuOp operations}
+
+At this writing there are no simple $MenuOp$ operations, only
+$MenuEdit$ operations (under $Setup$, below).
+
+\subsubsection{DialogOp operations}
+
+
+\begin{axdef}
+	type\_message\_prompt, store\_field\_prompt: CAPTION
+\end{axdef}
+
+To begin {\bf Write Log Message} (2.5.1, 17):
+
+\begin{schema}{TypeMessage}
+	DialogOp
+\where
+	input? = log\_message \\
+	op' = input?  \\
+	prompt! = type\_message\_prompt
+\end{schema}
+To begin {\bf Store Field} (8.9.5, 189 -- 188):
+
+\begin{schema}{EditField}
+	DialogOp
+\where
+	Setup \\
+	input? = store\_field \\
+	op' = input? \\
+	prompt! = store\_field\_prompt
+\end{schema}
+These two operations are completed by the complementary $Accept$
+operations, $WriteMessageC$ and $StoreFieldC$ (below).
+
+\subsubsection{Setup operations}
+
+Under $Setup$, there are $SelectName$, $SelectItem$, $MenuEdit$ and
+$DialogEdit$ operations.
+
+{\bf Select Patient} (8.9.3, 184 -- 185):
+
+\begin{schema}{SelectPatientC}
+	SelectName
+\where
+	Setup \\
+	display = select\_patient \\
+	Continue
+\end{schema}
+At this writing, $SelectPatient$ is a $Continue$ operation; the
+patient list remains on the screen\footnote{We also considered
+establishing $display' = select\_field$ in $SelectPatientC$.  It would
+not be difficult to adopt this alternative later.}.
+
+{\bf SelectField} (8.9.4, 186 -- 189): There are three cases.  The
+simplest case occurs during experiment mode, or when the chosen field
+has not yet been delivered today and the prescribed total dose and
+number of fractions has not yet been exceeded (8.9.4, 187).
+
+\begin{schema}{NewFieldC}
+	SelectName \\
+	ConsoleSession
+\where
+	Setup \\
+	display = select\_field \\
+\end{schema}
+
+\begin{schema}{SelectSimpleFieldC}
+	NewFieldC
+\where
+	mode = experiment \\
+	\lor (counters~name!~dose = 0 \land \lnot exceeded(fields~name!, counters~name!)) \\
+	Continue
+\end{schema}
+The more complicated cases arise in therapy mode when the operator
+must be warned of some unusual condition (8.9.4, 187-188).  These are
+$DialogOp$ operations. The name of the new field must be stored during
+the dialog.  The operator may enter a preset dose or cancel
+the dialog (so no new field is selected).
+
+\begin{schema}{Console1}
+	ConsoleSession \\
+	new\_field: FIELD \\
+\where
+	new\_field \in \dom fields
+\end{schema}
+
+\begin{schema}{DoseDialogOp}
+	NewFieldC \\
+	DialogOp \\
+	\Delta Console1 \\
+\where
+	op' = select\_field \\
+	new\_field' = name! \\
+	mode = therapy \\
+\end{schema}
+There are two such cases. The first arises when the same field has
+already been delivered on the same day but the prescribed daily dose
+has not yet been reached; the remaining dose is offered as the default
+(8.9.4, 187):
+
+\begin{axdef}
+sprintf: VALUE \fun STRING \\
+delivered\_prompt: NAME \cross VALUE \cross VALUE \cross VALUE \fun CAPTION \\
+\end{axdef}
+
+\begin{schema}{SelectDeliveredField}
+	DoseDialogOp
+\where
+	counters~new\_field'~dose > 0 \\
+	\lnot exceeded(fields~new\_field', counters~new\_field') \\
+	(\LET d == fields~new\_field'~dose; c == counters~new\_field'~dose @ \\
+\t1	 (\LET default\_dose == d-c @ \\
+\t2	  buffer' = sprintf~default\_dose \land \\
+\t2	   prompt! = delivered\_prompt(new\_field', d, c, default\_dose)))
+\end{schema}
+The other case arises when the daily dose, the total dose or the
+number of fractions has been exceeded (8.9.4, 188).  No default dose
+is provided.
+
+\begin{axdef}
+exceeded\_prompt: NAME \cross ACCUMULATION \cross ACCUMULATION \fun CAPTION
+\end{axdef}
+
+\begin{schema}{SelectExceededField}
+	DoseDialogOp
+\where
+	exceeded(fields~new\_field', counters~new\_field') \\
+	prompt! = exceeded\_prompt(new\_field', fields~new\_field', counters~new\_field') \\
+	buffer' = empty \\
+\end{schema}
+The complete operation is composed of all these cases.
+
+\begin{zed} 
+	SelectFieldC \defs 
+	 SelectSimpleFieldC \lor SelectDeliveredField \lor SelectExceededField
+\end{zed}
+After $SelectSimpleFieldC$, nothing more need be done.
+$SelectExceededField$ and $SelectDeliveredField$ are succeeded by the 
+$SelectFieldOp$ state, which is handled by the $SelectComplexFieldS$
+operation.  
+
+\begin{schema}{SelectFieldOp}
+	Console1 \\
+	Dialog \\
+\where
+	op = select\_field
+\end{schema}
+
+{\bf Override} (8.4, 175; 8.8.1, 181; 8.8.2, 183) is also a $ConfirmOp$
+operation, enabled only when a field has been selected.  The name of
+the item that the operator selected is echoed in the confirmation
+dialog.  To begin {\bf Override}:
+
+\begin{zed}
+override\_table == \{ filter\_wedge, leaf\_collim, gantry\_psa, dose\_intlk \}
+\end{zed}
+
+\begin{axdef}
+	override\_query: CAPTION \fun CAPTION
+\end{axdef}
+
+\begin{schema}{SelectOverride}
+	ConfirmOp \\
+	SelectItem \\
+	\Xi Session \\
+\where
+	field \neq no\_field \\
+	display \in override\_table \\
+	input? = override\_cmd \\
+	op' = input? \\
+	query! = override\_query(setting\_info\_name~item)
+\end{schema}
+The complementary $AcceptConfirm$ operations is $OverrideC$ (below).
+
+{\bf Edit}: There are three cases.  Calibration factors can be edited
+in experiment mode (8.9.13, 215), preset dose and time can be edited
+in both modes when a field is selected (8.9.11, 201--202), and other
+preset items can be edited in experiment mode when a field is selected
+(8.8.1, 180--181; 8.9.8, 194; 8.9.9, 196; 8.9.10, 198).
+
+\begin{zed}
+	cal\_table == \{ dose\_cal \}
+\also
+	dose\_table == \{ dose\_intlk \}
+\also
+	preset\_table == \{ filter\_wedge, leaf\_collim \}
+\end{zed}
+
+\begin{zed}
+CalTable \defs [~ ConsoleSession | mode = experiment \land display \in cal\_table ~]
+\end{zed}
+The precondition $field \neq no\_field$ occurs elsewhere so it is
+convenient to collect two cases together.
+
+\begin{schema}{SettingTable}
+	ConsoleSession
+\where
+	display \in dose\_table \lor (mode = experiment \land display \in preset\_table)
+\end{schema}
+Finally 
+
+\begin{zed}
+	SelectCalMenu \defs CalTable \land MenuEdit
+\also
+	SelectCalDialog \defs CalTable \land DialogEdit
+\also
+	SelectSettingMenu \defs SettingTable \land MenuEdit
+\also
+	SelectSettingDialog \defs SettingTable \land DialogEdit
+\end{zed}
+The complementary operations are $EditSettingC$ and $MenuSettingC$
+(section~\ref{sect:gui-elts}, above).
+
+\subsubsection{Cancel operations}
+
+There is a special $cancel$ operation for the login process (below) so
+we have to strengthen the preconditions on $Cancel$:
+
+\begin{zed} 
+	LoggedIn \defs [ Console | op \notin \{ login, password \} ]
+\also
+	CancelOp \defs LoggedIn \land Cancel
+\end{zed}
+
+\subsubsection{AcceptConfirm operations}
+
+To complete {\bf Override} (8.4, 175; 8.8.1, 181; 8.8.2, 183):
+
+\begin{schema}{OverrideC}
+	AcceptConfirm \\
+	item!: ITEM
+\where
+	op = override\_cmd \\
+	item! = item
+\end{schema}
+To complete {\bf Cancel Run} (8.9.11, 209 -- 210):
+
+\begin{zed} 
+	CancelRunC \defs [~ AcceptConfirm | op = cancel\_run ~]
+\end{zed}
+
+\subsubsection{Accept operations}
+
+To complete {\bf Write Log Message} (2.5.1, 17).  The $smessage$
+function turns a string into a log message by prepending the timestamp
+and other information.
+
+\begin{axdef} log\_msg: STRING \fun MESSAGE \end{axdef}
+
+\begin{schema}{WriteMessageC}
+	Accept \\
+	message!: MESSAGE
+\where
+	op = log\_message \\
+	message! = log\_msg~buffer
+\end{schema}
+
+To complete {\bf Store Field} (8.9.5, 189 -- 188)\footnote{The
+$message!$ output from $StoreFieldC$ is not mentioned
+in~\cite{jacky92}; here we correct the omission.}.
+
+\begin{axdef}
+	sname: STRING \fun NAME \\
+	store\_msg: NAME \fun MESSAGE
+\end{axdef}
+\begin{schema}{StoreFieldC}
+	Accept \\
+	field!: NAME \\
+	message!: MESSAGE
+\where
+	op = store\_field \\
+	field! = sname~buffer \\
+	message! = store\_msg~field!
+\end{schema}
+The complex variants of {\bf Select Field} (8.9.4, 187--188) are
+handled by $SelectComplexFieldC$, which is similar to $EditSettingC$:
+
+\begin{schema}{SelectComplexFieldC}
+	\Delta Console1 \\
+	Accept \\
+	field!: FIELD \\
+	dose!: VALUE
+\where
+	SelectFieldOp \\
+	field! = new\_field \\
+	(\LET d == sval~buffer @ d \in valid~dose \land dose! = d)
+\end{schema}
+We have to make the operation total
+
+\begin{zed}
+InvalidDose \defs [~ Reprompt; \Delta Console1 | SelectFieldOp \land sval~buffer \notin valid~dose ~]
+\end{zed}
+
+\begin{zed}
+ComplexOrInvalidField \defs SelectComplexFieldC \lor InvalidDose
+\end{zed}
+
+\subsubsection{Logout and login} \label{sect:login-console}
+
+The {\bf Login} process (Fig. 2.6, 19) can be seen as editing the
+value of $operator$.  Messages are logged at logout and login.  
+{\bf Logout} (2.5.2, 17 -- 18; 8.9.2, 184) is is similar to $SelectDisplay$
+and $DialogOp$; it reads $Session$ for the operator's ID in the logout
+message. 
+
+\begin{axdef}
+	o\_msg, lo\_msg: OPERATOR \fun MESSAGE
+\end{axdef}
+
+\begin{schema}{Logout}
+	Op \\
+	\Xi Session \\
+	message!: MESSAGE
+\where
+	Setup \\
+	input? = login \\
+	display' = input? \\
+	op' =  display' \\
+	buffer' = empty \\
+	message! = lo\_msg~operator \\
+	Dialog' 
+\end{schema}
+A successful {\bf Login} (2.5.2, 17 -- 20; 8.9.1, 183) occurs when a
+user enters a valid operator identification.  The process of logging
+back in is broken into two steps.  In the first step, the user types
+their username into the buffer.  When the user types a terminator the
+username is saved in another buffer; the $Console1$ state is $Console$
+with this buffer added\footnote{The password is also typed into
+$buffer$ so the $GetChar$ operation can be used.}. The console remains
+logged out after this step.  This $EnterUsername$ operation is similar
+to $Accept$ and $Continue$.
+
+\begin{schema}{Console2}
+	Console \\
+	username: STRING
+\end{schema}
+
+\begin{schema}{EnterUsername}
+	\Delta Console2 \\
+	\Delta Dialog \\
+	EventUnlocked
+\where
+	op = login \\
+	input? \in terminator \\
+	username' = buffer \\
+	buffer' = empty \\
+	op' = password \\
+  	display' = display \\
+\end{schema}
+In the second step, the user enters their password.  If their
+username, password pair is found in operator database, the user is
+logged in, the help screen is displayed, and the console becomes
+available.  This $LoginC$ operation is similar to $Accept$ and
+$SelectDisplay$.
+
+The operator authorization file is modelled by Z global constants
+$operators$ and $physicists$ (physicists are authorized to use the
+equipment in its experiment mode, see 8.2, 170).  Values of $OPERATOR$
+include the operator's password in addition to the operator's printed
+name.
+
+\begin{zed} USERNAME == STRING; PASSWORD == STRING \end{zed}
+
+\begin{axdef}
+	soper: (USERNAME \cross PASSWORD) \fun OPERATOR \\
+\end{axdef}
+
+\begin{schema}{LoginC}
+	\Delta Console2 \\
+	EventUnlocked \\
+	operator!: OPERATOR \\
+	message!: MESSAGE
+\where	
+	op = password \\
+	soper(username, buffer) \in operators \\
+	input? \in terminator \\
+	display' = help \\
+	op' = display \\
+	operator! = soper(username,buffer) \\
+	message! = o\_msg~operator! \\
+	Available'
+\end{schema}
+If the username, password pair is not found in the authorization file,
+the console remains logged out.  
+
+\begin{schema}{Unauthorized}
+	\Delta Console2 \\
+	Reprompt 
+\where
+	op = password \\
+	soper(username,buffer) \notin operators \\
+	username' = username   
+\end{schema}
+
+\begin{zed} LoginOrUnauthorized \defs LoginC \lor Unauthorized \end{zed}
+Users may cancel a login attempt while entering their username or
+password.  The login process begins anew.
+
+\begin{schema}{CancelUsername}
+	\Delta Console2 \\
+	\Delta Dialog \\
+	EventUnlocked
+\where
+	op \in \{ login, password \} \\
+	input?  = cancel \\
+	op' = login \\
+	buffer'  = empty \\
+	username' = empty \\
+	display' = display
+\end{schema}
+
+\subsubsection{Other operations}
+
+Several operations not described in~\cite{jacky92} are included for
+development purposes\footnote{$Shutdown$ will not be included in
+production versions.}.  They are always enabled.
+
+\begin{zed}
+	Refresh \defs [~ Event | input? = refresh ~]
+\also
+	Shutdown \defs [~ Event | input? = shutdown ~]
+\end{zed}
+
+This concludes our presention of the states and operations in the user
+interface.
+
+\section{Combining the subsystems} \label{sect:compose}
+
+In this section we combine related operations from the $Console$,
+$Session$ and $Field$ subsystems.  In cases where no data is
+transferred between subsystems, we can simply conjoin the separate
+operations:
+
+\begin{zed} ExptMode \defs ExptModeC \land ExptModeS \land ExptModeF \end{zed}
+Here the conjunction just expresses that the named operations in all
+three subsystems are triggered by the $expt\_mode$ input at the
+console.  In this report both $ExptModeC$ and $ExptModeS$ contain the
+precondition $operator \in physicists$, but this predicate only needs
+to appear once; we include it in both schemas for clarity\footnote{In our
+implementation, we observe the convention that preconditions of
+combined operations are always tested in the $Console$
+operations.  For example $operator \in physicists$
+is tested by code in {\tt zconsole.c}, not {\tt zsession.c}.}.
+
+In other cases, data is transferred.  For example, in the $Override$
+operation, the $item!$ output from the $Console$ subsystem is
+consumed by the $item?$ input in the $Field$ subsystem (the $Session$
+subsystem does not participate in this operation).  We wish to
+express
+
+%%unchecked - avoid spurious msgs
+\begin{schema}{Override}
+	OverrideC \\
+	OverrideF
+\where
+	item! = item?
+\end{schema}
+This can be expressed more concisely using the Z {\em pipe} operator
+$\pipe$, which has the effect of connecting corresponding input and
+output variables (\cite{spivey92}, p. 78)\footnote{The Z pipe operator
+also hides the piped variables.}.
+
+\begin{zed} Override \defs OverrideC \pipe OverrideF \end{zed}
+In $Login$, the new operator name $operator!/operator?$ is the piped variable.
+
+\begin{zed} Login \defs LoginC \pipe LoginS \end{zed}
+In $EditSetting$, both the item name $item!/item?$ and the
+new setting value $value!/value?$ are piped:
+
+\begin{zed} EditSetting \defs EditSettingC \pipe EditSettingF \end{zed}
+Sometimes the output from the $Console$ subsystem is piped to inputs in
+both the $Session$ and $Field$ subsystems.  In $StoreField$, the new
+field name $field! / field?$ is the piped variable:
+
+\begin{zed} 
+	StoreField \defs StoreFieldC \pipe (StoreFieldS \land StoreFieldF)
+\end{zed}
+Here the conjunction $StoreFieldS \land StoreFieldF$ ensures that
+$prescribed'$ in $fields' = fields \cup \{ field' \mapsto prescribed' \}$ 
+from $StoreFieldS$ is the same as $prescribed'$ in
+$prescribed' = prescribed \oplus  measured \dots$ from $StoreFieldF$.
+
+In $SelectPatient$, the new patient name $patient!/patient?$ is the
+piped variable ($patient?$ does not appear in $SelectPatientF$).
+
+\begin{zed} 
+SelectPatient \defs SelectPatientC \pipe (SelectPatientS \land SelectPatientF)
+\end{zed}
+There are two variations of 
+$SelectField$.  In both variants $field!/field?$ is piped from 
+the $SelectFieldC$ variant to $SelectFieldS$.  In the complex variant,
+$dose!/dose?$ is piped from $SelectComplexFieldS$ to $SelectComplexFieldF$.
+
+\begin{zed} 
+	SelectSimpleField \defs SelectSimpleFieldC \pipe (SelectFieldS \land SelectSimpleFieldF)
+\also
+	SelectComplexField \defs SelectComplexFieldC \pipe (SelectFieldS \land SelectComplexFieldF)
+\end{zed}
+
+

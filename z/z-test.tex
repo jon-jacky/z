@@ -1,0 +1,158 @@
+\chapter{Z test page}
+
+This page exercises most of the translations provided by the {\bf Z2HTML} tool.
+
+% LaTeX comments are removed.  Section numbers do not appear.
+% Sections, subsections and subsubsections are processed by toc.sed 
+% to create the table of contents
+
+\section{Symbols} 
+
+Most Z symbols are represented by GIF's.  Symbols which are not
+yet supported appear as untranslated LaTeX commands.
+
+% Here is an example of the LaTeX tabbing.
+% Z2HTML does not use xxxx \= \kill lines to control column width.
+% Instead use LaTeX space ~ to make columns wider - translates to HTML &nbsp;
+% Note use of ~~~ in last line before \end{tabbing} below
+% Note use of $...$ to select math font inside table entries
+% Note you must use ~ in empty columns - see second line under Sequences
+
+\begin{tabbing}
+Logic 	\> $true false \lnot \land \lor \implies \iff \forall \exists \exists_1 \LET \vdash \models$ \\
+Sets etc. \> $= \neq \in \notin \emptyset \subseteq \subset \{ \} | @ \lambda \mu  \cap \cup \setminus \bigcup \bigcap \power \cross first second \IF \THEN \ELSE \ldata \rdata$ \\
+Relations \> $\rel \mapsto \dom \ran \comp \circ \dres \ndres \rres \nrres \limg \rimg \inv \plus \star \oplus \inrel{R} \id$ \\
+Functions \> $\pfun \fun \pinj \inj \bij \psurj \surj \ffun \finj $ \\
+Numbers etc. \> $\num \nat \nat_1 + - * \div \mod \leq < \geq > \upto min max \# \finset \finset_1$ \\
+Sequences \> $\seq \seq_1 \iseq \langle \rangle \cat \dcat head tail last front rev \inseq \filter \extract \disjoint \partition $ \\ 
+~ \> $squash \prefix \suffix$ \\
+Bags \> $\bag \lbag \rbag count \bcount \otimes \inbag \subbageq \uplus \uminus items$ \\
+Schema calc. \> $\defs [ | ] ; . \lnot \land \lor \theta \semi \pipe \hide \project \pre \lblot \rblot $ \\
+Conventions ~~~ \> $? ! ' \Delta \Xi$ \\
+\end{tabbing}
+
+\section*{Z paragraphs} % Un-numbered \section* looks the same as \section
+
+\subsection{Inline math}
+
+% In Z2HTML \[ ... \] only works if it's all on one line
+
+\[ ConsoleOp \defs SelectDisplay \lor SelectPatientList \lor SelectFieldList \lor  \ldots \lor IgnoreOthers \]
+
+\subsection{Axiomatic definition}
+
+% labels are ignored
+\subsubsection{Inline axiomatic definition and Z} \label{sect:inline-axdef}
+
+\begin{axdef} no\_name: NAME \end{axdef}
+\begin{zed} no\_patient == no\_name; no\_field == no\_name \end{zed}
+
+\subsubsection{Multiline Z, axiomatic definition boxes}
+
+\begin{axdef}
+	cal\_factor: cal\_const \fun VALUE
+\end{axdef}
+
+\begin{zed}
+	ACCUMULATION == counter \fun VALUE
+\also
+ 	PRESCRIPTION == prescrip \fun VALUE
+\end{zed}
+
+\begin{axdef}	
+	Preset: studies \fun (FIELD \pfun PRESCRIPTION) \\
+	Prescribed: patients \fun (FIELD \pfun PRESCRIPTION) \\
+	Accumulated: patients \fun (FIELD \pfun ACCUMULATION) \\
+\where
+	\forall s: studies @ no\_field \notin \dom (Preset~s) \\
+	\forall p: patients @ no\_field \notin \dom (Prescribed~p) \\
+\t9		\land \dom~(Prescribed~p) = \dom~(Accumulated~p) 
+\end{axdef}
+
+\subsection{Schema boxes} \label{sect:schema} % For now labels are ignored
+
+\begin{schema}{TherapyControl}
+	Session \\
+	Field \\
+	Intlk \\
+	\dots \\
+	Console \\
+\end{schema}
+
+% The following line uses $...$ to indicate Z indentifiers in running text.
+
+The $CheckOut$ operation has two input parameters, the person $p?$ and
+the document $d?$.
+
+\begin{schema}{CheckOut}
+	\Delta Documents \\
+	p?: PERSON \\
+	d?: DOCUMENT
+\where
+	d? \notin \dom checked\_out \\
+	(d?, p?) \in permission \\
+	checked\_out' = checked\_out \cup \{(d?, p?)\}
+\end{schema}
+
+\subsection*{Generic definition box}
+
+% LaTeX tabular - directions about column justification ignored
+% Again use $...$ to select math font for identifiers
+
+\begin{tabular}{l c l}
+$Q \comp R$ & - & Relational composition: $Q$ composed with $R$ \\
+$R \circ Q$ & - & Backward relational composition, same as $Q \comp R$ \\
+\end{tabular}
+
+\begin{gendef}[X,Y,Z]
+	\_ \comp \_ : (X \rel Y) \cross (Y \rel Z) \fun (X \rel Z) \\
+	\_ \circ \_ : (Y \rel Z) \cross (X \rel Y) \fun (X \rel Z) \\
+\where
+	\forall Q: X \rel Y; R: Y \rel Z @ \\
+\t3		Q \comp R = R \circ Q = \{~ x: X; y: Y; z: Z | x \inrel{Q} y \land y \inrel{R} z @ x \mapsto z ~\}
+\end{gendef}
+
+\subsection*{Argue environment}
+
+\begin{argue}
+ \exists Editor' @ Insert & Definition of precondition \\
+\t1 \iff \exists left', right': TEXT | \dots  @ \dots & Expand schemas \\
+\t1 \iff \exists left', right': TEXT @ \dots \land \dots & Restricted $\exists$-quantifier \\
+\t1 \iff pr \land \# ((left \cat \langle ch? \rangle) \cat right) \leq maxsize & One-point rule
+\t1 \iff pr \land \# left + \# \langle ch? \rangle + \# right \leq maxsize & $\# (s \cat t) = \# s + \#t$ \\
+\t1 \iff pr \land \# left + 1 + \# right \leq maxsize & $\# \langle x \rangle = 1$ \\
+\t1 \iff pr \land \# left + \# right < maxsize & Arithmetic 
+\end{argue}
+
+This completes the calculation.  The precondition of $Insert$ is 
+$ ch? \in printing \land \# left + \# right < maxsize$.  When the input is a
+printing character, the number of characters to
+the left and right of the cursor must be less than the buffer size. 
+
+\newpage % Page breaks are ignored
+
+\section{Other formatting} 
+
+Here is some {\em emphasized text}, {\bf boldface text}, 
+{\tt typewriter font text}, and an \mbox{enclosed mbox}.  
+You must ensure that these don't break across a line, {\em like
+this}.  Footnotes don't appear at the bottom of the 
+page\footnote{Instead footnotes are translated
+inline, as you see here.}.  Footnotes are the only one of these
+environments that can extend across lines.
+
+\begin{quote}
+Quotes are indented.
+\end{quote}
+
+% For now we don't do anything much with citations and cross-references.
+% You can edit in the links by hand in the generated HTML.
+
+% Paragraphs are not included in the table of contents
+\paragraph{Cross references} The $TherapyControl$ schema in
+section~\ref{sect:schema} is from~\cite{jacky95}.
+
+\subsection*{Miscellaneous}
+
+$TherapyControl$ or any other formal text at the beginning of a line
+is handled properly.  \dots That's about all.

@@ -1,0 +1,303 @@
+% reasoning-slides.tex (root is reasoning.tex)
+
+\pagestyle{empty}
+
+\begin{slide}{}
+FORMAL REASONING
+
+All properties do not have to be spelled out explicitly.  From a few
+properties, we can infer many more by formal reasoning (applying
+rules).
+
+Enables a formal model to act as a {\em non-executable prototype}.
+
+Investigate behavior in hypothetical situations.
+
+Validate a specification against requirements.
+
+Check consistency and completeness.
+
+Calculate preconditions.
+
+Check refinement from specification to detailed design.
+
+\end{slide}
+
+\begin{slide}{}
+CALCULATION AND PROOF
+
+An exercise in formal reasoning is a kind of calculation.
+
+``A train moves at a constant velocity of sixty miles per hour.  How far does
+the train travel in four hours?''
+
+\begin{axdef}
+	distance, velocity, time: \nat
+\where
+	distance = velocity * time \\
+	velocity = 60 \\
+	time = 4 
+\end{axdef}
+To find $distance$, {\em substitute} equals for
+equals. From $a=b$ and $b=c$, conclude $a=c$.
+
+\begin{argue}
+	distance = velocity * time & Definition \\
+\t1		= 60 * time & $velocity = 60$ \\
+\t1		= 60 * 4 & $time = 4$ \\
+\t1		= 240 & Arithmetic
+\end{argue}
+The proof {\em is} a predicate in vertical format.
+
+\end{slide}
+
+\begin{slide}{}
+REASONING ABOUT SETS
+
+Calculations need not be arithmetic.
+
+``Philip works on the adhesives team in the materials group, which is part of
+the research division.  Is Philip in research?''
+
+\begin{axdef}	
+	philip: PERSON \\
+	adhesives, materials, research,manufacturing: \power PERSON
+\where
+	adhesives \subseteq materials \\
+	materials \subseteq research \\
+	philip \in adhesives 
+\end{axdef} 
+Show $philip \in research$.
+
+\begin{argue}
+	philip \in adhesives & Definition \\
+\t1		\subseteq materials & Definition \\
+\t1		\subseteq research & Definition
+\end{argue}
+Like equality, the subset relation is {\em transitive}. 
+From $S \subseteq T \subseteq U$, infer 
+$S \subseteq U$.
+
+\end{slide}
+
+\begin{slide}{}
+REASONING WITH EQUIVALENCE AND \\
+ IMPLICATION
+
+Each step can be a predicate, connected by
+the transitive logical connectives $\iff$ and $\implies$.
+
+\begin{axdef}
+	x: \num
+\where
+	2*x + 7 = 13
+\end{axdef}
+Solve for $x$
+
+\begin{argue}
+2*x + 7 = 13			& Definition \\
+\t1	\iff 2*x = 13 - 7	& $-7$, both sides \\
+\t1	\iff 2*x = 6		& Arithmetic \\
+\t1	\implies (2*x) \div 2 = 6 \div 2 & $\div 2$, both \\
+\t1	\iff x = 6 \div 2	& Algebra \\
+\t1	\iff x = 3 		& Arithmetic
+\end{argue}
+We have proved $2*x + 7 = 13 \implies x = 3$.
+
+\end{slide}
+
+\begin{slide}{}
+LAWS
+
+Formal reasoning steps are justified by {\em laws}:
+predicates that are always {\em true}, for any values of the
+place holders.
+
+Place holders can stand for expressions.
+
+\begin{argue} 
+0 * n = 0 & Zero \\
+% \also
+d \neq 0 \implies n = d*(n \div d) + (n \mod d) & Division \\
+%\also
+x=y \land x \in \dom f \implies f~x = f~y & Leibniz \\
+\end{argue}
+
+Place holders can stand for predicates.
+
+\begin{argue}
+p \lor \lnot p & Excluded middle \\
+% \also
+p \land \lnot p \iff false & Contradiction \\
+%\also
+\lnot (p \land q) \iff \lnot p \lor \lnot q &  DeMorgan \\
+% \also
+p \land (q \lor r) \iff (p \land q) \lor (p \land r)   & Distrib.\\
+\end{argue}
+
+\end{slide}
+
+\begin{slide}{}
+SELECTED LAWS
+
+About logical connectives
+
+\begin{argue}
+p \land true \iff p & Unit of {\em and} \\
+%\also
+p \land false \iff false & Zero of {\em and}
+\end{argue}
+
+About sequences
+
+\begin{argue}
+\# \langle x \rangle = 1 & Size of singleton \\
+%\also
+\ran \langle x \rangle = \{ x \} & Range of singleton \\
+%\also
+\# (s \cat t) = \# s + \#t & $\#$ and $\cat$ \\
+%\also
+\ran (s \cat t) = \ran s \cup \ran t & $\ran$ and $\cat$ \\
+\end{argue}
+
+About the existential quantifier
+
+\begin{argue}
+\exists d | p @ q \iff \exists d @ p \land q & Restricted $\exists$ \\
+% \also
+\exists x: T @ x = e \land p \iff p[e/x] & 1-pt. rule \\
+\end{argue}
+
+\end{slide}
+
+\begin{slide}{}
+PRECONDITIONS BY INSPECTION
+
+The {\em precondition} is the predicate that must be true for the
+operation to be defined, involving only inputs and unprimed ``before''
+variables.
+
+
+\begin{schema}{Forward}
+	\Delta Editor \\
+	ch?: CHAR
+\where	
+	ch? = right\_arrow \\
+	right \neq \langle \rangle \\
+	left' = left \cat \langle head(right) \rangle \\
+	right' = tail(right)
+\end{schema}
+The precondition is
+
+\[ ch? = right\_arrow \land right \neq \langle \rangle \]
+
+\end{slide}
+
+\begin{slide}{}
+PRECONDITIONS BY INSPECTION (2)
+
+A complete case analysis reduces to $p \lor \lnot p$
+
+\begin{schema}{T\_Forward}
+	\Delta Editor \\
+	ch?: CHAR 
+\where
+	ch? = right\_arrow \\
+	((right \neq \langle \rangle \\
+\t1		\land left' = left \cat \langle head~right \rangle \\
+\t1		\land right' = tail~right) \lor \\
+	(right = \langle \rangle \land left' = left \land right' = right))
+\end{schema}
+The precondition is 
+
+\begin{argue}
+ch? = right\_arrow \land & \\
+\t2	((right \neq \langle \rangle \land \dots) \lor & \\
+\t2	(right = \langle \rangle \land \dots)) & Given \\
+\t1 \iff ch? = right\_arrow \land true & Excluded middle \\
+\t1 \iff ch? = right\_arrow  & Unit of {\em and} 
+\end{argue}
+
+\end{slide}
+
+\begin{slide}{}
+PRECONDITIONS BY CALCULATION
+
+{\em Implicit preconditions} arise when the 
+operation definition interacts with the state invariant.
+
+The precondition of operation $Op$ on state $S$ is $\exists S' @ Op$,
+``There exists a final state $S'$ that satisfies the
+predicate of $Op$.''
+
+\begin{schema}{Insert}
+	\Delta Editor \\
+	ch?: CHAR
+\where
+	ch? \in printing \\
+	left' = left \cat \langle ch? \rangle \\
+	right' = right
+\end{schema}
+The precondition of $Insert$ is 
+
+\begin{zed} \exists Editor' @ Insert \end{zed}
+
+\end{slide}
+
+\begin{slide}{}
+PRECONDITION CALCULATION
+
+
+$\exists Editor' @ Insert$
+
+\begin{argue}
+\iff \exists left', right': TEXT | & \\
+\t1	\# (left' \cat right') \leq maxsize @ & \\
+\t2	ch? \in printing \land & \\
+\t2	left' = left \cat \langle ch? \rangle \land right' = right & Expand schemas \\
+ \iff \exists left', right': TEXT @  & \\
+\t1	\# (left' \cat right') \leq maxsize \land pr \land \dots  & $\exists$,  $pr$ is $ch? \in printing$  \\
+ \iff pr \land \# ((left \cat \langle ch? \rangle) \cat right) \leq maxsize & 1-pt. rule w/ $left'$,$right'$ \\
+ \iff pr \land \# left + \# \langle ch? \rangle + \# right \leq maxsize & $\#$ and $\cat$ \\
+ \iff pr \land \# left + 1 + \# right \leq maxsize & Size of singleton \\
+ \iff pr \land \# left + \# right < maxsize & Arithmetic 
+\end{argue}
+The precondition is 
+
+\[ ch? \in printing \land \# left + \# right < maxsize \]
+The buffer mustn't overflow!
+\end{slide}
+
+\begin{slide}{}
+REFINEMENT, IMPLEMENTATION
+
+Implication can be used to check the correctness of design steps
+({\em refinement} steps).
+
+$p \implies q$ means $p$ has all the properties of $q$, and
+possibly more besides.  If you asked for $q$, you should be satisfied
+with $p$.
+
+\begin{zed}
+	stronger \implies weaker
+\also
+	concrete \implies abstract
+\also
+	implementation \implies specification
+\also
+impl. \implies design_n \implies \dots \implies  design_1 \implies spec.
+\end{zed}
+Example
+
+\begin{argue}
+	x' > x & Specification  \\
+% \also
+	x' = x+1 & Implementation  \\
+% \also
+	x' = x+1 \implies x' > x & Proof
+\end{argue}
+
+\end{slide}
+
+
+

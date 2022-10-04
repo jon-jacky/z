@@ -1,0 +1,536 @@
+<html>
+
+<head>
+<link rel="stylesheet" href="zed.css" type="text/css">
+<title>Z lecture notes: Formal Reasoning</title>
+</head>
+
+<body>
+
+<p class="informal">
+<h3>FORMAL REASONING</h3>
+</p>
+
+
+
+<p>
+Based on chapter 15 in 
+<a href="../z-book/index.html">
+The Way of Z</a>.
+</p>
+
+<p>
+Links to more <a href="z-lectures.html">Z lectures</a>.
+</p>
+
+<p class="informal">
+This page looks best when this <var class="zed"><img height=11 width=9 alt="\power" src="zimg/power-m.gif"></var> and this <var class="zed">X</var> are 
+about the same size: <var class="zed"><img height=11 width=9 alt="\power" src="zimg/power-m.gif"> X</var>.  See these <a href="z-viewing-tips.html">viewing tips</a>.
+</p>
+
+<hr>
+
+<p class="informal">
+All properties do not have to be spelled out explicitly.  From a few
+properties, we can infer many more by formal reasoning (applying
+rules).
+</p>
+
+<p class="informal">
+Enables a formal model to act as a <em>non-executable prototype</em>.
+</p>
+
+<p class="informal">
+Investigate behavior in hypothetical situations.
+</p>
+
+<p class="informal">
+Validate a specification against requirements.
+</p>
+
+<p class="informal">
+Check consistency and completeness.
+</p>
+
+<p class="informal">
+Calculate preconditions.
+</p>
+
+<p class="informal">
+Check refinement from specification to detailed design.
+</p>
+
+<hr>
+
+<p class="informal">
+CALCULATION AND PROOF
+</p>
+
+<p class="informal">
+An exercise in formal reasoning is a kind of calculation.
+</p>
+
+<p class="informal">
+``A train moves at a constant velocity of sixty miles per hour.  How far does
+the train travel in four hours?''
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>distance, velocity, time: <img height=11 width=10 alt="\nat" src="zimg/nat-m.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>distance = velocity * time </td></tr>
+<tr> <td></td><td class="zed" colspan=2>velocity = 60 </td></tr>
+<tr> <td></td><td class="zed" colspan=2>time = 4 </td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+<p class="informal">
+To find <var class="zed">distance</var>, <em>substitute</em> equals for
+equals. From <var class="zed">a=b</var> and <var class="zed">b=c</var>, conclude <var class="zed">a=c</var>.
+</p>
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><var class="zed">distance = velocity * time </var></td><td align=right> Definition </td></tr>
+<tr> <td><var class="zed"><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif">= 60 * time </var></td><td align=right> <var class="zed">velocity = 60</var> </td></tr>
+<tr> <td><var class="zed"><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif">= 60 * 4 </var></td><td align=right> <var class="zed">time = 4</var> </td></tr>
+<tr> <td><var class="zed"><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif">= 240 </var></td><td align=right> Arithmetic</td></tr>
+</table>
+</div>
+
+<p class="informal">
+The proof <em>is</em> a predicate in vertical format.
+</p>
+
+<hr>
+
+<p class="informal">
+REASONING ABOUT SETS
+</p>
+
+<p class="informal">
+Calculations need not be arithmetic.
+</p>
+
+<p class="informal">
+``Philip works on the adhesives team in the materials group, which is part of
+the research division.  Is Philip in research?''
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>philip: PERSON </td></tr>
+<tr> <td></td><td class="zed" colspan=2>adhesives, materials, research,manufacturing: <img height=11 width=9 alt="\power" src="zimg/power-m.gif"> PERSON</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>adhesives <img width=9 height=10 align=absbottom alt="\subseteq" src="zimg/subseteq-m.gif"> materials </td></tr>
+<tr> <td></td><td class="zed" colspan=2>materials <img width=9 height=10 align=absbottom alt="\subseteq" src="zimg/subseteq-m.gif"> research </td></tr>
+<tr> <td></td><td class="zed" colspan=2>philip <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> adhesives </td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+ 
+<p class="informal">
+Show <var class="zed">philip <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> research</var>.
+</p>
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><var class="zed">philip <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> adhesives </var></td><td align=right> &nbsp; Definition </td></tr>
+<tr> <td><var class="zed"><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif"><img width=9 height=10 align=absbottom alt="\subseteq" src="zimg/subseteq-m.gif"> materials </var></td><td align=right> Definition </td></tr>
+<tr> <td><var class="zed"><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif"><img width=9 height=10 align=absbottom alt="\subseteq" src="zimg/subseteq-m.gif"> research </var></td><td align=right> Definition</td></tr>
+</table>
+</div>
+
+<p class="informal">
+Like equality, the subset relation is <em>transitive</em>. 
+From <var class="zed">S <img width=9 height=10 align=absbottom alt="\subseteq" src="zimg/subseteq-m.gif"> T <img width=9 height=10 align=absbottom alt="\subseteq" src="zimg/subseteq-m.gif"> U</var>, infer 
+<var class="zed">S <img width=9 height=10 align=absbottom alt="\subseteq" src="zimg/subseteq-m.gif"> U</var>.
+</p>
+
+<hr>
+
+<p class="informal">
+REASONING WITH EQUIVALENCE AND 
+ IMPLICATION
+</p>
+
+<p class="informal">
+Each step can be a predicate, connected by
+the transitive logical connectives <var class="zed"><img width=13 height=7 alt="\iff" src="zimg/iff-m.gif"></var> and <var class="zed"><img width=13 height=7 alt="\implies" src="zimg/implies-m.gif"></var>.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>x: <img height=11 width=10 alt="\num" src="zimg/num-m.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>2*x + 7 = 13</td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+<p class="informal">
+Solve for <var class="zed">x</var>
+</p>
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><var class="zed">2*x + 7 = 13</var></td><td align=right> Definition </td></tr>
+<tr> <td><var class="zed"><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif"><img width=13 height=7 alt="\iff" src="zimg/iff-m.gif"> 2*x = 13 - 7</var></td><td align=right> <var class="zed">-7</var>, both sides </td></tr>
+<tr> <td><var class="zed"><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif"><img width=13 height=7 alt="\iff" src="zimg/iff-m.gif"> 2*x = 6</var></td><td align=right> Arithmetic </td></tr>
+<tr> <td><var class="zed"><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif"><img width=13 height=7 alt="\implies" src="zimg/implies-m.gif"> (2*x) <b>div</b> 2 = 6 <b>div</b> 2 </var></td><td align=right> <var class="zed"><b>div</b> 2</var>, both </td></tr>
+<tr> <td><var class="zed"><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif"><img width=13 height=7 alt="\iff" src="zimg/iff-m.gif"> x = 6 <b>div</b> 2</var></td><td align=right> Algebra </td></tr>
+<tr> <td><var class="zed"><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif"><img width=13 height=7 alt="\iff" src="zimg/iff-m.gif"> x = 3 </var></td><td align=right> Arithmetic</td></tr>
+</table>
+</div>
+
+<p class="informal">
+We have proved <var class="zed">2*x + 7 = 13 <img width=13 height=7 alt="\implies" src="zimg/implies-m.gif"> x = 3</var>.
+</p>
+
+<hr>
+
+<p class="informal">
+LAWS
+</p>
+
+<p class="informal">
+Formal reasoning steps are justified by <em>laws</em>:
+predicates that are always <em>true</em>, for any values of the
+place holders.
+</p>
+
+<p class="informal">
+Place holders can stand for expressions.
+</p>
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0> 
+<tr> <td><var class="zed">0 * n = 0 </var></td><td align=right> Zero </td></tr>
+<tr> <td><var class="zed">d <img width=7 height=7 alt="\neq" src="zimg/neq-m.gif"> 0 <img width=13 height=7 alt="\implies" src="zimg/implies-m.gif"> n = d*(n <b>div</b> d) + (n <b>mod</b> d) </var></td><td align=right>&nbsp; Division </td></tr>
+<tr> <td><var class="zed">x=y <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> x <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> <b>dom</b> f <img width=13 height=7 alt="\implies" src="zimg/implies-m.gif"> f&nbsp;x = f&nbsp;y </var></td><td align=right> Leibniz </td></tr>
+</table>
+</div>
+
+
+<p class="informal">
+Place holders can stand for predicates.
+</p>
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><var class="zed">p <img width=8 height=7 alt="\lor" src="zimg/lor-m.gif"> <img width=7 height=7 alt="\lnot" src="zimg/lnot-m.gif"> p </var></td><td align=right> Excluded middle </td></tr>
+<tr> <td><var class="zed">p <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> <img width=7 height=7 alt="\lnot" src="zimg/lnot-m.gif"> p <img width=13 height=7 alt="\iff" src="zimg/iff-m.gif"> false </var></td><td align=right> Contradiction </td></tr>
+<tr> <td><var class="zed"><img width=7 height=7 alt="\lnot" src="zimg/lnot-m.gif"> (p <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> q) <img width=13 height=7 alt="\iff" src="zimg/iff-m.gif"> <img width=7 height=7 alt="\lnot" src="zimg/lnot-m.gif"> p <img width=8 height=7 alt="\lor" src="zimg/lor-m.gif"> <img width=7 height=7 alt="\lnot" src="zimg/lnot-m.gif"> q </var></td><td align=right>  DeMorgan </td></tr>
+<tr> <td><var class="zed">p <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> (q <img width=8 height=7 alt="\lor" src="zimg/lor-m.gif"> r) <img width=13 height=7 alt="\iff" src="zimg/iff-m.gif"> (p <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> q) <img width=8 height=7 alt="\lor" src="zimg/lor-m.gif"> (p <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> r)   </var></td><td align=right> Distrib.</td></tr>
+</table>
+</div>
+
+<hr>
+
+<p class="informal">
+SELECTED LAWS
+</p>
+
+<p class="informal">
+About logical connectives
+</p>
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><var class="zed">p <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> true <img width=13 height=7 alt="\iff" src="zimg/iff-m.gif"> p </var></td><td align=right> Unit of <em>and</em> </td></tr>
+<tr> <td><var class="zed">p <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> false <img width=13 height=7 alt="\iff" src="zimg/iff-m.gif"> false </var></td><td align=right>&nbsp; Zero of <em>and</em></td></tr>
+</table>
+</div>
+
+
+<p class="informal">
+About sequences
+</p>
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><var class="zed"># <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> x <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"> = 1 </var></td><td align=right> Size of singleton </td></tr>
+<tr> <td><var class="zed"><b>ran</b> <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> x <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"> = { x } </var></td><td align=right> Range of singleton </td></tr>
+<tr> <td><var class="zed"># (s <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> t) = # s + #t </var></td><td align=right> <var class="zed">#</var> and <var class="zed"><img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"></var> </td></tr>
+<tr> <td><var class="zed"><b>ran</b> (s <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> t) = <b>ran</b> s <img width=10 height=7 alt="\cup" src="zimg/cup-m.gif"> <b>ran</b> t </var></td><td align=right> <var class="zed"><b>ran</b></var> and <var class="zed"><img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"></var> </td></tr>
+</table>
+</div>
+
+
+<p class="informal">
+About the existential quantifier
+</p>
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><var class="zed"><img width=6 height=10 alt="\exists" src="zimg/exists-m.gif"> d | p <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> q <img width=13 height=7 alt="\iff" src="zimg/iff-m.gif"> <img width=6 height=10 alt="\exists" src="zimg/exists-m.gif"> d <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> p <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> q </var></td><td align=right> Restricted <var class="zed"><img width=6 height=10 alt="\exists" src="zimg/exists-m.gif"></var> </td></tr>
+<tr> <td><var class="zed"><img width=6 height=10 alt="\exists" src="zimg/exists-m.gif"> x: T <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> x = e <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> p <img width=13 height=7 alt="\iff" src="zimg/iff-m.gif"> p[e/x] </var></td><td align=right> 1-pt. rule </td></tr>
+</table>
+</div>
+
+<hr>
+
+<p class="informal">
+PRECONDITIONS BY INSPECTION
+</p>
+
+<p class="informal">
+The <em>precondition</em> is the predicate that must be true for the
+operation to be defined, involving only inputs and unprimed ``before''
+variables.
+</p>
+
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">Forward</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=7 height=10 alt="\Delta" src="zimg/Delta-m.gif"> Editor </td></tr>
+<tr> <td></td><td class="zed" colspan=2>ch?: CHAR</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>ch? = right_arrow </td></tr>
+<tr> <td></td><td class="zed" colspan=2>right <img width=7 height=7 alt="\neq" src="zimg/neq-m.gif"> <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"> </td></tr>
+<tr> <td></td><td class="zed" colspan=2>left' = left <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> head(right) <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"> </td></tr>
+<tr> <td></td><td class="zed" colspan=2>right' = tail(right)</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+<p class="informal">
+The precondition is
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> ch? = right_arrow <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> right <img width=7 height=7 alt="\neq" src="zimg/neq-m.gif"> <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"> </td></tr>
+</table>
+</div>
+
+<hr>
+
+<p class="informal">
+PRECONDITIONS BY INSPECTION (2)
+</p>
+
+<p class="informal">
+A complete case analysis reduces to <var class="zed">p <img width=8 height=7 alt="\lor" src="zimg/lor-m.gif"> <img width=7 height=7 alt="\lnot" src="zimg/lnot-m.gif"> p</var>
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">T_Forward</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=7 height=10 alt="\Delta" src="zimg/Delta-m.gif"> Editor </td></tr>
+<tr> <td></td><td class="zed" colspan=2>ch?: CHAR </td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>ch? = right_arrow </td></tr>
+<tr> <td></td><td class="zed" colspan=2>((right <img width=7 height=7 alt="\neq" src="zimg/neq-m.gif"> <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"> </td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif"><img width=8 height=7 alt="\land" src="zimg/land-m.gif"> left' = left <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> head&nbsp;right <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"> </td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif"><img width=8 height=7 alt="\land" src="zimg/land-m.gif"> right' = tail&nbsp;right) <img width=8 height=7 alt="\lor" src="zimg/lor-m.gif"> </td></tr>
+<tr> <td></td><td class="zed" colspan=2>(right = <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"> <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> left' = left <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> right' = right))</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+<p class="informal">
+The precondition is 
+</p>
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><var class="zed">ch? = right_arrow <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> </var></td><td align=right> </td></tr>
+<tr> <td><var class="zed"><img width=20 height=1 align=bottom alt="    " src="zimg/clear.gif">((right <img width=7 height=7 alt="\neq" src="zimg/neq-m.gif"> <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"> <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> ...) <img width=8 height=7 alt="\lor" src="zimg/lor-m.gif"> </var></td><td align=right> </td></tr>
+<tr> <td><var class="zed"><img width=20 height=1 align=bottom alt="    " src="zimg/clear.gif">(right = <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"> <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> ...)) </var></td><td align=right> Given </td></tr>
+<tr> <td><var class="zed"><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif"> <img width=13 height=7 alt="\iff" src="zimg/iff-m.gif"> ch? = right_arrow <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> true </var></td><td align=right> &nbsp; Excluded middle </td></tr>
+<tr> <td><var class="zed"><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif"> <img width=13 height=7 alt="\iff" src="zimg/iff-m.gif"> ch? = right_arrow  </var></td><td align=right> Unit of <em>and</em> </td></tr>
+</table>
+</div>
+
+<hr>
+
+<p class="informal">
+PRECONDITIONS BY CALCULATION
+</p>
+
+<p class="informal">
+<em>Implicit preconditions</em> arise when the 
+operation definition interacts with the state invariant.
+</p>
+
+<p class="informal">
+The precondition of operation <var class="zed">Op</var> on state <var class="zed">S</var> is <var class="zed"><img width=6 height=10 alt="\exists" src="zimg/exists-m.gif"> S' <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> Op</var>,
+``There exists a final state <var class="zed">S'</var> that satisfies the
+predicate of <var class="zed">Op</var>.''
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">Insert</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=7 height=10 alt="\Delta" src="zimg/Delta-m.gif"> Editor </td></tr>
+<tr> <td></td><td class="zed" colspan=2>ch?: CHAR</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>ch? <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> printing </td></tr>
+<tr> <td></td><td class="zed" colspan=2>left' = left <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> ch? <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"> </td></tr>
+<tr> <td></td><td class="zed" colspan=2>right' = right</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+<p class="informal">
+The precondition of <var class="zed">Insert</var> is 
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> <img width=6 height=10 alt="\exists" src="zimg/exists-m.gif"> Editor' <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> Insert </td></tr>
+</table>
+</div>
+
+<hr>
+
+<p class="informal">
+PRECONDITION CALCULATION
+</p>
+
+
+<p class="informal">
+<var class="zed"><img width=6 height=10 alt="\exists" src="zimg/exists-m.gif"> Editor' <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> Insert</var>
+</p>
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><var class="zed"><img width=13 height=7 alt="\iff" src="zimg/iff-m.gif"> <img width=6 height=10 alt="\exists" src="zimg/exists-m.gif"> left', right': TEXT | </var></td><td align=right> </td></tr>
+<tr> <td><var class="zed"><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif"># (left' <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> right') <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> maxsize <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> </var></td><td align=right> </td></tr>
+<tr> <td><var class="zed"><img width=20 height=1 align=bottom alt="    " src="zimg/clear.gif">ch? <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> printing <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> </var></td><td align=right> </td></tr>
+<tr> <td><var class="zed"><img width=20 height=1 align=bottom alt="    " src="zimg/clear.gif">left' = left <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> ch? <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"> <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> right' = right </var></td><td align=right> Expand schemas </td></tr>
+<tr> <td><var class="zed"> <img width=13 height=7 alt="\iff" src="zimg/iff-m.gif"> <img width=6 height=10 alt="\exists" src="zimg/exists-m.gif"> left', right': TEXT <img width=7 height=7 alt="@" src="zimg/spot-m.gif">  </var></td><td align=right> </td></tr>
+<tr> <td><var class="zed"><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif"># (left' <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> right') <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> maxsize <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> pr <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> ...  </var></td><td align=right> <var class="zed"><img width=6 height=10 alt="\exists" src="zimg/exists-m.gif"></var>,  <var class="zed">pr</var> is <var class="zed">ch? <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> printing</var>  </td></tr>
+<tr> <td><var class="zed"> <img width=13 height=7 alt="\iff" src="zimg/iff-m.gif"> pr <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> # ((left <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> ch? <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif">) <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> right) <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> maxsize </var></td><td align=right> &nbsp; 1-pt. rule w/ <var class="zed">left'</var>,<var class="zed">right'</var> </td></tr>
+<tr> <td><var class="zed"> <img width=13 height=7 alt="\iff" src="zimg/iff-m.gif"> pr <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> # left + # <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> ch? <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"> + # right <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> maxsize </var></td><td align=right> <var class="zed">#</var> and <var class="zed"><img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"></var> </td></tr>
+<tr> <td><var class="zed"> <img width=13 height=7 alt="\iff" src="zimg/iff-m.gif"> pr <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> # left + 1 + # right <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> maxsize </var></td><td align=right> Size of singleton </td></tr>
+<tr> <td><var class="zed"> <img width=13 height=7 alt="\iff" src="zimg/iff-m.gif"> pr <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> # left + # right &lt; maxsize </var></td><td align=right> Arithmetic </td></tr>
+</table>
+</div>
+
+<p class="informal">
+The precondition is 
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> ch? <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> printing <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> # left + # right &lt; maxsize </td></tr>
+</table>
+</div>
+
+<p class="informal">
+The buffer mustn't overflow!
+</p>
+
+<hr>
+
+<p class="informal">
+REFINEMENT, IMPLEMENTATION
+</p>
+
+<p class="informal">
+Implication can be used to check the correctness of design steps
+(<em>refinement</em> steps).
+</p>
+
+<p class="informal">
+<var class="zed">p <img width=13 height=7 alt="\implies" src="zimg/implies-m.gif"> q</var> means <var class="zed">p</var> has all the properties of <var class="zed">q</var>, and
+possibly more besides.  If you asked for <var class="zed">q</var>, you should be satisfied
+with <var class="zed">p</var>.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed">stronger <img width=13 height=7 alt="\implies" src="zimg/implies-m.gif"> weaker</td></tr>
+<tr> <td class="zed"><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td class="zed">concrete <img width=13 height=7 alt="\implies" src="zimg/implies-m.gif"> abstract</td></tr>
+<tr> <td class="zed"><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td class="zed">implementation <img width=13 height=7 alt="\implies" src="zimg/implies-m.gif"> specification</td></tr>
+<tr> <td class="zed"><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td class="zed">impl. <img width=13 height=7 alt="\implies" src="zimg/implies-m.gif"> design_n <img width=13 height=7 alt="\implies" src="zimg/implies-m.gif"> ... <img width=13 height=7 alt="\implies" src="zimg/implies-m.gif">  design<sub><font size=-3>1</font></sub> <img width=13 height=7 alt="\implies" src="zimg/implies-m.gif"> spec.</td></tr>
+</table>
+</div>
+
+<p class="informal">
+Example
+</p>
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><var class="zed">x' &gt; x </var></td><td align=right> Specification  </td></tr>
+<tr> <td><var class="zed">x' = x+1 </var></td><td align=right> Implementation  </td></tr>
+<tr> <td><var class="zed">x' = x+1 <img width=13 height=7 alt="\implies" src="zimg/implies-m.gif"> x' &gt; x </var></td><td align=right> Proof</td></tr>
+</table>
+</div>
+
+<p>
+Back to <a href="z-lectures.html">Z lectures</a>.
+</p>
+
+<HR>
+
+<ADDRESS>
+<A HREF="http://staff.washington.edu/~jon/">Jonathan Jacky</A> /
+<a href="http://www.washington.edu/">University of Washington</a> /
+Seattle, Washington / USA<br>
+E-mail: jon@u.washington.edu
+</ADDRESS>
+
+
+</body>
+</html>

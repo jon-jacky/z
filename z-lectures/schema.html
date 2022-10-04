@@ -1,0 +1,871 @@
+<html>
+
+<head>
+<link rel="stylesheet" href="zed.css" type="text/css">
+<title>Z lecture notes: Schemas and Schema Calculus</title>
+</head>
+
+<body>
+
+
+
+
+<p class="informal">
+<h3>SCHEMAS AND SCHEMA CALCULUS</h3>
+</p>
+
+
+
+<p>
+Based on chapters 12 and 14 in
+<a href="../z-book/index.html">
+The Way of Z</a>.
+</p>
+
+<p>
+Links to more <a href="z-lectures.html">Z lectures</a>.
+</p>
+
+<p class="informal">
+This page looks best when this <var class="zed"><img height=11 width=9 alt="\power" src="zimg/power-m.gif"></var> and this <var class="zed">X</var> are 
+about the same size: <var class="zed"><img height=11 width=9 alt="\power" src="zimg/power-m.gif"> X</var>.  See these <a href="z-viewing-tips.html">viewing tips</a>.
+</p>
+
+<hr>
+
+<p class="informal">
+Schema: math in a box, with a name attached.
+</p>
+
+<p class="informal">
+Unique to Z.
+</p>
+
+<p class="informal">
+Schema calculus builds large schemas from smaller ones.
+</p>
+
+<p class="informal">
+Model states and operations.
+</p>
+
+<p class="informal">
+Can be used as declarations, predicates, expressions, types, sets ...
+</p>
+
+<hr>
+
+<p class="informal">
+STATE SCHEMA
+</p>
+
+<p class="informal">
+Simple text editor with limited memory.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed">[CHAR]</td></tr>
+<tr> <td class="zed"><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td class="zed">TEXT == seq CHAR</td></tr>
+</table>
+</div>
+ 
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>maxsize: <img height=11 width=10 alt="\nat" src="zimg/nat-m.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>maxsize <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> 65535</td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+ 
+<p class="informal">
+The editor state is modelled by two <em>state variables</em>, the texts
+to the left and right of the cursor.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">Editor</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>left, right: TEXT </td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2># (left <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> right) <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> maxsize</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+<p class="informal">
+The editor starts up empty.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed">Init <img height=11 width=11 alt="\defs" src="zimg/defs-m.gif"> [&nbsp; Editor | left = right = <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"> &nbsp;] </td></tr>
+</table>
+</div>
+
+<hr>
+
+<p class="informal">
+OPERATION SCHEMA
+</p>
+
+<p class="informal">
+The <var class="zed">Insert</var> operation inserts a printing character to the left of the
+cursor.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>printing: <img height=11 width=9 alt="\power" src="zimg/power-m.gif"> CHAR</td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">Insert</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=7 height=10 alt="\Delta" src="zimg/Delta-m.gif"> Editor </td></tr>
+<tr> <td></td><td class="zed" colspan=2>ch?: CHAR</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>ch? <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> printing </td></tr>
+<tr> <td></td><td class="zed" colspan=2>left' = left <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> ch? <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"> </td></tr>
+<tr> <td></td><td class="zed" colspan=2>right' = right</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+
+<p class="informal">
+Delta in <var class="zed"><img width=7 height=10 alt="\Delta" src="zimg/Delta-m.gif"> Editor</var> indicates state change.
+</p>
+
+<p class="informal">
+Unprimed <var class="zed">left</var>, primed <var class="zed">left'</var> represent before and after.
+</p>
+
+<p class="informal">
+Question mark <var class="zed">ch?</var> indicates input.
+</p>
+
+<hr>
+
+<p class="informal">
+PRECONDITIONS, PARTIAL OPERATIONS
+</p>
+
+<p class="informal">
+The <var class="zed">Forward</var> operation moves the cursor forward.
+</p>
+
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>right_arrow: CHAR</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>right_arrow <img width=7 height=11 align=absbottom alt="\notin" src="zimg/notin-m.gif"> printing</td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">Forward</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=7 height=10 alt="\Delta" src="zimg/Delta-m.gif"> Editor </td></tr>
+<tr> <td></td><td class="zed" colspan=2>ch?: CHAR</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>ch? = right_arrow </td></tr>
+<tr> <td></td><td class="zed" colspan=2>right <img width=7 height=7 alt="\neq" src="zimg/neq-m.gif"> <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"> </td></tr>
+<tr> <td></td><td class="zed" colspan=2>left' = left <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> head(right) <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"> </td></tr>
+<tr> <td></td><td class="zed" colspan=2>right' = tail(right)</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+<p class="informal">
+The <em>precondition</em> is the predicate that must be true for the
+operation to be defined, involving only inputs and unprimed ``before''
+variables.
+<var class="zed">Forward</var> is a <em>partial</em> operation. It does not 
+cover the situation where the cursor is already at the end of the
+buffer, <var class="zed">right = <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"></var>
+</p>
+
+<hr>
+
+<p class="informal">
+SCHEMA CALCULUS, TOTAL OPERATIONS
+</p>
+
+<p class="informal">
+In <var class="zed">EOF</var> states the cursor is at end-of-file.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">EOF</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>        Editor</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>        right = <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+
+<p class="informal">
+Box up <var class="zed">right_arrow</var> for schema expressions.
+</p>
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">RightArrow</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>ch?: CHAR</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>ch? = right_arrow</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+<p class="informal">
+Xi in <var class="zed"><img width=9 height=10 alt="\Xi" src="zimg/Xi-m.gif"> Editor</var> indicates no change in state.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed">        T_Forward <img height=11 width=11 alt="\defs" src="zimg/defs-m.gif"> Forward <img width=8 height=7 alt="\lor" src="zimg/lor-m.gif"> (EOF <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> RightArrow <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> <img width=9 height=10 alt="\Xi" src="zimg/Xi-m.gif"> Editor)</td></tr>
+</table>
+</div>
+ 
+<p class="informal">
+<var class="zed">T_Forward</var> is a <em>total</em> operation that is defined in all
+<var class="zed">Editor</var> states.
+</p>
+
+<hr>
+
+<p class="informal">
+SCHEMA INCLUSION, EXPANSION
+</p>
+
+<p class="informal">
+Schemas can be used like macros.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">Editor</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>left, right: TEXT </td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2># (left <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> right) <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> maxsize</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+ 
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">Init</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>        Editor</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>        left = right = <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+ 
+<p class="informal">
+Any <em>included</em> schema name (or <em>schema reference</em>)
+can be <em>expanded</em> by replacing the name by the text.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">Init</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>left, right: TEXT </td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2># (left <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> right) <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> maxsize </td></tr>
+<tr> <td></td><td class="zed" colspan=2>        left = right = <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+
+<hr>
+
+<p class="informal">
+DECORATION, <var class="zed"><img width=7 height=10 alt="\Delta" src="zimg/Delta-m.gif"></var>, <var class="zed"><img width=9 height=10 alt="\Xi" src="zimg/Xi-m.gif"></var>
+</p>
+
+<p class="informal">
+<em>Decorations</em> give identifiers conventional meanings (prime <var class="zed">'</var>
+indicates ``after'').  Decorating a schema name decorates all its
+state variables.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">Editor'</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>left', right': TEXT</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2># (left' <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> right') <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> maxsize</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+ 
+<p class="informal">
+<var class="zed"><img width=7 height=10 alt="\Delta" src="zimg/Delta-m.gif"></var> indicates the operation schema that includes the
+before state and the after state.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"><img width=7 height=10 alt="\Delta" src="zimg/Delta-m.gif"> Editor <img height=11 width=11 alt="\defs" src="zimg/defs-m.gif"> [&nbsp; Editor; Editor' &nbsp;] </td></tr>
+</table>
+</div>
+
+<p class="informal">
+<var class="zed"><img width=9 height=10 alt="\Xi" src="zimg/Xi-m.gif"></var> indicates the operation where before and after states are the
+same.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed"><img width=9 height=10 alt="\Xi" src="zimg/Xi-m.gif"> Editor</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=7 height=10 alt="\Delta" src="zimg/Delta-m.gif"> Editor</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>left' = left </td></tr>
+<tr> <td></td><td class="zed" colspan=2>right' = right</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+
+<hr>
+
+<p class="informal">
+SCHEMA CALCULUS
+</p>
+
+<p class="informal">
+Merge declarations, combine predicates.
+</p>
+
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">Quotient</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>n, d, q, r: <img height=11 width=10 alt="\nat" src="zimg/nat-m.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>d <img width=7 height=7 alt="\neq" src="zimg/neq-m.gif"> 0 </td></tr>
+<tr> <td></td><td class="zed" colspan=2>n = q*d + r</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+ 
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">Remainder</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>r, d: <img height=11 width=10 alt="\nat" src="zimg/nat-m.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>r &lt; d</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> Division <img height=11 width=11 alt="\defs" src="zimg/defs-m.gif"> Quotient <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> Remainder </td></tr>
+</table>
+</div>
+
+<p class="informal">
+means the same as
+</p>
+
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">Division</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>n,d,q,r: <img height=11 width=10 alt="\nat" src="zimg/nat-m.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>d <img width=7 height=7 alt="\neq" src="zimg/neq-m.gif"> 0 </td></tr>
+<tr> <td></td><td class="zed" colspan=2>r &lt; d </td></tr>
+<tr> <td></td><td class="zed" colspan=2>n = q*d + r</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+ 
+<hr>
+
+<p class="informal">
+SCHEMA CALCULUS AND TOTAL OPERATIONS
+</p>
+
+<p class="informal">
+Any schema expression can be expressed as a single schema box.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed">T_Forward <img height=11 width=11 alt="\defs" src="zimg/defs-m.gif"> Forward </td></tr>
+<tr> <td class="zed"><img width=20 height=1 align=bottom alt="    " src="zimg/clear.gif"><img width=8 height=7 alt="\lor" src="zimg/lor-m.gif"> (EOF <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> RightArrow <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> <img width=9 height=10 alt="\Xi" src="zimg/Xi-m.gif"> Editor) </td></tr>
+</table>
+</div>
+
+<p class="informal">
+means the same as
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">T_Forward</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>left, right, left', right': TEXT </td></tr>
+<tr> <td></td><td class="zed" colspan=2>ch?: CHAR </td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2># (left <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> right) <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> maxsize </td></tr>
+<tr> <td></td><td class="zed" colspan=2># (left' <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> right') <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> maxsize </td></tr>
+<tr> <td></td><td class="zed" colspan=2>ch? = right_arrow </td></tr>
+<tr> <td></td><td class="zed" colspan=2>((right <img width=7 height=7 alt="\neq" src="zimg/neq-m.gif"> <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"> </td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif"><img width=8 height=7 alt="\land" src="zimg/land-m.gif"> left' = left <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> head&nbsp;right <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"> </td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif"><img width=8 height=7 alt="\land" src="zimg/land-m.gif"> right' = tail&nbsp;right) <img width=8 height=7 alt="\lor" src="zimg/lor-m.gif"> </td></tr>
+<tr> <td></td><td class="zed" colspan=2>(right = <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"> <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> left' = left <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> right' = right))</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+<hr>
+
+<p class="informal">
+OTHER SCHEMA CALCULUS OPERATORS
+</p>
+
+<p class="informal">
+There is a schema operator for every logical connective and
+quantifier.
+</p>
+
+<p class="informal">
+Conjunction and disjunction are most useful.
+</p>
+
+<p class="informal">
+Schema negation is uninituitive, not very useful.
+</p>
+
+<p class="informal">
+Two operators are not based on logical connectives:
+</p>
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><var class="zed">S <img width=6 height=12 alt="\semi" align=absbottom src="zimg/comp-m.gif"> T</var> </td> <td> &nbsp; &nbsp; Schema composition </td></tr>
+<tr> <td><var class="zed">S &gt;&gt; T</var> </td> <td> &nbsp; &nbsp; Schema piping </td></tr>
+</table>
+</div>
+
+
+<p class="informal">
+Composition is like relational composition and piping is like
+conjunction, <em>not</em> sequencing.  
+</p>
+
+<p class="informal">
+Z is not a programming language!
+</p>
+
+
+<hr>
+
+<p class="informal">
+SCHEMAS AS DECLARATIONS, PREDICATES
+</p>
+
+<p class="informal">
+Schemas can be used like macros to write compact formulas.
+</p>
+
+<p class="informal">
+``When an editor is in its initial state, the cursor is at the end of
+the file''
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> <img width=9 height=10 alt="\forall" src="zimg/forall-m.gif"> Editor | Init <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> EOF </td></tr>
+</table>
+</div>
+
+
+<p class="informal">
+This expands to an ordinary predicate.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"><img width=9 height=10 alt="\forall" src="zimg/forall-m.gif"> left, right: TEXT | # (left <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> right) <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> maxsize <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> </td></tr>
+<tr> <td class="zed"><img width=20 height=1 align=bottom alt="    " src="zimg/clear.gif">left = right = <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"> <img width=13 height=7 alt="\implies" src="zimg/implies-m.gif"> right = <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"></td></tr>
+</table>
+</div>
+
+<hr>
+
+<p class="informal">
+GENERIC DEFINITIONS
+</p>
+
+<p class="informal">
+A definition of sequence concatenation <var class="zed">(_ <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> _)</var> that applied to
+only one type would not be very useful.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>_ <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> _ : TEXT <img width=7 height=7 alt="\cross" src="zimg/cross-m.gif"> TEXT <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> TEXT</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>...</td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+ 
+<p class="informal">
+The tool-kit provides this <em>generic definition</em>.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{gendef}" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">[X]</td>
+     <td><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10 height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=3><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td width=10 height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2>_ <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> _ : seq X <img width=7 height=7 alt="\cross" src="zimg/cross-m.gif"> seq X <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> seq X</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2>...</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{gendef}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+ 
+<p class="informal">
+<var class="zed">X</var> is a <em>formal generic parameter</em> that can be <em>instantiated</em>
+with an <em>actual generic parameter</em>.
+</p>
+
+<p class="informal">
+Generic definitions can use patterns.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> X <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> Y == <img height=11 width=9 alt="\power" src="zimg/power-m.gif"> (X <img width=7 height=7 alt="\cross" src="zimg/cross-m.gif"> Y) </td></tr>
+</table>
+</div>
+
+<p class="informal">
+Generic definitions can extend the Z notation.
+</p>
+
+<hr>
+
+<p class="informal">
+GENERIC SCHEMAS
+</p>
+
+<p class="informal">
+<em>Generic schemas</em> have type parameters.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">Pool[RESOURCE]</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>owner: RESOURCE <img width=14 height=8 alt="\pfun" src="zimg/pfun-m.gif"> USER </td></tr>
+<tr> <td></td><td class="zed" colspan=2>free: <img height=11 width=9 alt="\power" src="zimg/power-m.gif"> RESOURCE</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>(<b>dom</b> owner) <img width=10 height=7 alt="\cup" src="zimg/cup-m.gif"> free = RESOURCE </td></tr>
+<tr> <td></td><td class="zed" colspan=2>(<b>dom</b> owner) <img width=10 height=7 alt="\cap" src="zimg/cap-m.gif"> free = <img width=11 height=11 alt="\emptyset" src="zimg/emptyset-m.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+ 
+<p class="informal">
+<var class="zed">RESOURCE</var> could be instantiated with
+different types for memory pages, disk blocks, etc.
+</p>
+
+<hr>
+
+<p class="informal">
+FREE TYPES
+</p>
+
+<p class="informal">
+Free types can model <em>recursive data types</em> used to build linked
+structures. 
+</p>
+
+<p class="informal">
+Example: define syntax of simple arithmetic expressions on natural
+numbers, such as <var class="zed">2+3</var> and <var class="zed">(12 <b>div</b> (2+3)) - 7</var>:
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed">
+OP  ::=  plus | minus | times | divide 
+</td></tr>
+</table>
+</div>
+
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed">
+EXP  ::=  const <img width=8 height=14 align=absbottom alt="\ldata" src="zimg/ldata-m.gif"> <img height=11 width=10 alt="\nat" src="zimg/nat-m.gif"> <img width=8 height=14 align=absbottom alt="\rdata" src="zimg/rdata-m.gif"> 
+  | binop <img width=8 height=14 align=absbottom alt="\ldata" src="zimg/ldata-m.gif"> OP <img width=7 height=7 alt="\cross" src="zimg/cross-m.gif"> EXP <img width=7 height=7 alt="\cross" src="zimg/cross-m.gif"> EXP <img width=8 height=14 align=absbottom alt="\rdata" src="zimg/rdata-m.gif">
+</td></tr>
+</table>
+</div>
+
+
+<p>
+Back to <a href="z-lectures.html">Z lectures</a>.
+</p>
+
+<HR>
+
+<ADDRESS>
+<A HREF="http://staff.washington.edu/~jon/">Jonathan Jacky</A> /
+<a href="http://www.washington.edu/">University of Washington</a> /
+Seattle, Washington / USA<br>
+E-mail: jon@u.washington.edu
+</ADDRESS>
+
+
+</body>
+</html>

@@ -1,0 +1,9 @@
+% intro.tex - root 
+
+\documentstyle[fuzz]{slides}
+
+\begin{document}
+
+\blackandwhite{intro-slides}
+
+\end{document}

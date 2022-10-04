@@ -1,0 +1,387 @@
+<html>
+
+<head>
+<link rel="stylesheet" href="zed.css" type="text/css">
+<title>Text Processing</title>
+</head>
+
+<body>
+
+
+<h2><a name="top">Text Processing</a></h2>
+
+<p>
+Based on chapter 17 in 
+<a href="../z-book/index.html">
+The Way of Z</a>.
+</p>
+
+<p>
+Links to more <a href="z-examples.html">Z examples</a>.
+</p>
+
+<p class="informal">
+This page looks best when this <var class="zed"><img height=11 width=9 alt="\power" src="zimg/power-m.gif"></var> and this <var class="zed">X</var> are 
+about the same size: <var class="zed"><img height=11 width=9 alt="\power" src="zimg/power-m.gif"> X</var>.  See these <a href="z-viewing-tips.html">viewing tips</a>.
+</p>
+
+<hr>
+
+<p class="informal">
+Here we model a word counting utility, and formatting operations such
+as filling paragraphs.
+</p>
+
+<h2><a name="Breaking a text into words">Breaking a text into words</a></h2>
+
+<p class="informal">
+We begin by defining a set of characters.  A text is just a
+sequence of characters.  Certain characters are <em>blanks</em>.  Spaces, line
+breaks, and tabs are certainly blanks, but we might also choose to include
+punctuation marks and other special characters.  In fact, we define a 
+<em>word</em> to be a sequence of non-blank characters, 
+so a blank is any character
+that might separate two words.  A <em>space</em> is a sequence of blank
+characters.  
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> [CHAR] </td></tr>
+</table>
+</div>
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td width=10></td><td class="zed"> blank: <img height=11 width=9 alt="\power" src="zimg/power-m.gif"> CHAR </td></tr>
+<tr><td><img width=1 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed">        TEXT == seq CHAR</td></tr>
+<tr> <td class="zed"><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td class="zed">SPACE == seq<sub><font size=-3>1</font></sub> blank </td></tr>
+<tr> <td class="zed"><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td class="zed">WORD == seq<sub><font size=-3>1</font></sub> (CHAR \ blank)</td></tr>
+</table>
+</div>
+
+<p class="informal">
+<var class="zed">TEXT</var> includes the empty sequence, but <var class="zed">SPACE</var> and <var class="zed">WORD</var> must have
+at least one character, so we declare them to be <var class="zed">seq<sub><font size=-3>1</font></sub></var> (non-empty
+sequences).
+</p>
+
+<p class="informal">
+Our word counting and formatting utilities are based on a function called
+<var class="zed">words</var>.  The <var class="zed">words</var> function returns the sequence of all the words in a
+text.  For example,
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed">words&nbsp;<img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> H,o,w,&nbsp;,a,r,e,&nbsp;,y,o,u,? <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"> = <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> H,o,w <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"> , <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> a,r,e <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"> , <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> y,o,u <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"> <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"></td></tr>
+</table>
+</div>
+
+<p class="informal">
+Clearly <var class="zed">words</var> is a total function from a <var class="zed">TEXT</var> to a sequence of <var class="zed">WORD</var>.
+To define <var class="zed">words</var>, we consider all possible patterns of words and spaces, and
+write an equation for each. 
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>        words: TEXT <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> seq WORD</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr> 
+<tr> <td></td><td class="zed" colspan=2>        <img width=9 height=10 alt="\forall" src="zimg/forall-m.gif"> s: SPACE; w: WORD; l,r: TEXT  <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> </td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif">words&nbsp; <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"> = <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"> <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> </td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif">words&nbsp; s = <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"> <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> </td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif">words&nbsp; w = <img width=5 height=14 align=absbottom alt="\langle" src="zimg/langle-m.gif"> w <img width=5 height=14 align=absbottom alt="\rangle" src="zimg/rangle-m.gif"> <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> </td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif">words&nbsp;(s <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> r) = words&nbsp;r <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> </td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif">words&nbsp;(l <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> s) = words&nbsp;l <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> </td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif">words&nbsp;(l <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> s <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> r) = (words&nbsp;l) <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> (words&nbsp;r)</td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+<p class="informal">
+As you can see, there really aren't so many patterns. When the text is empty,
+the result is an empty.  When the text is nothing but space, the
+result is empty too.  When the text is a single word, the result is a
+sequence that contains just that word.  When the text begins or ends with a
+space, you can strip it off; the result is the same.  Wherever
+the interior of the text contains a space, you can discard the space and 
+break the text in two.   That's it.
+</p>
+
+<p class="informal">
+This example illustrates several Z techniques that can make definitions
+shorter and clearer than code.  The function is applied to <em>patterns</em>
+like <var class="zed">l <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> s <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> r</var> that reveal the internal structure of their arguments.
+If you think in terms of code that has to work its way through the text from
+beginning to end, you can't use patterns in this way.  The definition is
+<em>recursive</em>: the function being defined can appear on both sides of an
+equation.  (The definition is not circular: by repeatedly applying the
+equations to any text, we will eventually arrive at the simple cases.)
+Finally, the last equation is <em>nondeterministic</em>: it doesn't tell us
+where to begin breaking between words; any space is as good as another.  We
+don't need to assume that the text will be scanned in order from beginning
+to end.
+</p>
+
+<p class="informal">
+The definition might seem obvious, but it includes cases that are often
+forgotten.  Published programs that purport to fill paragraphs break down
+when presented with an empty file, or a text that ends with a series of
+blank lines.  The errors are not just coding bugs; they reveal a failure to
+understand the problem fully.  Writing formal definitions encourages us to 
+think carefully about all the cases.  We don't have to complain, as some
+programmers do, that there are so many possibilities we can't consider
+them all.
+</p>
+
+<h2><a name="A word counting utility">A word counting utility</a></h2>
+
+<p class="informal">
+The number of words in text <var class="zed">t</var> is simply <var class="zed"># (words&nbsp;t)</var>.  We can define a
+function similar to <var class="zed">words</var> that breaks a text into lines.  We consider a 
+line break to be a special blank character named <var class="zed">nl</var> (for new line).
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>        lines: TEXT <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> seq LINE</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr> 
+<tr> <td></td><td class="zed" colspan=2>... definition omitted ...</td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+ 
+<p class="informal">
+Now we have everything we need to write a formal specification for the Unix
+word counting utility <var class="zed">wc</var>.  This popular utility is actually a function
+whose argument is a file name, and whose result is a tuple whose components
+are the number of lines, words and characters in the file.  A typical
+application looks like this:
+</p>
+
+<p class="informal">
+<blockquote>
+<samp>
+% wc structure.tex<br>
+110 559 4509
+</samp>
+</blockquote>
+</p>
+
+<p class="informal">
+Here is the definition of <var>wc</var>:
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>wc: TEXT <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> (<img height=11 width=10 alt="\nat" src="zimg/nat-m.gif"> <img width=7 height=7 alt="\cross" src="zimg/cross-m.gif"> <img height=11 width=10 alt="\nat" src="zimg/nat-m.gif"> <img width=7 height=7 alt="\cross" src="zimg/cross-m.gif"> <img height=11 width=10 alt="\nat" src="zimg/nat-m.gif">)</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=9 height=10 alt="\forall" src="zimg/forall-m.gif"> file: TEXT <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> </td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif">wc&nbsp;file = (# (lines&nbsp;file), # (words&nbsp;file), # file)</td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+<p class="informal">
+Or, if you like to be more terse
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed">   wc == (<img width=8 height=10 alt="\lambda" src="zimg/lambda-m.gif"> file: TEXT <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> (# (lines&nbsp;file), # (words&nbsp;file), # file))</td></tr>
+</table>
+</div>
+
+
+<h2><a name="Filling paragraphs">Filling paragraphs</a></h2>
+
+<p class="informal">
+Almost any text editor provides a <em>fill</em> operation.  The fill operation
+transforms raggedy-looking text with lines of different lengths into
+nicely formatted text with lines nearly the same length.
+</p>
+
+<p class="informal">
+For example, you can type in something that looks like this:
+</p>
+
+
+<p class="informal">
+<blockquote>
+<samp>
+     Almost any text editor provides a fill<br>
+     operation. The fill operation transforms raggedy-looking text<br>
+     with lines of<br>
+     different lengths into nicely formatted text with lines<br>
+     nearly the same length.
+</samp>
+</blockquote>
+</p>
+
+<p class="informal">
+and then you can use the fill operation to turn it into this:
+</p>
+
+<p class="informal">
+<blockquote>
+<samp>
+     Almost any text editor provides a fill operation.  The<br>
+     fill operation transforms raggedy-looking text with lines of<br>
+     different lengths into nicely formatted text with lines<br>
+     nearly the same length.
+</samp>
+</blockquote>
+</p>
+
+<p class="informal">
+Let's define the fill operation in Z.  We observe that fill is just one
+example of a <em>format</em> operation that changes the appearance of a text by
+breaking lines in different places, and expanding or contracting the spaces
+between words, subject to the constraint that no line exceeds the page 
+width.  Moreover, a format operation must not change the content of the text:
+it preserves the same words in their original order.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td width=10></td><td class="zed"> width: <img height=11 width=10 alt="\nat" src="zimg/nat-m.gif"> </td></tr>
+<tr><td><img width=1 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">Format</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>t,t': TEXT</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>words&nbsp;t' = words&nbsp;t </td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=9 height=10 alt="\forall" src="zimg/forall-m.gif"> l: <b>ran</b>&nbsp;(lines&nbsp;t') <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> # l <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> width</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+ 
+<p class="informal">
+The fill operation is a format operation that satisfies an additional
+constraint: the lines should be filled as much as possible.  There are many
+different ways to express this, and each one results in a slightly different
+appearance to the text.  Perhaps the simplest rule is to require that the
+filled text occupy the fewest possible lines.  
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">Fill</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>Format</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2># (lines&nbsp;t') = min&nbsp; { t': TEXT | Format <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> # (lines&nbsp;t') }</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+<p class="informal">
+This definition says that <var class="zed">Fill</var> is essentially a <em>minimization</em>
+operation: it is the specialization of <var class="zed">Format</var> that minimizes the
+number of lines.  The schema is a little tricky because <var class="zed">Format</var> is
+used in two different ways and different occurrences of <var class="zed">t'</var> represent
+different things.  The <var class="zed">t'</var> on the left of the equal sign is the final
+state of <var class="zed">Fill</var>.  The <var class="zed">t'</var> inside the set comprehension is different:
+it is a bound variable that ranges over all final states of <var class="zed">Format</var>
+that can be reached from the initial state of <var class="zed">Fill</var>.  Inside the set
+comprehension, <var class="zed">Format</var> is used as a predicate.  The <var class="zed">t</var> in this
+<var class="zed">Format</var> is free: it is the initial state of the enclosing schema
+<var class="zed">Fill</var>.
+</p>
+
+<p class="informal">
+<var class="zed">Fill</var> is nondeterministic.  There are usually many different ways to
+place line breaks and spaces that achieve the same minimal number of
+lines.  In specifications, nondeterminism is usually a good thing.  We
+should only ask for what we really want.  Nondeterministic definitions
+are often shorter and clearer because they can omit unimportant
+details.  When we come to implementation, they give us the freedom to
+make choices that can increase efficiency or convenience.  Moreover,
+nondeterministic definitions enable us to build up specifications by a
+process of increasing specialization.  Just as <var class="zed">Fill</var> is a
+specialization of <var class="zed">Format</var>, we can define specializations of <var class="zed">Fill</var> to
+achieve different effects such as justified right margins or minimal
+spaces between words.  Z was designed to support this style of
+definition by specialization.  It makes the formal texts easy to
+understand and enables us to reuse general definitions.
+</p>
+
+<p class="informal">
+Back to <a href="#top">top</a>
+</p>
+
+<HR>
+
+<ADDRESS>
+<A HREF="http://staff.washington.edu/~jon/">Jonathan Jacky</A> /
+<A HREF="http://www.radonc.washington.edu/">Department of Radiation Oncology</A>
+ 
+Box 356043<br>
+<a href="http://www.washington.edu/">University of Washington</a> /
+Seattle, Washington 98195-6043 / USA<BR>
+Tel (206) 598-4117 / Fax (206) 598-6218<BR>
+<p>
+E-mail: jon@u.washington.edu
+</ADDRESS>
+
+</body>
+</html>

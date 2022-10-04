@@ -1,0 +1,9 @@
+% reasoning.tex - root 
+
+\documentstyle[fuzz]{slides}
+
+\begin{document}
+
+\blackandwhite{reasoning-slides}
+
+\end{document}

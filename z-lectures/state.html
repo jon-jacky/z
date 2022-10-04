@@ -1,0 +1,128 @@
+<html>
+
+<head>
+<link rel="stylesheet" href="zed.css" type="text/css">
+<title>Z lecture notes: State</title>
+</head>
+
+<body>
+
+<p class="informal">
+<h3>STATE</h3>
+</p>
+
+
+
+<p>
+Based on chapter 5 in
+<a href="../z-book/index.html">
+The Way of Z</a>.
+</p>
+
+<p>
+Links to more <a href="z-lectures.html">Z lectures</a>.
+</p>
+
+<p class="informal">
+This page looks best when this <var class="zed"><img height=11 width=9 alt="\power" src="zimg/power-m.gif"></var> and this <var class="zed">X</var> are 
+about the same size: <var class="zed"><img height=11 width=9 alt="\power" src="zimg/power-m.gif"> X</var>.  See these <a href="z-viewing-tips.html">viewing tips</a>.
+</p>
+
+<hr>
+
+<p class="informal">
+A <em>state</em> is a <em>situation</em> or ``state of affairs''.
+</p>
+
+<p class="informal">
+We model a state as an assignment of <em>values</em> to a collection of 
+named <em>variables</em>.
+</p>
+
+<p class="informal">
+States can represent assumptions (preconditions),
+goals (results, postconditions), or safety requirements (invariants).
+</p>
+
+<p class="informal">
+State can be divided into fixed configuration (constants) and volatile
+components (state variables).
+</p>
+
+<p class="informal">
+Programming languages do not describe states
+directly; they can only describe state <em>transitions</em>.
+</p>
+
+
+<hr>
+
+<p class="informal">
+STATE TRANSITIONS
+</p>
+
+<p class="informal">
+Programming languages describe state transitions.
+</p>
+
+<pre>
+  int iroot(int arg)
+  /* Integer square root */
+  {
+    int i, term, sum;
+
+    term = 1; sum = 1;
+    for (i = 0; sum &lt;= arg; i++) {
+        term = term + 2;   
+        sum = sum + term;  
+    )
+    return i; 
+  )
+</pre>
+
+
+<hr>
+
+<p class="informal">
+STATES
+</p>
+
+<p class="informal">
+Specification languages describe states directly.
+</p>
+
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>        iroot: <img height=11 width=10 alt="\nat" src="zimg/nat-m.gif"> <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> <img height=11 width=10 alt="\nat" src="zimg/nat-m.gif"> </td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=9 height=10 alt="\forall" src="zimg/forall-m.gif"> a: <img height=11 width=10 alt="\nat" src="zimg/nat-m.gif"> <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> </td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif"> iroot(a) * iroot(a) <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> a &lt; (iroot(a)+1) * (iroot(a)+1)</td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+
+<p>
+Back to <a href="z-lectures.html">Z lectures</a>.
+</p>
+
+<HR>
+
+<ADDRESS>
+<A HREF="http://staff.washington.edu/~jon/">Jonathan Jacky</A> /
+<a href="http://www.washington.edu/">University of Washington</a> /
+Seattle, Washington / USA<br>
+E-mail: jon@u.washington.edu
+</ADDRESS>
+
+
+
+
+</body>
+</html>

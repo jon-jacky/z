@@ -1,0 +1,513 @@
+% structure-slides.tex (root is structure.tex)
+
+
+\pagestyle{empty}
+
+\begin{slide}{}
+STRUCTURE
+
+Objects from discrete mathematics can model {\em data structures}.
+
+\begin{itemize}
+
+\item Tuples (records)
+
+\item Relations (tables, linked data structures)
+
+\item Functions (lookup tables, trees and lists)
+
+\item Sequences (lists, arrays)
+
+\end{itemize}
+
+Mathematics also provides precise meanings for {\em operators}.
+
+\end{slide}
+
+\begin{slide}{}
+TUPLES
+
+{\em Tuples} can resemble C {\em structures} or \\
+Pascal {\em records}.  
+
+Tuples are instances of {\em Cartesian product types}.
+ 
+First declare types for each component.
+\begin{zed}
+	[NAME]
+\also
+	ID == \nat
+\also
+	DEPT ::= admin | manufacturing | research
+\end{zed}
+
+Define the Cartesian product type $EMPLOYEE$.
+\begin{zed} EMPLOYEE == ID \cross NAME \cross DEPT \end{zed}
+
+Declare tuples which are instances of the type.
+\begin{axdef}
+	Frank, Aki: EMPLOYEE
+\where
+	Frank = (0019, frank, admin) \\
+	Aki = (7408, aki, research)
+\end{axdef}
+
+\end{slide}
+
+\begin{slide}{}
+RELATIONS
+
+{\em Relations} are sets of tuples. They can 
+resemble {\em tables} or {\em databases}.
+
+\begin{center} % center slightly narrowed minipage to indent table
+\begin{minipage}[t]{5.25in} % attempt to get nice left margin for table
+\begin{tabular}{ | l | l | l | } \hline
+\multicolumn{1}{| c |}{ID} & \multicolumn{1}{| c |}{Name} & 
+                        \multicolumn{1}{| c |}{DEPT} \\ \hline \hline
+0019 & Frank & Admin \\ 
+0308 & Philip & Research \\ 
+% 6302 & Frank & Manufacturing \\ 
+7408 & Aki & Research \\
+% 0517 & Doug & Research \\ 
+% 0038 & Philip & Admin \\ 
+\vdots & \vdots & \vdots 
+\end{tabular}
+\end{minipage}
+\end{center}
+
+
+In Z this can be expressed
+\begin{axdef}
+	Employee: \power EMPLOYEE
+\where
+	Employee = \{ \\
+% \t1	\vdots \\
+\t1	  (0019, frank, admin), \\
+\t1	  (0308, philip, research), \\
+% \t1	  (6302, frank, manufacturing), \\
+\t1	  (7408, aki, research), \\
+% \t1	  (0517, doug, research), \\
+% \t1	  (0038, philip, admin), \\
+\t1	  \vdots \\
+\t1	 \}
+\end{axdef}
+
+\end{slide}
+
+\begin{slide}{}
+PAIRS
+
+{\em Pairs} are tuples with just two components.
+
+\[ (aki, 4117) \]
+The {\em maplet} arrow provides alternate syntax without 
+parentheses.
+
+\[ aki \mapsto 4117 \]
+The {\em projection} operators {\em first} and {\em second} 
+extract the components of a pair.
+
+\begin{zed}
+	first(aki,4117) = aki
+\also	
+	second(aki, 4117) = 4117
+\end{zed}
+\end{slide}
+
+
+\begin{slide}{}
+BINARY RELATIONS (1)
+
+{\em Binary relations} are sets of pairs.
+
+\[ \power (NAME \cross PHONE) \]
+or 
+
+\[ NAME \rel PHONE \]
+
+Binary relations can model lookup tables.
+
+\begin{center} % center slightly narrowed minipage to indent table
+\begin{minipage}[t]{5.25in} % attempt to get nice left margin for table
+\begin{tabular}{ | l | l | } \hline
+\multicolumn{1}{| c |}{Name} & 
+                        \multicolumn{1}{| c |}{Phone} \\ \hline \hline
+Aki & 4019 \\
+Philip & 4107 \\
+Doug & 4107 \\
+ Doug & 4136 \\
+ Philip & 0113 \\
+ Frank & 0110 \\
+ Frank & 6190  \\
+\vdots & \vdots 
+\end{tabular}
+\end{minipage}
+\end{center}
+
+\end{slide}{}
+
+\begin{slide}{}
+BINARY RELATIONS (2)
+
+In Z this can be expressed
+
+\begin{axdef}
+	phone: NAME \rel PHONE
+\where
+	phone = \{ \\
+ \t1		\vdots \\
+\t1		aki \mapsto 4019, \\
+\t1		philip \mapsto 4107, \\
+\t1		doug \mapsto 4107, \\
+ \t1		doug \mapsto 4136, \\
+ \t1		philip \mapsto 0113, \\
+ \t1		frank \mapsto 0110, \\
+ \t1		frank \mapsto 6190, \\
+\t1		\vdots  \\
+\t1		\}
+\end{axdef} 
+
+\end{slide}
+
+\begin{slide}{}
+RELATIONAL CALCULUS (1)
+
+The tool-kit provides many operators for binary
+relations.
+
+{\em Domain} and {\em range} are the sets of first and second
+components, respectively.
+
+\begin{zed}
+	\dom phone = \{ \dots, aki, philip, doug, frank, \dots \}
+\also
+	\ran phone = \{ \dots, 4019, 4107, 4136, 0113, \dots \}
+\end{zed}
+
+{\em Relational image} can model table lookup.
+
+\begin{zed} 
+	phone \limg \{ doug, philip \} \rimg = \{ 4107, 4136, 0113 \}  
+\end{zed}
+
+\end{slide}
+
+\begin{slide}{}
+RELATIONAL CALCULUS (2)
+
+{\em Restriction operators} can model database queries.
+
+{\em Domain restriction} selects pairs based on their first component.
+
+\begin{zed} 
+\{ doug, philip \} \dres phone = \\
+\also
+\t1 	\{ philip \mapsto 4107, \\
+\t1	doug \mapsto 4107, \\
+\t1	doug \mapsto 4136, \\
+\t1	philip \mapsto 0113 \}
+\end{zed}
+
+{\em Range restriction} selects according to the second element.
+
+\begin{zed}
+	phone \rres (4000 \upto 4999) = \{ \\
+\t1		\vdots \\
+\t1		aki \mapsto 4019, \\
+\t1		philip \mapsto 4107, \\
+\t1		doug \mapsto 4107, \\
+\t1		doug \mapsto 4136, \\
+\t1		\vdots \\
+\t1		\}
+\end{zed}
+
+\end{slide}
+
+\begin{slide}{}
+RELATIONAL CALCULUS (3)
+
+{\em Overriding} can model database updates.
+
+\begin{zed}
+	phone \oplus \{ heather \mapsto 4026, aki \mapsto 4026 \} = \{ \\
+\t1		\vdots \\
+\t1		aki \mapsto 4026, \\
+\t1		philip \mapsto 4107, \\
+\t1		doug \mapsto 4107, \\
+\t1		doug \mapsto 4136, \\
+\t1		philip \mapsto 0113, \\
+\t1		frank \mapsto 0110, \\
+\t1		frank \mapsto 6190, \\
+\t1		heather \mapsto 4026, \\
+\t1		\vdots \\
+\t1		\}
+\end{zed}
+
+\end{slide}
+
+\begin{slide}{}
+RELATIONAL CALCULUS (4)
+
+{\em Inverse} reverses domain and range by exchanging the components
+of each pair.
+
+
+%% \begin{zed} phone \inv = \{ 4019 \mapsto aki \} \end{zed}
+%%unchecked
+\begin{zed}
+	phone \inv = \{ \\
+\t1		 \vdots \\
+\t1		 4019 \mapsto aki, \\
+\t1		 4107 \mapsto philip,  \\
+\t1		 4107 \mapsto doug,  \\
+\t1		 4136 \mapsto doug,  \\
+\t1		 0013 \mapsto philip,  \\
+\t1		 0110 \mapsto frank,  \\
+\t1		 6190 \mapsto frank, \\
+\t1		\vdots \\
+\t1		 \}
+\end{zed}
+
+
+\end{slide}
+
+
+
+\begin{slide}{}
+RELATIONAL CALCULUS (5)
+
+{\em Composition} merges two relations by combining pairs that share a
+matching component.
+
+\begin{axdef}
+	dept: PHONE \rel DEPT
+\where
+	dept = \{ \\
+\t1		0000 \mapsto admin, \dots, 0999 \mapsto admin, \\
+\t1		4000 \mapsto research, \dots, 4999 \mapsto research, \\
+\t1		6000 \mapsto manufacturing, \dots, 
+\end{axdef}
+Composing the $phone$ and $dept$ relations:
+
+\begin{zed} 
+	phone \comp dept = \{ \\
+\t1		\vdots \\
+\t1		aki \mapsto research, \\
+\t1		philip \mapsto research, \\
+\t1		doug \mapsto research, \\
+\t1		philip \mapsto admin, \\
+\t1		frank \mapsto admin, \\
+\t1		frank \mapsto manufacturing, \\
+\t1		\vdots \\
+\t1		\}
+\end{zed} 
+
+\end{slide}
+
+\begin{slide}{}
+FUNCTIONS
+
+{\em Functions} are binary relations where each element in the domain
+appears just once.  Each domain element is a {\em unique key}.
+
+\begin{axdef}
+	phonef: NAME \pfun PHONE
+\where
+	phonef = \{ \\
+\t1		\vdots \\
+\t1		aki \mapsto 4019, \\
+\t1		philip \mapsto 4107, \\
+\t1		doug \mapsto 4107, \\
+\t1		frank \mapsto 6190, \\
+\t1		\vdots \\
+\t1		\}
+\end{axdef} 
+{\em Function application} is a special case of relational image.  It
+associates a domain element with its unique range element.
+
+\begin{zed}
+	phonef \limg \{ doug \} \rimg = 4107
+\also
+	phonef~(doug) = 4107	
+\also
+	phonef~doug = 4107		
+\end{zed}
+
+\end{slide}
+
+\begin{slide}{}
+BINARY RELATIONS AND FUNCTIONS
+
+\begin{tabbing}
+xxxxxxxxxxx \= \kill \\ 
+$X \rel Y$ \> Binary relations: many-to-many \\
+\\
+$X \pfun Y$ \> Partial functions: many-to-one \\
+		\> Some function applications undefined \\
+\\
+$X \fun Y$ \> Total functions: \\
+		\> All function applications defined \\
+\\
+$X \pinj Y$ \> Partial injections: one-to-one \\
+		\> Inverse is also a function \\
+\\
+$X \inj Y$ \> Total injections \\
+\\
+$X \bij Y$ \> Bijections: cover entire range (onto) \\
+\end{tabbing}
+
+All have type $\power (X \cross Y)$
+\end{slide}
+
+\begin{slide}{}
+LINKED DATA STRUCTURES
+
+Binary relations can model linked data \\ 
+structures such as lists, graphs and trees.
+
+Each {\em arc} can be modelled by a pair of {\em nodes}.
+
+For example a {\em tree} can be modelled by its {\em child} function.
+
+\begin{axdef}
+child: NODE \pfun NODE
+\also
+child = \{ a \mapsto b, a \mapsto c, \\
+\t2 		b \mapsto d, b \mapsto e, \\
+\t2		c \mapsto f, c \mapsto g, c \mapsto h \}
+\end{axdef}
+
+``Pointers'' are not necessary.
+
+The {\em transitive closure} operator builds the \\
+{\em descendent} relation from the {\em child} relation.
+
+\begin{zed}
+descendent = child \plus \\ 
+\also
+descendent = \{ a \mapsto b, a \mapsto c , a \mapsto d, a \mapsto e, \dots \}
+\end{zed}
+
+\end{slide}
+
+\begin{slide}{}
+SEQUENCES
+
+{\em Sequences} can model {\em arrays} and {\em lists}.
+
+\begin{zed}
+DAYS ::= friday | monday | saturday | sunday \\
+\t3		|  thursday | tuesday | wednesday
+\end{zed}
+
+\begin{axdef}
+	weekday: \seq DAYS
+\where
+weekday = \langle monday, tuesday, wednesday, \\
+\t3		thursday, friday \rangle \\
+\end{axdef}
+
+Sequence operators include {\em head} and \\
+{\em concatentation}, $\cat$.
+
+\begin{zed} 
+head~weekday = monday
+\also
+week == \langle sunday \rangle \cat weekday \cat \langle saturday \rangle
+\end{zed}
+Sequences are functions, and functions are sets.
+
+\begin{zed}
+weekday = \{ 1 \mapsto monday, 2 \mapsto tuesday, \dots \}
+\also
+weekday~3 = wednesday
+\also
+\# week = 7 
+\end{zed}
+
+\end{slide}
+
+\begin{slide}{}
+OPERATORS
+
+Most operators are just functions with infix syntax. For example
+
+\begin{zed} 2 + 3 = 5 \end{zed}
+is a function application that can also be written
+
+\begin{zed} (\_ + \_) (2,3) = 5	\end{zed}
+This function could be defined like any other.
+
+\begin{axdef}
+	\_ + \_: \num \cross \num \fun \num
+\where
+	\dots
+\end{axdef}
+In Z the familiar plus sign ``$+$'' is actually the name of a set.
+
+\begin{zed}
+(\_ + \_) = \{~ \dots, (1,1) \mapsto 2, (1,2) \mapsto 3, \dots \}
+\end{zed} 
+
+\end{slide}
+
+
+\begin{slide}{}
+OPERATOR SYMBOLS AND SYNTAX
+
+Operator symbols are defined systematically.
+\begin{tabbing}
+xxxxxxxxxxx \= \kill \\ 
+$X \dres R$ \> Domain restriction \\
+$X \ndres R$ \> Domain anti-restriction \\
+$R \rres Y$ \> Range restriction \\
+$R \nrres Y$ \> Range anti-restriction \\
+\end{tabbing}
+Pictorial symbols and infix syntax remind us of operand order and 
+make expressions easy to parse by eye. \\
+\begin{zed}
+\{ doug, philip \} \dres phone \rres (4000 \upto 4999) = \\
+\also
+\t1		\{ philip \mapsto 4107, \\
+\t1		doug \mapsto 4107, \\
+\t1		doug \mapsto 4136 \}
+\end{zed}
+Compare to \\
+$rres(dres(phone, (doug, philip)), upto(4000,4999)))$
+
+\end{slide}
+
+\begin{slide}{}
+FORMAL DEFINITIONS
+
+Z operators are defined by formulas.
+
+\begin{gendef}[X,Y]
+	\_ \dres \_, \_ \ndres \_ : \power X \cross (X \rel Y) \fun X \rel Y \\
+	\_ \rres \_, \_ \nrres \_ : (X \rel Y)  \cross  \power Y \fun X \rel Y \\
+	\_ \inv : (X \rel Y) \fun (Y \rel X) \\
+	\_ \limg \_ \rimg : (X \rel Y) \cross \power X \fun \power Y \\
+	\_ \oplus \_ : (X \rel Y) \cross (X \rel Y) \fun (X \rel Y) \\
+\where
+	\forall x: X; y: Y; S: \power X; T: \power Y; \\
+\t4					Q, R: X \rel Y @ \\
+\also
+ S \dres R = \{~ x: X; y: Y | x \in S \land x \inrel{R} y ~\} \land	
+\also
+ S \ndres R = \{~ x: X; y: Y | x \notin S \land x \inrel{R} ~\} \land	
+\also
+ R \rres T = \{~ x: X; y: Y | x \inrel{R} y \land y \in T  ~\} \land	
+\also
+ R \nrres T = \{~ x: X; y: Y | x \inrel{R} y \land y \notin T ~\} \land	
+\also	
+	R \inv = \{~ x: X; y: Y | x \inrel{R} y @ y \mapsto x ~\} \land \\
+\also 
+ R \limg S \rimg = \{~ x: X; y: Y | x \in S \land x \inrel{R} y @ y ~\} \land	
+\also
+ Q \oplus R = ((\dom R) \ndres Q) \cup R
+\also
+\end{gendef}
+
+\end{slide}
+

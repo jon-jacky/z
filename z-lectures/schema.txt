@@ -1,0 +1,9 @@
+% schema.tex - root 
+
+\documentstyle[fuzz]{slides}
+
+\begin{document}
+
+\blackandwhite{schema-slides}
+
+\end{document}

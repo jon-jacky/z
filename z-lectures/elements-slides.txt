@@ -1,0 +1,293 @@
+% elements-slides.tex (root is elements.tex)
+
+
+\pagestyle{empty}
+
+\begin{slide}{}
+ELEMENTS OF Z
+
+Three basic constructs:
+
+\begin{description}
+
+\item{\em Declarations} introduce {\em variables}.
+
+\item{\em Expressions} describe {\em values} that variables can assume.
+
+\item{\em Predicates} place {\em constraints} on the values that
+variables do assume.
+
+\end{description}
+
+\end{slide}{}
+
+\begin{slide}{}
+SETS 
+
+Set display
+
+% Doesn't fit on one slide with \also, doesn't look too crowded without it.
+
+\begin{argue}
+\{ 1, 2, 3, 4, 5, 6 \} \\
+% \also
+\{ 4, 5, 6, 1, 2, 3 \} \\
+% \also
+\{ 4, 5, 5, 6, 1, 1, 1, 2, 3 \} \\
+% \also
+\{ red, yellow, green \} \\
+% \also
+\{ yellow, red, green, 1, 2 \} & Type error! \\
+\end{argue}
+
+Set names
+
+\begin{argue}
+\num \\
+% \also
+DICE \\
+% \also
+LAMP
+\end{argue}
+
+Set expressions
+
+\begin{argue}
+1 \upto 6 \\
+% \also
+\{~ i: \num | 1 \leq i \leq 6 ~\}
+\end{argue}
+
+\end{slide}{}
+
+\begin{slide}{}
+TYPES
+
+Every object belongs to a set called its {\em type}.
+
+\[ 
+\mbox{$1$, $2$, $\dots$ all belong to the type $\num$.}
+\also
+\mbox{$red$, $green$ belong to the type $COLOR$.}
+\]
+
+Every type must be introduced in a {\em declaration}.
+There are two ways to declare types.
+
+{\em Free types} are like enumerations.
+
+\begin{zed} 
+   COLOR ::= red | green | blue | yellow \\
+\t3		| cyan | magenta | white | black
+\end{zed}
+
+{\em Basic types} can include indefinitely many \\
+elements.
+
+\begin{argue}
+	[\num] \\
+	[NAME] \\
+	[PROCESS, FILE]
+\end{argue}
+
+\end{slide}{}
+
+\begin{slide}{}
+VARIABLES
+
+A {\em variable} is a name for an object: its {\em value}.  
+Variables are introduced in {\em declarations}.
+
+\[ x: S \hspace*{0.5in} \mbox{The value of $x$ belongs to set $S$} \]
+{\em Axiomatic definitions} declare {\em global variables} and can
+include optional {\em constraints}.
+
+\begin{axdef}
+	d_1,d_2: DICE 
+\where
+	d_1 + d_2 = 7 \\
+	d_1 < d_2
+\end{axdef}
+{\em Constants} are variables that are constrained to one value
+($\power S$ means {\em set of $S$}).
+
+\begin{axdef}
+	DICE: \power \num
+\where
+	DICE = 1 \upto 6
+\end{axdef}
+{\em Abbreviation definitions} can also declare \\
+constants.
+
+\[ DICE == 1 \upto 6 \]
+ 
+\end{slide}
+
+\begin{slide}{}
+TYPES, SETS AND NORMALIZATION
+
+Types are sets, but not all sets are types.
+
+$ODD, EVEN, PRIME$ are just sets, $\num$ is their type.
+
+Any set can appear in a declaration.
+
+\begin{axdef}
+	e: EVEN \\
+	o: ODD \\
+	p: PRIME 
+\end{axdef} 
+In a {\em normalized} declaration, we write the \\
+{\em signature}
+to show the type.
+
+
+\begin{axdef}
+	e,o,p: \num
+\where
+	e \in EVEN \\
+	o \in ODD \\
+	p \in PRIME 
+\end{axdef} 
+The type determines which variables can be combined in expressions.
+
+\end{slide}
+
+
+\begin{slide}{}
+EXPRESSIONS AND OPERATORS, \\
+ARITHMETIC
+
+{\em Expressions} have {\em values}.
+The simplest expressions are constants and variables.
+
+\[ \mbox{$1$, $2$, $red$, $x$, $d_1$,  $DICE$, $\num$, \dots} \] 
+{\em Operators} build larger expressions from smaller ones.
+Arithmetic provides familiar examples.
+
+\begin{tabbing}
+xxxxxxxxxxx \= \kill \\ 
+$m+n$ \> Addition \\
+$m-n$ \> Subtraction \\
+$m*n$ \> Multiplication \\
+$m \div n$ \> Division \\
+$m \mod n$ \> Remainder (modulus) \\
+$m \leq n$ \> Less than or equal \\
+$m \upto n$ \> Number range (up to)\\
+$min~A$ \> Minimum of a set of numbers \\
+$max~A$ \> Maximum of a set of numbers \\
+\end{tabbing}
+
+\end{slide}
+
+\begin{slide}{}
+SET OPERATORS
+
+The {\em size} operator $\#$ counts elements.
+
+\[  \# \{ red, yellow, blue, green, red \} = 4 \]
+The {\em union} operator $\cup$ combines sets.
+
+\[	\{ 1, 2, 3 \} \cup \{ 2, 3, 4 \} = \{ 1, 2, 3, 4 \} \]
+The {\em difference} operator $\setminus$ removes the \\
+elements of one set from
+another.
+
+\[  \{ 1, 2, 3, 4 \} \setminus \{ 2, 3 \} = \{ 1, 4 \} \]
+The {\em intersection} operator $\cap$ finds the elements common to
+both sets.
+
+\[	\{ 1, 2, 3 \} \cap \{ 2, 3, 4 \} = \{ 2, 3 \} \]
+Set operators work with sets of any type, but
+
+\begin{argue} \{ 1, 2, 3 \} \cup \{ red, green \} & Type error! \end{argue}
+
+\end{slide}
+
+
+\begin{slide}{}
+PREDICATES
+
+Predicates {\em constrain} values.  Many
+have the form $e_1~R~e_2$, where $e_1$ and $e_2$
+are expressions.
+
+Equality, $x$ and $y$ have the same value.
+
+\[ x = y \]
+
+Arithmetic relations, $n$ is less than $m$.
+
+\[ n < m \]
+
+Set membership, $x$ is a member of $S$.
+
+\[ x \in S \]
+
+Subset, members of $S$ are members of $T$.
+
+\[ S \subseteq T \]
+
+Predicates are not expressions.  They do not have values, they are
+{\em true} or {\em false}.
+
+\end{slide}
+
+\begin{slide}{}
+PUTTING THE ELEMENTS TOGETHER
+
+A train moves at a constant velocity of sixty miles per hour for four hours.
+
+\begin{axdef}
+	distance, velocity, time: \nat
+\where
+	distance = velocity * time \\
+	velocity = 60 \\
+	time = 4 
+\end{axdef}
+How far does the train travel?
+
+Philip works on the adhesives team in the materials group, which is part of
+the research division.  
+\begin{axdef}	
+	philip: PERSON \\
+	adhesives, materials, research, \\
+\t1		manufacturing: \power PERSON
+\where
+	adhesives \subseteq materials \\
+	materials \subseteq research \\
+	philip \in adhesives 
+\end{axdef} 
+Is Philip in the research division?
+
+\end{slide}
+
+\begin{slide}{}
+ELEMENTS OF Z: DISCUSSION
+
+1. Compare this Z 
+
+\begin{zed} DICE == 1 \upto 6 \end{zed}
+\begin{axdef}
+	d_1,d_2: DICE 
+\where
+	d_1 + d_2 = 7 \\
+	d_1 < d_2
+\end{axdef}
+with this C.
+
+\begin{verbatim}
+     typedef int DICE;
+     DICE d1, d2;
+\end{verbatim}
+
+2. Compare this basic type and definition 
+
+\begin{zed} [X] \end{zed}
+
+\begin{axdef} x,y: X \end{axdef}
+with this free type.
+
+\begin{zed} X ::= x | y | \dots \end{zed}
+
+\end{slide}

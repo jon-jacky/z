@@ -1,0 +1,9 @@
+% structure.tex - root 
+
+\documentstyle[fuzz]{slides}
+
+\begin{document}
+
+\blackandwhite{structure-slides}
+
+\end{document}

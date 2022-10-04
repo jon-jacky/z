@@ -1,0 +1,313 @@
+<html>
+
+<head>
+<link rel="stylesheet" href="zed.css" type="text/css">
+<title>Document Control System</title>
+</head>
+
+<body>
+
+
+<h2><a name="top">Document Control System</a></h2>
+
+<p>
+Based on chapter 16 in 
+<a href="../z-book/index.html">
+The Way of Z</a>.
+</p>
+
+<p>
+Links to more <a href="z-examples.html">Z examples</a>.
+</p>
+
+<p class="informal">
+This page looks best when this <var class="zed"><img height=11 width=9 alt="\power" src="zimg/power-m.gif"></var> and this <var class="zed">X</var> are 
+about the same size: <var class="zed"><img height=11 width=9 alt="\power" src="zimg/power-m.gif"> X</var>.  See these <a href="z-viewing-tips.html">viewing tips</a>.
+</p>
+
+<hr>
+
+<p class="informal">
+Here we model a simple document control system in Z.
+People who work together need to share their work, but there are many
+opportunities for misunderstandings and confusion.  Errors can be
+introduced when two people working on the same thing --- a file of
+program code, for example --- make changes that conflict with each
+other.  We can enlist the computer to help prevent such errors: this
+is the purpose of a document control system.  Real examples include
+SCCS (source code control system) and RCS (revision control
+system).
+</p>
+
+<p class="informal">
+Here is an excerpt from the informal description:
+</p>
+
+<blockquote>
+<p class="informal">
+    If a user wants to check out a document in order to change
+    the document and the user  has the permission to change it, 
+    and nobody else is changing it at the moment, then that user
+    may check the document out.
+</p>
+
+<p class="informal">
+    As soon as a user has checked out a document for editing
+    everyone else is disallowed from checking it out (of course people with
+    read permission can read it).
+</p>
+
+<p class="informal">
+    When the user is done editing the document, it should be
+    checked in, allowing another user to check it out.
+</p>
+</blockquote>
+
+<p class="informal">
+Here is the Z model.  We begin by introducing two basic sets that
+hold everything of interest in this universe, namely people and
+documents:
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> [PERSON, DOCUMENT] </td></tr>
+</table>
+</div>
+
+<p class="informal">
+Some people have permission to change particular documents.  We can model
+that as a relation on documents and people:
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>permission: DOCUMENT <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> PERSON</td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+<p class="informal">
+This relation is just a set of pairs of the form <var class="zed">(document, person)</var>.
+For example, Doug can change the specification, Aki and Doug can
+change the design, and Aki and Phil can change the code.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>doug, aki, phil: PERSON </td></tr>
+<tr> <td></td><td class="zed" colspan=2>spec, design, code: DOCUMENT</td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed">permission = { (spec, doug), (design, doug), (design, aki), (code, aki), (code, phil) }</td></tr>
+</table>
+</div>
+
+<p class="informal">
+The state of the system is merely another relation of the same type,
+this one saying which documents are actually checked out to whom.   The
+central requirement is that a document can only be checked out to
+one person at a time, so in this case the relation is a function:
+it associates each object in the domain with a single
+object in the range.  
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">Documents</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>checked_out: DOCUMENT <img width=14 height=8 alt="\pfun" src="zimg/pfun-m.gif"> PERSON</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>checked_out <img width=9 height=10 align=absbottom alt="\subseteq" src="zimg/subseteq-m.gif"> permission</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+<p class="informal">
+Note that <var class="zed">checked_out</var> is a partial function, indicated by the stroke
+through the arrow <var class="zed"><img width=14 height=8 alt="\pfun" src="zimg/pfun-m.gif"></var>.  This means that some documents might not be
+checked out to anybody.  The predicate says that documents can only be
+checked out to people who have permission to change them.
+</p>
+
+<p class="informal">
+A possible state of our system occurs when Doug has checked out the
+specification and design, and Phil has checked out the code.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0> 
+<tr> <td class="zed">checked_out = { (design, doug), (spec, doug), (code, phil) }</td></tr>
+</table>
+</div>
+
+
+<p class="informal">
+We need two operations that change the state, <var class="zed">CheckOut</var> and <var class="zed">CheckIn</var>.
+Here is <var class="zed">CheckOut</var>.  It has two input parameters, the person <var class="zed">p?</var> and the document <var class="zed">d?</var>.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">CheckOut</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=7 height=10 alt="\Delta" src="zimg/Delta-m.gif"> Documents </td></tr>
+<tr> <td></td><td class="zed" colspan=2>p?: PERSON </td></tr>
+<tr> <td></td><td class="zed" colspan=2>d?: DOCUMENT</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>d? <img width=7 height=11 align=absbottom alt="\notin" src="zimg/notin-m.gif"> <b>dom</b> checked_out </td></tr>
+<tr> <td></td><td class="zed" colspan=2>(d?, p?) <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> permission </td></tr>
+<tr> <td></td><td class="zed" colspan=2>checked_out' = checked_out <img width=10 height=7 alt="\cup" src="zimg/cup-m.gif"> {(d?, p?)}</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+<p class="informal">
+<var class="zed">CheckOut</var> has two preconditions.  They are the predicates that contain
+no primed ``after'' variables.  First, document <var class="zed">d?</var> can't already be checked
+out: it can't be in the domain of <var class="zed">checked_out</var>.  Moreover, the person
+doing the checking out needs permission:  <var class="zed">(d?, p?)</var> must belong to
+<var class="zed">permission</var>.  If the preconditions are satisfied we add the pair <var class="zed">(d?,p?)</var>
+to <var class="zed">checked_out</var>; this prevents anyone else from checking out <var class="zed">d?</var>.
+</p>
+
+<p class="informal">
+We must account for cases where the preconditions are not satisfied.
+There are two preconditions, so there must be two such cases.
+<var class="zed">CheckedOut</var> says that the document is already checked out: $d? <img width=7 height=7 alt="\in" src="zimg/in-m.gif">
+<b>dom</b> checked_out<var class="zed">.  </var>Unauthorized$ expresses that the person does not 
+have permission: <var class="zed">(d?,p?) <img width=7 height=11 align=absbottom alt="\notin" src="zimg/notin-m.gif"> permission</var>.  In both cases nothing
+gets checked out and the state of the system does not change:
+<var class="zed"><img width=9 height=10 alt="\Xi" src="zimg/Xi-m.gif">&nbsp;Documents</var>.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed">CheckedOut <img height=11 width=11 alt="\defs" src="zimg/defs-m.gif"> [&nbsp; <img width=9 height=10 alt="\Xi" src="zimg/Xi-m.gif"> Documents; d?: DOCUMENT | d? <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> <b>dom</b> checked_out &nbsp;]</td></tr>
+</table>
+</div>
+
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">Unauthorized</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=9 height=10 alt="\Xi" src="zimg/Xi-m.gif"> Documents </td></tr>
+<tr> <td></td><td class="zed" colspan=2>p?: PERSON </td></tr>
+<tr> <td></td><td class="zed" colspan=2> d?: DOCUMENT</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>(d?,p?) <img width=7 height=11 align=absbottom alt="\notin" src="zimg/notin-m.gif"> permission</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+<p class="informal">
+The total operation <var class="zed">T_CheckOut</var> covers all three possibilities.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed">T_CheckOut <img height=11 width=11 alt="\defs" src="zimg/defs-m.gif"> CheckOut <img width=8 height=7 alt="\lor" src="zimg/lor-m.gif"> CheckedOut <img width=8 height=7 alt="\lor" src="zimg/lor-m.gif"> Unauthorized</td></tr>
+</table>
+</div>
+
+<p class="informal">
+This concludes our presentation.  This little study illustrates some 
+typical features of Z models:
+</p>
+
+<p class="informal">
+You can ignore details in order to focus on the aspects of the problem
+you are interested in.  Here we concentrated on permissions and
+keeping track of who has checked out what.  We did not model actually
+copying documents back and forth between the central repository and
+users' local directories.  We modelled the collections of documents
+and users as fixed sets, and the permissions as a constant.  A real
+document control system would have to provide some way to enter new
+documents into the system and delete old ones, and there would also
+have to be a way to assign and change permissions.  If we wished to 
+model all that in Z we could represent people, documents, and
+permissions as variables in the state schema instead of basic types
+and global constants.
+</p>
+
+<p class="informal">
+Models should be simple.  If you find yourself writing complicated functions
+and quantified predicates, it is usually a sign that you are on the wrong
+track.  Let the basic properties of sets, relations and functions do the
+work for you.  The requirement that only one person at a time can check out
+a document can be neatly expressed by a function.
+</p>
+
+<p class="informal">
+The requirements about permissions can be represented by letting the
+<var class="zed">checked_out</var> function be a subset of the <var class="zed">permission</var> relation.  In
+Z, functions are relations and relations are sets, so operators
+defined for sets also apply to relations and functions, and you can
+put them all together in the same expressions.  This is an advantage
+of Z that you don't find in every formal notation.
+</p>
+
+<p class="informal">
+Back to <a href="#top">top</a>
+</p>
+
+<HR>
+
+<ADDRESS>
+<A HREF="http://staff.washington.edu/~jon/">Jonathan Jacky</A> /
+<A HREF="http://www.radonc.washington.edu/">Department of Radiation Oncology</A>
+ 
+Box 356043<br>
+<a href="http://www.washington.edu/">University of Washington</a> /
+Seattle, Washington 98195-6043 / USA<BR>
+Tel (206) 598-4117 / Fax (206) 598-6218<BR>
+<p>
+E-mail: jon@u.washington.edu
+</ADDRESS>
+
+</body>
+</html>

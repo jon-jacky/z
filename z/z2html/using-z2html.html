@@ -1,0 +1,199 @@
+<html>
+<head>
+<link rel="stylesheet" href="../zed.css" type="text/css">
+<title>Using Z2HTML</title>
+</head>
+
+<body>
+
+<h1><a name="top">Using <b>Z2HTML</b></a></h1>
+
+<p>
+Back to the <a href="z2html.html"><b>Z2HTML</b> home page</a>.
+</p>
+
+<p>
+<a href="#src">Preparing the LaTeX source text</a><br>
+<a href="#translate">Translating the source files to HTML</a><br>
+<a href="#stylesheet">Choosing a stylesheet</a><br>
+<a href="#server">Installing the files on your web server</a><br>
+</p>
+
+<hr>
+
+<h2><a name="src">Preparing the LaTeX source text</a></h2>
+
+<p>
+<b>Z2HTML</b> translates a LaTeX source file to a single HTML page (not
+a collection of linked pages).
+</p>
+
+<p>
+<b>Z2HTML</b> understands the LaTeX commands defined in the
+<b>zed.sty</b> and <b>fuzz.sty</b> style files.  Compare this HTML <a
+href="../z-test.html">test page</a> to its <a
+href="../z-test.txt">LaTeX source</a>.  See the comments in the source
+file for more instructions.  See also these <a
+href="../z-examples.html">Z examples</a> and their <a
+href="../z-examples-tex.html">sources</a>.
+</p>
+
+<p>
+(This <a href="fuzz-compat.txt"><b>fuzz-compat.sty</b></a> enables
+files created for <b>zed.sty</b> and <b>fuzz.sty</b> to be used with
+<b>oz.sty</b> under <b>LaTeX2e</b>.  All three style files are
+available through links on the
+<a href="http://www.comlab.ox.ac.uk/archive/z.html">Z home page</a>.)
+<p>
+
+<p>
+<b>Z2HTML</b> is not intended to be a full-featured LaTeX-to-HTML
+translator.  There are many LaTeX commands which it cannot handle; it
+simply passes these through, untranslated, to the output file.
+You will probably want to do some editing of the
+LaTeX source or the HTML it produces.  
+<p>
+
+<hr>
+
+<h2><a name="translate">Translating the source files to HTML</a></h2>
+
+<p>
+Run the <b>Z2HTML</b> scripts to translate your LaTeX source files to
+HTML.  
+</p>
+
+<p>
+The <b>z2html.sed</b> script is the first pass; it translates the Z
+LaTeX macros and some other LaTeX commands to HTML.  The
+<b>paragraph.awk</b> script is the second pass; it puts paragraph tags
+around each informal paragraph so they don't all run together in the
+browser, and puts blank paragraphs between Z formulas to make some
+space.  The <b>z2html</b> shell command invokes these two scripts in a
+pipeline, taking the name of the LaTeX source file from the command
+line.
+</p>
+
+<p>
+Obviously, you must run the scripts on a system that provides
+<b>sed</b> and <b>awk</b>.  If you want to use the <b>z2html</b> shell
+command the system must also provide a Unix-like shell with pipes.
+</p>
+
+<p>
+The <b>z2html</b> shell script is just one line: 
+</p>
+
+<p>
+<blockquote>
+<tt>cat $1 | sed -f z2html.sed | awk -f paragraph.awk</tt>
+</blockquote>
+</p>
+
+<p>
+When you invoke the <b>z2html</b> shell command, there must be 
+copies of (or links to) <b>z2html.sed</b> and <b>paragraph.awk</b>
+in your current default directory (otherwise <b>sed</b> and <b>awk</b>
+will not be able to find the scripts).  And of course the directory
+that holds the <b>z2html</b> shell script must be in your path.
+</p>
+
+<p>
+To view the translated output on your terminal screen, invoke the 
+shell command like this:
+</p>
+
+<p>
+<blockquote>
+<tt>% z2html machine.tex</tt>
+</blockquote>
+</p>
+
+<p>
+To save the translated output, redirect it to an HTML file:
+</p>
+
+<p>
+<blockquote>
+<tt>% z2html machine.tex > machine.html</tt>
+</blockquote>
+</p>
+
+<p>
+If you want a table of contents, use the <b>toc.sed</b> script.  This
+script processes the HTML output of <b>z2html.sed</b> (or
+<b>z2html.sed</b> then <b>paragraph.awk</b> --- it doesn't matter) to
+produce an HTML file containing nothing but a list of links to 
+all the sections, subsections and subsubsections in the input file.
+Invoke it like this (you must use the <b>-n</b> option):
+</p> 
+
+<p>
+<blockquote>
+<tt>% sed -n -f toc.sed machine.html > machine-toc.html</tt>
+</blockquote>
+</p>
+
+<p>
+Then use a text editor to include the table of contents file
+near the top of the original file.
+</p>
+
+<p>
+(The <b>sed</b> scripts work with GNU <b>sed</b>.  They may not work
+with some other versions, in particular <b>z2html.sed</b> does not work with the
+<b>sed</b> shipped with HP-UX 10.20.)
+</p>
+
+<hr>
+
+<h2><a name="stylesheet">Choosing a stylesheet</a></h2>
+
+<p>
+Pages translated by <b>Z2HTML</b> contain a link to an external
+stylesheet named <b>zed.css</b>.  Use the stylesheet to control the
+appearance of the Z text.
+<p>
+
+</p>
+Follow this link for an explanation and some examples of 
+<a href="z-stylesheet.html">Z stylesheets</a>.
+</p>
+
+<hr>
+
+<h2><a name="server">Installing the files on your web server</a></h2>
+
+<p>
+The translated HTML files can go anywhere, but each directory that
+contains them must also contain a subdirectory named <b>zimg</b> that holds
+all the GIF image files for the Z symbols.
+The easiest way to provide this on Unix-like systems is to make a
+symbolic link in each directory to a single <b>zimg</b> directory.  
+</p>
+
+<p>
+In each directory you should also put a copy of <b>zed.css</b>.
+Again, the easiest way is to make symbolic links to a single
+stylesheet.
+</p>
+
+Back to <a href="#top">top</a>
+
+<HR>
+
+<ADDRESS>
+<A HREF="http://www.radonc.washington.edu/prostaff/jon/">Jonathan Jacky</A> /
+<A HREF="http://www.radonc.washington.edu/">Department of Radiation Oncology</A>
+ 
+Box 356043<br>
+<a href="http://www.washington.edu/">University of Washington</a> /
+Seattle, Washington 98195-6043 / USA<BR>
+Tel (206) 598-4117 / Fax (206) 598-6218<BR>
+<p>
+E-mail: jon@u.washington.edu
+</ADDRESS>
+
+
+</body>
+</html>

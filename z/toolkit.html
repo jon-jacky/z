@@ -1,0 +1,632 @@
+<html>
+
+<head>
+<link rel="stylesheet" href="zed-nomargin.css" type="text/css">
+<title>Z Mathematical Tool-kit</title>
+</head>
+
+<body>
+
+<h2><a name="top">Z Mathematical Tool-kit</a></h2> 
+
+
+<p>
+Based on appendix D in 
+<a href="../z-book/index.html">The Way of Z</a>.
+</p>
+
+
+<p>
+Links to more <a href="z-examples.html">Z examples</a>.
+</p>
+
+<p class="informal">
+This page looks best when this <var class="zed"><img height=11 width=9 alt="\power" src="zimg/power-m.gif"></var> and this <var class="zed">X</var> are 
+about the same size: <var class="zed"><img height=11 width=9 alt="\power" src="zimg/power-m.gif"> X</var>.  See these <a href="z-viewing-tips.html">viewing tips</a>.
+</p>
+
+<hr>
+
+<p class="informal">
+The Z mathematical tool-kit is a collection of types and operators
+somewhat like a standard library of types and functions in a
+programming language.
+</p>
+
+<p class="informal">
+The definitions in the tool-kit build up all the Z operators from
+a few fundamental constructs in logic and set theory.
+</p>
+
+<p class="informal">
+The tool-kit uses generic definitions very heavily: <var class="zed">X</var>, <var class="zed">Y</var>, and <var class="zed">Z</var>
+stand for any type, <var class="zed">S</var> and <var class="zed">T</var> are sets of any type, and <var class="zed">Q</var> and <var class="zed">R</var>
+are binary relations between any two types.  The toolkit also makes
+extensive use of patterns in abbreviation definitions, for example it
+defines the binary relation symbol <var class="zed"><img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"></var> by <var class="zed">X <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> Y == <img height=11 width=9 alt="\power" src="zimg/power-m.gif"> (X <img width=7 height=7 alt="\cross" src="zimg/cross-m.gif"> Y)</var>.
+</p>
+
+
+<p class="informal">
+In a few places I've used English paraphrases for predicates, where
+the formal definition uses constructs or concepts not defined here.
+</p>
+
+<hr>
+
+
+
+<p>
+These selections from the tool-kit are based on the 
+<a href="http://spivey.oriel.ox.ac.uk/~mike/zrm/">Reference Manual</a>,
+which defines additional types and operators.
+</p>
+
+
+<p>
+<a name="setref" href="#sets">Sets</a><br>
+<a name="pair1ref" href="#pair1">Pairs and binary relations I</a><br>
+<a name="pair2ref" href="#pair2">Pairs and binary relations II</a><br>
+<a name="pair3ref" href="#pair3">Pairs and binary relations III</a><br>
+<a name="numref" href="#num">Numbers and arithmetic</a><br>
+<a name="funcref" href="#func">Functions</a><br>
+<a name="seqref" href="#seq">Sequences</a><br>
+</p>
+
+<p>
+<a name="otherref" href="#other">Other Z pages</a><br>
+</p>
+
+<hr>
+
+<blockquote>
+
+
+<h4><a name="sets" href="#setref">Sets</a></h4>
+
+<b>Glossary</b>
+
+<p class="space"></p>
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><var class="zed"><img width=11 height=11 alt="\emptyset" src="zimg/emptyset-m.gif"></var> </td> <td> &nbsp;-&nbsp; </td> <td> Empty set: a set that has no elements </td></tr>
+<tr> <td><var class="zed">x <img width=7 height=11 align=absbottom alt="\notin" src="zimg/notin-m.gif"> S</var> </td> <td> &nbsp;-&nbsp; </td> <td> Non-membership: <var class="zed">x</var> is not an element of <var class="zed">S</var> </td></tr>
+<tr> <td><var class="zed">S <img width=9 height=10 align=absbottom alt="\subseteq" src="zimg/subseteq-m.gif"> T</var> </td> <td> &nbsp;-&nbsp; </td> <td> Subset: all elements of <var class="zed">S</var> belong to <var class="zed">T</var> </td></tr>
+<tr> <td><var class="zed">S <img width=9 height=7 alt="\subset" src="zimg/subset-m.gif"> T</var> </td> <td> &nbsp;-&nbsp; </td> <td> Proper subset: <var class="zed">S</var> is a subset of <var class="zed">T</var> and <var class="zed">S</var> is not equal to <var class="zed">T</var> </td></tr>
+<tr> <td><var class="zed">S <img width=10 height=7 alt="\cup" src="zimg/cup-m.gif"> T</var> </td> <td> &nbsp;-&nbsp; </td> <td> Union: the set of elements in either <var class="zed">S</var> or <var class="zed">T</var> </td></tr>
+<tr> <td><var class="zed">S <img width=10 height=7 alt="\cap" src="zimg/cap-m.gif"> T</var> </td> <td> &nbsp;-&nbsp; </td> <td> Intersection: the set of elements in both <var class="zed">S</var> and <var class="zed">T</var> </td></tr>
+<tr> <td><var class="zed">S \ T</var> </td> <td> &nbsp;-&nbsp; </td> <td> Set difference: the set of elements in <var class="zed">S</var> that are not in <var class="zed">T</var> </td></tr>
+</table>
+</div>
+
+<p class="space"></p>
+
+
+<b>Definitions</b>
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> <img width=11 height=11 alt="\emptyset" src="zimg/emptyset-m.gif">[X] == {&nbsp; x: X | false &nbsp;} </td></tr>
+</table>
+</div>
+
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{gendef}" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">[X]</td>
+     <td><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10 height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=3><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td width=10 height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2> _ <img width=7 height=11 alt="\notin" src="zimg/notin-m.gif"> _ : X <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> <img height=11 width=9 alt="\power" src="zimg/power-m.gif"> X  </td></tr>
+<tr> <td></td><td class="zed"  colspan=2>_ <img width=9 height=10 align=absbottom alt="\subseteq" src="zimg/subseteq-m.gif"> _, _ <img width=9 height=7 alt="\subset" src="zimg/subset-m.gif"> _ : <img height=11 width=9 alt="\power" src="zimg/power-m.gif"> X <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> <img height=11 width=9 alt="\power" src="zimg/power-m.gif"> X  </td></tr>
+<tr> <td></td><td class="zed"  colspan=2>   _ <img width=10 height=7 alt="\cup" src="zimg/cup-m.gif"> _ , _ <img width=10 height=7 alt="\cap" src="zimg/cap-m.gif"> _, _ \ _: <img height=11 width=9 alt="\power" src="zimg/power-m.gif"> X <img width=7 height=7 alt="\cross" src="zimg/cross-m.gif"> <img height=11 width=9 alt="\power" src="zimg/power-m.gif"> X <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> <img height=11 width=9 alt="\power" src="zimg/power-m.gif"> X </td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=9 height=10 alt="\forall" src="zimg/forall-m.gif"> x: X; S, T: <img height=11 width=9 alt="\power" src="zimg/power-m.gif"> X <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> </td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif">x <img width=7 height=11 align=absbottom alt="\notin" src="zimg/notin-m.gif"> S <img width=13 height=7 alt="\iff" src="zimg/iff-m.gif"> <img width=7 height=7 alt="\lnot" src="zimg/lnot-m.gif"> (x <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> X) <img width=8 height=7 alt="\land" src="zimg/land-m.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif">(S <img width=9 height=10 align=absbottom alt="\subseteq" src="zimg/subseteq-m.gif"> T <img width=13 height=7 alt="\iff" src="zimg/iff-m.gif"> (<img width=9 height=10 alt="\forall" src="zimg/forall-m.gif"> x: X <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> x <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> S <img width=13 height=7 alt="\implies" src="zimg/implies-m.gif"> x <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> T)) <img width=8 height=7 alt="\land" src="zimg/land-m.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif">(S <img width=9 height=7 alt="\subset" src="zimg/subset-m.gif"> T <img width=13 height=7 alt="\iff" src="zimg/iff-m.gif"> S <img width=9 height=10 align=absbottom alt="\subseteq" src="zimg/subseteq-m.gif"> T <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> S <img width=7 height=7 alt="\neq" src="zimg/neq-m.gif"> T) <img width=8 height=7 alt="\land" src="zimg/land-m.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"> </td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif">S <img width=10 height=7 alt="\cup" src="zimg/cup-m.gif"> T = {&nbsp; x: X | x <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> S <img width=8 height=7 alt="\lor" src="zimg/lor-m.gif"> X <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> T &nbsp;} <img width=8 height=7 alt="\land" src="zimg/land-m.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"> </td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif">S <img width=10 height=7 alt="\cap" src="zimg/cap-m.gif"> T = {&nbsp; x: X | x <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> S <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> X <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> T &nbsp;} <img width=8 height=7 alt="\land" src="zimg/land-m.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"> </td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif">S \ T = {&nbsp; x: X | x <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> S <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> X <img width=7 height=11 align=absbottom alt="\notin" src="zimg/notin-m.gif"> T &nbsp;}</td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{gendef}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+<p class="space"></p>
+
+
+<hr>
+
+
+<h4><a name="pair1" href="#pair1ref">Pairs and binary relations I</a></h4>
+
+<b>Glossary</b>
+
+<p class="space"></p>
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><var class="zed">(x,y)</var>  </td> <td> &nbsp;-&nbsp; </td> <td> The pair <var class="zed">x</var>,<var class="zed">y</var> </td></tr>
+<tr> <td><var class="zed">x <img height=9 width=10 alt="\mapsto" src="zimg/mapsto-m.gif"> y</var> </td> <td> &nbsp;-&nbsp; </td> <td> Maplet: <var class="zed">x</var> maps to <var class="zed">y</var>, same as <var class="zed">(x,y)</var> </td></tr>
+<tr> <td><var class="zed">first&nbsp;p</var> </td> <td> &nbsp;-&nbsp; </td> <td> First element of pair <var class="zed">p</var> </td></tr>
+<tr> <td><var class="zed">second&nbsp;p</var> </td> <td> &nbsp;-&nbsp; </td> <td> Second element of pair <var class="zed">p</var> </td></tr>
+<tr> <td><var class="zed"><b>id</b> X</var> </td> <td> &nbsp;-&nbsp; </td> <td> Identity relation </td></tr>
+<tr> <td><var class="zed">X <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> Y</var> </td> <td> &nbsp;-&nbsp; </td> <td> Binary relation </td></tr>
+<tr> <td><var class="zed"><b>dom</b> R</var> </td> <td> &nbsp;-&nbsp; </td> <td> Domain: the set of first elements of all pairs in <var class="zed">R</var> </td></tr>
+<tr> <td><var class="zed"><b>ran</b> R</var> </td> <td> &nbsp;-&nbsp; </td> <td> Range: the set of second elements of all pairs in <var class="zed">R</var> </td></tr>
+</table>
+</div>
+
+<p class="space"></p>
+
+
+<b>Definitions</b>
+
+<p class="space"></p>
+
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0> 
+<tr> <td class="zed">X <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> Y == <img height=11 width=9 alt="\power" src="zimg/power-m.gif"> (X <img width=7 height=7 alt="\cross" src="zimg/cross-m.gif"> Y)</td></tr>
+<tr> <td class="zed"><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td class="zed"><b>id</b> X == { x: X <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> x <img height=9 width=10 alt="\mapsto" src="zimg/mapsto-m.gif"> x }</td></tr>
+</table>
+</div>
+
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{gendef}" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">[X,Y]</td>
+     <td><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10 height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=3><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td width=10 height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2>first: X <img width=7 height=7 alt="\cross" src="zimg/cross-m.gif"> Y <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> X </td></tr>
+<tr> <td></td><td class="zed"  colspan=2>second: X <img width=7 height=7 alt="\cross" src="zimg/cross-m.gif"> Y <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> Y </td></tr>
+<tr> <td></td><td class="zed"  colspan=2>_ <img height=9 width=10 alt="\mapsto" src="zimg/mapsto-m.gif"> _ : X <img width=7 height=7 alt="\cross" src="zimg/cross-m.gif"> Y <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> X <img width=7 height=7 alt="\cross" src="zimg/cross-m.gif"> Y </td></tr>
+<tr> <td></td><td class="zed"  colspan=2><b>dom</b>: (X <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> Y) <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> <img height=11 width=9 alt="\power" src="zimg/power-m.gif"> X </td></tr>
+<tr> <td></td><td class="zed"  colspan=2><b>ran</b>: (X <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> Y) <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> <img height=11 width=9 alt="\power" src="zimg/power-m.gif"> Y </td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=9 height=10 alt="\forall" src="zimg/forall-m.gif"> x: X; y: Y; R: X <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> Y <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> </td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif">first(x,y) = x <img width=8 height=7 alt="\land" src="zimg/land-m.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif">second(x,y) = y <img width=8 height=7 alt="\land" src="zimg/land-m.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif">x <img height=9 width=10 alt="\mapsto" src="zimg/mapsto-m.gif"> y = (x,y) <img width=8 height=7 alt="\land" src="zimg/land-m.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif"><b>dom</b> R = {&nbsp; x: X; y: Y | x <u>R</u> y <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> x &nbsp;} <img width=8 height=7 alt="\land" src="zimg/land-m.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif"><b>ran</b> R = {&nbsp; x: X; y: Y | x <u>R</u> y <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> y &nbsp;}</td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{gendef}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+<p class="space"></p>
+
+<hr>
+
+
+<h4><a name="pair2" href="#pair2ref">Pairs and binary relations II</a></h4>
+
+<b>Glossary</b>
+
+<p class="space"></p>
+
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><var class="zed">S <img height=11 width=10 alt="\dres" src="zimg/dres-m.gif"> R</var> </td> <td> &nbsp;-&nbsp; </td> <td> Domain restriction: the pairs in <var class="zed">R</var> whose first element is in <var class="zed">S</var> </td></tr>
+<tr> <td><var class="zed">R <img height=11 width=10 alt="\rres" src="zimg/rres-m.gif"> T</var> </td> <td> &nbsp;-&nbsp; </td> <td> Range restriction: the pairs in <var class="zed">R</var> whose second element is in <var class="zed">T</var> </td></tr>
+<tr> <td><var class="zed">S <img height=11 width=10 alt="\dres" src="zimg/ndres-m.gif"> R</var> </td> <td> &nbsp;-&nbsp; </td> <td> Domain antirestriction: the pairs in <var class="zed">R</var> whose first element is not in <var class="zed">S</var> </td></tr>
+<tr> <td><var class="zed">R <img height=11 width=10 alt="\rres" src="zimg/nrres-m.gif"> T</var> </td> <td> &nbsp;-&nbsp; </td> <td> Range antirestriction: the pairs in <var class="zed">R</var> whose second element is not in <var class="zed">T</var> </td></tr>
+<tr> <td><var class="zed">R <sup>~</sup></var> </td> <td> &nbsp;-&nbsp; </td> <td> Relational inverse: the  pairs in <var class="zed">R</var>, </td></tr>
+<tr> <td></td> <td>  </td> <td> but with first and second elements exchanged </td></tr>
+<tr> <td><var class="zed">R <img height=14 width=7 alt="\limg" src="zimg/limg-m.gif" align=absbottom> S <img height=14 width=7 alt="\rimg" src="zimg/rimg-m.gif" align=absbottom></var> </td> <td> &nbsp;-&nbsp; </td> <td> Relational image: the second elements of pairs </td></tr>
+<tr> <td></td> <td>  </td> <td> in <var class="zed">R</var> whose first element is in <var class="zed">S</var>. </td></tr>
+<tr> <td><var class="zed">R <img width=9 height=9 alt="\oplus" src="zimg/oplus-m.gif"> Q</var> </td> <td> &nbsp;-&nbsp; </td> <td> Overriding: all pairs in <var class="zed">R</var> or <var class="zed">Q</var>, </td></tr>
+<tr> <td></td> <td> </td> <td> except pairs in <var class="zed">R</var> whose first element is also in <var class="zed">Q</var>. </td></tr>
+<tr> <td><var class="zed">R <sup>+</sup></var> </td> <td> &nbsp;-&nbsp; </td> <td> Transitive closure of <var class="zed">R</var> </td></tr>
+</table>
+</div>
+
+<p class="space"></p>
+
+
+<b>Definitions</b>
+
+<p class="space"></p>
+
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{gendef}" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">[X,Y]</td>
+     <td><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10 height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=3><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td width=10 height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2>_ <img height=11 width=10 alt="\dres" src="zimg/dres-m.gif"> _, _ <img height=11 width=10  alt="\ndres" src="zimg/ndres-m.gif"> _ : <img height=11 width=9 alt="\power" src="zimg/power-m.gif"> X <img width=7 height=7 alt="\cross" src="zimg/cross-m.gif"> (X <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> Y) <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> X <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> Y </td></tr>
+<tr> <td></td><td class="zed"  colspan=2>_ <img height=11 width=10 alt="\rres" src="zimg/rres-m.gif"> _, _ <img height=11 width=10 alt="\nrres" src="zimg/nrres-m.gif"> _ : (X <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> Y)  <img width=7 height=7 alt="\cross" src="zimg/cross-m.gif">  <img height=11 width=9 alt="\power" src="zimg/power-m.gif"> Y <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> X <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> Y </td></tr>
+<tr> <td></td><td class="zed"  colspan=2>_ <sup>~</sup> : (X <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> Y) <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> (Y <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> X) </td></tr>
+<tr> <td></td><td class="zed"  colspan=2>_ <img height=14 width=7 alt="\limg" src="zimg/limg-m.gif" align=absbottom> _ <img height=14 width=7 alt="\rimg" src="zimg/rimg-m.gif" align=absbottom> : (X <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> Y) <img width=7 height=7 alt="\cross" src="zimg/cross-m.gif"> <img height=11 width=9 alt="\power" src="zimg/power-m.gif"> X <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> <img height=11 width=9 alt="\power" src="zimg/power-m.gif"> Y </td></tr>
+<tr> <td></td><td class="zed"  colspan=2>_ <img width=9 height=9 alt="\oplus" src="zimg/oplus-m.gif"> _ : (X <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> Y) <img width=7 height=7 alt="\cross" src="zimg/cross-m.gif"> (X <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> Y) <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> (X <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> Y) </td></tr>
+<tr> <td></td><td class="zed"  colspan=2>_ <sup>+</sup> : (X <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> X) <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> (X <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> X)</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=9 height=10 alt="\forall" src="zimg/forall-m.gif"> x: X; y: Y; S: <img height=11 width=9 alt="\power" src="zimg/power-m.gif"> X; T: <img height=11 width=9 alt="\power" src="zimg/power-m.gif"> Y; Q, R: X <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> Y <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> </td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif"> S <img height=11 width=10 alt="\dres" src="zimg/dres-m.gif"> R = {&nbsp; x: X; y: Y | x <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> S <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> x <u>R</u> y <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> x <img height=9 width=10 alt="\mapsto" src="zimg/mapsto-m.gif"> y &nbsp;} <img width=8 height=7 alt="\land" src="zimg/land-m.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif"> S <img height=11 width=10  alt="\ndres" src="zimg/ndres-m.gif"> R = {&nbsp; x: X; y: Y | x <img width=7 height=11 align=absbottom alt="\notin" src="zimg/notin-m.gif"> S <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> x <u>R</u> y <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> x <img height=9 width=10 alt="\mapsto" src="zimg/mapsto-m.gif"> y &nbsp;} <img width=8 height=7 alt="\land" src="zimg/land-m.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif"> R <img height=11 width=10 alt="\rres" src="zimg/rres-m.gif"> T = {&nbsp; x: X; y: Y | x <u>R</u> y <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> y <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> T <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> x <img height=9 width=10 alt="\mapsto" src="zimg/mapsto-m.gif"> y &nbsp;} <img width=8 height=7 alt="\land" src="zimg/land-m.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif"> R <img height=11 width=10 alt="\nrres" src="zimg/nrres-m.gif"> T = {&nbsp; x: X; y: Y | x <u>R</u> y <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> y <img width=7 height=11 align=absbottom alt="\notin" src="zimg/notin-m.gif"> T <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> x <img height=9 width=10 alt="\mapsto" src="zimg/mapsto-m.gif"> y &nbsp;} <img width=8 height=7 alt="\land" src="zimg/land-m.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif">R <sup>~</sup> = {&nbsp; x: X; y: Y | x <u>R</u> y <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> y <img height=9 width=10 alt="\mapsto" src="zimg/mapsto-m.gif"> x &nbsp;} <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> </td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"> </td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif"> R <img height=14 width=7 alt="\limg" src="zimg/limg-m.gif" align=absbottom> S <img height=14 width=7 alt="\rimg" src="zimg/rimg-m.gif" align=absbottom> = {&nbsp; x: X; y: Y | x <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> S <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> x <u>R</u> y <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> y &nbsp;} <img width=8 height=7 alt="\land" src="zimg/land-m.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif">Q <img width=9 height=9 alt="\oplus" src="zimg/oplus-m.gif"> R = ((<b>dom</b> R) <img height=11 width=10  alt="\ndres" src="zimg/ndres-m.gif"> Q) <img width=10 height=7 alt="\cup" src="zimg/cup-m.gif"> R</td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif">... predicate for <var class="zed">_ <sup>+</sup></var> omitted ...</td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{gendef}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+<p class="space"></p>
+
+
+<hr>
+
+
+<h4><a name="pair3" href="#pair3ref">Pairs and binary relations III</a></h4>
+
+<b>Glossary</b>
+
+<p class="space"></p>
+
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><var class="zed">Q <img width=6 height=12 alt="\comp" src="zimg/comp-m.gif" align=absbottom> R</var> </td> <td> &nbsp;-&nbsp; </td> <td> Relational composition: <var class="zed">Q</var> composed with <var class="zed">R</var> </td></tr>
+<tr> <td><var class="zed">R <img width=7 height=7 alt="\circ" src="zimg/circ-m.gif"> Q</var> </td> <td> &nbsp;-&nbsp; </td> <td> Backward relational composition, same as <var class="zed">Q <img width=6 height=12 alt="\comp" src="zimg/comp-m.gif" align=absbottom> R</var> </td></tr>
+</table>
+</div>
+
+<p class="space"></p>
+
+<b>Definitions</b>
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{gendef}" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">[X,Y,Z]</td>
+     <td><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10 height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=3><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td width=10 height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2>_ <img width=6 height=12 alt="\comp" src="zimg/comp-m.gif" align=absbottom> _ : (X <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> Y) <img width=7 height=7 alt="\cross" src="zimg/cross-m.gif"> (Y <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> Z) <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> (X <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> Z) </td></tr>
+<tr> <td></td><td class="zed"  colspan=2>_ <img width=7 height=7 alt="\circ" src="zimg/circ-m.gif"> _ : (Y <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> Z) <img width=7 height=7 alt="\cross" src="zimg/cross-m.gif"> (X <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> Y) <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> (X <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> Z) </td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=9 height=10 alt="\forall" src="zimg/forall-m.gif"> Q: X <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> Y; R: Y <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> Z <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> </td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=30 height=1 align=bottom alt="    " src="zimg/clear.gif">Q <img width=6 height=12 alt="\comp" src="zimg/comp-m.gif" align=absbottom> R = R <img width=7 height=7 alt="\circ" src="zimg/circ-m.gif"> Q = {&nbsp; x: X; y: Y; z: Z | x <u>Q</u> y <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> y <u>R</u> z <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> x <img height=9 width=10 alt="\mapsto" src="zimg/mapsto-m.gif"> z &nbsp;}</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{gendef}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+<p class="space"></p>
+
+
+<hr>
+
+<h4><a name="num" href="#numref">Numbers and arithmetic</a></h4>
+
+<b>Glossary</b>
+
+<p class="space"></p>
+
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><var class="zed"><img height=11 width=10 alt="\num" src="zimg/num-m.gif"></var> </td> <td> &nbsp;-&nbsp; </td> <td> The set of integers </td></tr>
+<tr> <td><var class="zed"><img height=11 width=10 alt="\nat" src="zimg/nat-m.gif"></var> </td> <td> &nbsp;-&nbsp; </td> <td> The set of natural numbers, starting with zero </td></tr>
+<tr> <td><var class="zed"><img height=11 width=10 alt="\nat" src="zimg/nat-m.gif"><sub><font size=-3>1</font></sub></var> </td> <td> &nbsp;-&nbsp; </td> <td> The set of strictly positive numbers, starting with one </td></tr>
+<tr> <td><var class="zed">+,-,*</var> </td> <td> &nbsp;-&nbsp; </td> <td> Arithmetic operators: addition, subtraction, multiplication </td></tr>
+<tr> <td><var class="zed"><b>div</b>,<b>mod</b></var> </td> <td> &nbsp;-&nbsp; </td> <td> Arithmetic operators: integer division and remainder (modulus) </td></tr>
+<tr> <td><var class="zed">&lt;,<img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"></var> </td> <td> &nbsp;-&nbsp; </td> <td>  Comparison: less than, less than or equal </td></tr>
+<tr> <td><var class="zed">&gt;, <img width=7 height=9 alt="\geq" src="zimg/geq-m.gif"></var> </td> <td> &nbsp;-&nbsp; </td> <td> Comparison: greater than, greater than or equal </td></tr>
+<tr> <td><var class="zed">i .. j</var> </td> <td> &nbsp;-&nbsp; </td> <td> Number range: the set of numbers starting with <var class="zed">i</var> up through <var class="zed">j</var> </td></tr>
+<tr> <td><var class="zed">min&nbsp;S</var> </td> <td> &nbsp;-&nbsp; </td> <td> Mininum: the smallest element in <var class="zed">S</var>, if any </td></tr>
+<tr> <td><var class="zed">max&nbsp;S</var> </td> <td> &nbsp;-&nbsp; </td> <td> Maximum: the largest element in <var class="zed">S</var>, if any </td></tr>
+<tr> <td><var class="zed"># S</var></td> <td> &nbsp;-&nbsp; </td> <td> Size: the number of elements in <var class="zed">S</var> </td></tr>
+<tr> <td><var class="zed"><img height=11 width=9 alt="\power" src="zimg/power-m.gif"><sub><font size=-3>1</font></sub></var> </td> <td> &nbsp;-&nbsp; </td> <td> Non-empty sets </td></tr>
+<tr> <td><var class="zed"><img height=11 width=8 alt="\finset" src="zimg/finset-m.gif"></var> </td> <td> &nbsp;-&nbsp; </td> <td> Finite sets </td></tr>
+</table>
+</div>
+
+<p class="space"></p>
+
+<b>Definitions</b>
+
+<p class="space"></p>
+
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0> 
+<tr> <td class="zed">[<img height=11 width=10 alt="\num" src="zimg/num-m.gif">]</td></tr>
+<tr> <td class="zed"><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td class="zed"><img height=11 width=10 alt="\nat" src="zimg/nat-m.gif"> == {&nbsp; n: <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> | n <img width=7 height=9 alt="\geq" src="zimg/geq-m.gif"> 0 &nbsp;}</td></tr>
+<tr> <td class="zed"><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td class="zed"><img height=11 width=10 alt="\nat" src="zimg/nat-m.gif"><sub><font size=-3>1</font></sub> == <img height=11 width=10 alt="\nat" src="zimg/nat-m.gif"> \ { 0 }</td></tr>
+<tr> <td class="zed"><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td class="zed"><img height=11 width=9 alt="\power" src="zimg/power-m.gif"><sub><font size=-3>1</font></sub> X == {&nbsp; S: <img height=11 width=9 alt="\power" src="zimg/power-m.gif"> X | S <img width=7 height=7 alt="\neq" src="zimg/neq-m.gif"> <img width=11 height=11 alt="\emptyset" src="zimg/emptyset-m.gif"> &nbsp;}</td></tr>
+<tr> <td class="zed"><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td class="zed"><img height=11 width=8 alt="\finset" src="zimg/finset-m.gif"> X == {&nbsp; S: <img height=11 width=9 alt="\power" src="zimg/power-m.gif"> X | ... <var class="zed">S</var> is finite ... &nbsp;}</td></tr>
+</table>
+</div>
+
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>_ + _, _ - _, _* _ : <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> <img width=7 height=7 alt="\cross" src="zimg/cross-m.gif"> <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> </td></tr>
+<tr> <td></td><td class="zed" colspan=2>      _ <b>div</b> _, _ <b>mod</b> _ : <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> (<img height=11 width=10 alt="\num" src="zimg/num-m.gif"> \ { 0 }) <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> </td></tr>
+<tr> <td></td><td class="zed" colspan=2>_ - : <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> </td></tr>
+<tr> <td></td><td class="zed" colspan=2>_ &lt; _, _ <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> _, _ <img width=7 height=9 alt="\geq" src="zimg/geq-m.gif"> _, _ &gt; _ : <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> </td></tr>
+<tr> <td></td><td class="zed" colspan=2>_ .. _ : <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> <img height=11 width=9 alt="\power" src="zimg/power-m.gif"> <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> </td></tr>
+<tr> <td></td><td class="zed" colspan=2>#: <img height=11 width=8 alt="\finset" src="zimg/finset-m.gif"> X <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> <img height=11 width=10 alt="\nat" src="zimg/nat-m.gif"> </td></tr>
+<tr> <td></td><td class="zed" colspan=2>min, max: <img height=11 width=9 alt="\power" src="zimg/power-m.gif"><sub><font size=-3>1</font></sub> <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> <img width=14 height=8 alt="\pfun" src="zimg/pfun-m.gif"> <img height=11 width=10 alt="\num" src="zimg/num-m.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=9 height=10 alt="\forall" src="zimg/forall-m.gif"> a,b: <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> a .. b = {&nbsp; i: <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> | a <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> i <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> b &nbsp;} </td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif">... predicates for other operators omitted ...</td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+<p class="space"></p>
+
+
+<hr>
+
+
+<h4><a name="func" href="#funcref">Functions</a></h4>
+
+<b>Glossary</b>
+
+<p class="space"></p>
+
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><var class="zed">X <img width=14 height=8 alt="\pfun" src="zimg/pfun-m.gif"> Y</var> </td> <td> &nbsp;-&nbsp; </td> <td> Partial function: some members of <var class="zed">X</var> are paired with a member of <var class="zed">Y</var> </td></tr>
+<tr> <td><var class="zed">X <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> Y</var> </td> <td> &nbsp;-&nbsp; </td> <td> Total function: every member of <var class="zed">X</var> is paired with a member of <var class="zed">Y</var> </td></tr>
+<tr> <td><var class="zed">X <img width=14 height=8 alt="\pinj" src="zimg/pinj-m.gif"> Y</var> </td> <td> &nbsp;-&nbsp; </td> <td> Partial injection:  some members of <var class="zed">X</var> are paired with different members of <var class="zed">Y</var> </td></tr>
+<tr> <td><var class="zed">X <img  width=14 height=8 alt="\inj" src="zimg/inj-m.gif"> Y</var> </td> <td> &nbsp;-&nbsp; </td> <td> Total injection: every member of <var class="zed">X</var> is paired with a different member of <var class="zed">Y</var> </td></tr>
+<tr> <td><var class="zed">X <img width=14 height=8 alt="\bij" src="zimg/bij-m.gif"> Y</var> </td> <td> &nbsp;-&nbsp; </td> <td> Bijection: every member of <var class="zed">X</var> is paired with a different member of <var class="zed">Y</var>, </td></tr>
+<tr> <td></td> <td> </td> <td> covering all <var class="zed">Y</var>'s </td></tr>
+</table>
+</div>
+
+<p class="space"></p>
+
+<b>Definitions</b>
+
+<p class="space"></p>
+
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> X <img width=14 height=8 alt="\pfun" src="zimg/pfun-m.gif"> Y == {&nbsp; f: X <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> Y | Each member of <var class="zed">X</var> appears no more than once. &nbsp;}</td></tr>
+<tr> <td class="zed"><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td class="zed"> X <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> Y == {&nbsp; f: X <img width=14 height=8 alt="\pfun" src="zimg/pfun-m.gif"> Y | <b>dom</b> f = X &nbsp;}</td></tr>
+<tr> <td class="zed"><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td class="zed"> X <img width=14 height=8 alt="\pinj" src="zimg/pinj-m.gif"> Y == {&nbsp; f: X <img width=14 height=8 alt="\pfun" src="zimg/pfun-m.gif"> Y | Each member of <var class="zed">X</var> is paired with a different member of <var class="zed">Y</var>. &nbsp;}</td></tr>
+<tr> <td class="zed"><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td class="zed"> X <img  width=14 height=8 alt="\inj" src="zimg/inj-m.gif"> Y == (X <img width=14 height=8 alt="\pinj" src="zimg/pinj-m.gif"> Y) <img width=10 height=7 alt="\cap" src="zimg/cap-m.gif"> (X <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> Y)</td></tr>
+<tr> <td class="zed"><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td class="zed"> X <img width=14 height=8 alt="\bij" src="zimg/bij-m.gif"> Y ==  ... definition omitted ... </td></tr>
+</table>
+</div>
+
+<p class="space"></p>
+
+<hr>
+
+
+<h4><a name="seq" href="#seqref">Sequences</a></h4>
+
+<b>Glossary</b>
+
+<p class="space"></p>
+
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><var class="zed">seq X</var> </td> <td> &nbsp;-&nbsp; </td> <td> Sequence: the set of all sequences of <var class="zed">X</var>'s </td></tr>
+<tr> <td><var class="zed">seq<sub><font size=-3>1</font></sub> X</var> </td> <td> &nbsp;-&nbsp; </td> <td> Non-empty sequence: the set of all sequences of <var class="zed">X</var>'s </td></tr>
+<tr> <td></td> <td>  </td> <td> with at least one element </td></tr>
+<tr> <td><var class="zed">iseq X</var> </td> <td> &nbsp;-&nbsp; </td> <td> Injective sequence: the set of all sequences of <var class="zed">X</var>'s </td></tr>
+<tr> <td></td> <td>  </td> <td> where each element of <var class="zed">X</var> appears only once </td></tr>
+<tr> <td><var class="zed">s <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> t</var> </td> <td> &nbsp;-&nbsp; </td> <td> Concatenation: sequence <var class="zed">s</var> with sequence <var class="zed">t</var> appended </td></tr>
+<tr> <td><var class="zed">head&nbsp;s</var> </td> <td> &nbsp;-&nbsp; </td> <td> Head: the first element of sequence <var class="zed">s</var> </td></tr>
+<tr> <td><var class="zed">last&nbsp;s</var> </td> <td> &nbsp;-&nbsp; </td> <td> Last: the last element of sequence <var class="zed">s</var> </td></tr>
+<tr> <td><var class="zed">front&nbsp;s</var> </td> <td> &nbsp;-&nbsp; </td> <td> Front: all but the last element of sequence <var class="zed">s</var> </td></tr>
+<tr> <td><var class="zed">tail&nbsp;s</var> </td> <td> &nbsp;-&nbsp; </td> <td> Tail: all but the first element of sequence <var class="zed">s</var> </td></tr>
+<tr> <td><var class="zed">s <b>in</b> t</var> </td> <td> &nbsp;-&nbsp; </td> <td> Segment relation: the sequence <var class="zed">s</var> appears in sequence <var class="zed">t</var></td></tr>
+</table>
+</div>
+
+<p class="space"></p>
+
+<b>Definitions</b>
+
+<p class="space"></p>
+
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed">seq X == {&nbsp; f: <img height=11 width=10 alt="\nat" src="zimg/nat-m.gif"> <img width=14 height=8 alt="\ffun" src="zimg/ffun-m.gif"> X | <b>dom</b> f = 1 .. # f &nbsp;}</td></tr>
+<tr> <td class="zed"><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td class="zed">seq<sub><font size=-3>1</font></sub> X == {&nbsp; f: seq X | # f &gt; 0 &nbsp;}</td></tr>
+<tr> <td class="zed"><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td class="zed">iseq X == seq X <img width=10 height=7 alt="\cap" src="zimg/cap-m.gif"> (<img height=11 width=10 alt="\nat" src="zimg/nat-m.gif"> <img width=14 height=8 alt="\pinj" src="zimg/pinj-m.gif"> X)</td></tr>
+</table>
+</div>
+
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{gendef}" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">[X]</td>
+     <td><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10 height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=3><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td width=10 height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2>head, last : seq<sub><font size=-3>1</font></sub> X <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> X </td></tr>
+<tr> <td></td><td class="zed"  colspan=2>tail, front : seq<sub><font size=-3>1</font></sub> X <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> seq X </td></tr>
+<tr> <td></td><td class="zed"  colspan=2>_ <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> _ : seq X <img width=7 height=7 alt="\cross" src="zimg/cross-m.gif"> seq X <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> seq X </td></tr>
+<tr> <td></td><td class="zed"  colspan=2>_ <b>in</b> _ : seq X <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> seq X </td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=9 height=10 alt="\forall" src="zimg/forall-m.gif"> s: seq<sub><font size=-3>1</font></sub> X; u,v: seq X <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> </td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"> </td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif">head(s) = s(1) <img width=8 height=7 alt="\land" src="zimg/land-m.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif">last(s) = s(# s) <img width=8 height=7 alt="\land" src="zimg/land-m.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif">u <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> v = u <img width=10 height=7 alt="\cup" src="zimg/cup-m.gif"> {&nbsp; i: <b>dom</b> v <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> i + #u <img height=9 width=10 alt="\mapsto" src="zimg/mapsto-m.gif"> v(i) &nbsp;}</td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif">u <b>in</b> v <img width=13 height=7 alt="\iff" src="zimg/iff-m.gif"> (<img width=6 height=10 alt="\exists" src="zimg/exists-m.gif"> s,t: seq X <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> s <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> u <img width=12 height=11 alt="\cat" src="zimg/cat-m.gif"> t = v) </td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif">... predicates for other operators omitted ...</td></tr>
+<tr> <td></td><td class="zed"  colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{gendef}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+
+</blockquote>
+
+<hr>
+
+<h4><a name="other" href="#otherref">Other Z pages</a></h4>
+
+<p>
+<a href="z-examples.html">Z examples</a> in web pages.
+</p>
+
+<p>
+<a href="z2html/z2html.html"><b>Z2HTML</b> tool</a> for translating 
+LaTeX documents with Z markup to HTML web pages.
+</p>
+
+<p>
+<a href="http://www.zuser.org/z/">Z home page</a>
+with FAQ and links to publications, tools, and meetings.
+</p>
+
+<p>
+Back to <a href="#top">top</a>
+</p>
+
+<HR>
+
+<ADDRESS>
+<A HREF="http://staff.washington.edu/~jon/">Jonathan Jacky</A> /
+<A HREF="http://www.radonc.washington.edu/">Department of Radiation Oncology</A>
+ 
+Box 356043<br>
+<a href="http://www.washington.edu/">University of Washington</a> /
+Seattle, Washington 98195-6043 / USA<BR>
+Tel (206) 598-4117 / Fax (206) 598-6218<BR>
+<p>
+E-mail: jon@u.washington.edu
+</ADDRESS>
+
+</body>
+</html>

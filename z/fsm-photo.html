@@ -1,0 +1,285 @@
+<html>
+
+<head>
+<link rel="stylesheet" href="zed.css" type="text/css">
+<title>Finite state machine</title>
+</head>
+
+<body>
+
+<h2><a name="top">Finite State Machine</a></h2> 
+
+<p>
+Excerpts from Chapter 6 in 
+<a href="../z-book/index.html">The Way of Z</a>.
+Sections explaining the motivation are omitted here.
+</p>
+
+<p>
+Links to more <a href="z-examples.html">Z examples</a>.
+</p>
+
+<p class="informal">
+This page looks best when this <var class="zed"><img height=11 width=9 alt="\power" src="zimg/power-m.gif"></var> and this <var class="zed">X</var> are 
+about the same size: <var class="zed"><img height=11 width=9 alt="\power" src="zimg/power-m.gif"> X</var>.  See these <a href="z-viewing-tips.html">viewing tips</a>.
+</p>
+
+<hr>
+
+
+<p class="informal">
+Here we show three ways to represent
+a <em>finite state machine</em> model: a diagram, a table, and Z.
+</p>
+
+<h2><a name="State transition diagram">State transition diagram</a></h2>
+
+<p class="informal">
+We can draw a <em>state transition diagram</em>.
+</p>
+
+<img height=600 width=800 alt="state transition diagram" src="fsm.jpg">
+
+<p class="informal">
+States are indicated by bubbles; transitions between states by arrows.
+The arrows are labelled with the events that cause state transitions.
+Thus, in the <b>PATIENTS</b> state pressing the <b>ENTER</b> key causes
+a transition to the <b>FIELDS</b> state, but in the <b>FIELDS</b> state
+pressing <b>ENTER</b> gets you to <b>SETUP</b>.
+</p>
+
+<p class="informal">
+We can trace all possible treatment sequences by
+following the arrows around the diagram. 
+</p>
+
+<h2><a name="State transition table">State transition table</a></h2>
+
+<p class="informal">
+The state transition diagram is a picture of our state machine model.
+There are other ways to represent the same model.  
+Here is the <em>state transition table</em>.  
+</p>
+
+<table border cellpadding=10>
+
+<tr>
+<td>
+<td>SELECT<br>
+    PATIENT
+<td>SELECT<br>
+    FIELD
+<td> <br>
+    ENTER
+<td>
+    <br>
+    ok
+<td>
+    <br>
+    START
+<td>
+    <br>
+     STOP
+<td><br>
+    intlk
+
+<tr>
+<td>PATIENTS
+<td>---
+<td>---
+<td>FIELDS
+<td>---
+<td>---
+<td>---
+<td>---
+
+<tr>
+<td>FIELDS
+<td>PATIENTS
+<td>---
+<td>SETUP
+<td>---
+<td>---
+<td>---
+<td>---
+
+<tr>
+<td>SETUP
+<td>PATIENTS
+<td>FIELDS
+<td>---
+<td>READY
+<td>---
+<td>---
+<td>---
+
+<tr>
+<td>READY
+<td>PATIENTS
+<td>FIELDS
+<td>---
+<td>---
+<td>BEAM ON
+<td>---
+<td>SETUP
+
+<tr>
+<td>BEAM ON
+<td>---
+<td>---
+<td>---
+<td>---
+<td>---
+<td>READY
+<td>SETUP
+
+</table>
+
+
+<p class="informal">
+Entries in the table indicate
+the next state that is reached when the event indicated by the column
+heading occurs during the state indicated by the row heading.
+</p>
+
+<p class="informal">
+This table is a bit more explicit than the state transition diagram because
+it makes it clear when events are ignored.  For example, pressing the
+<b>SELECT PATIENT</b> key in the <b>BEAM ON</b> mode has no effect 
+(causes no state
+change); this is indicated by the hyphen <b>---</b> in the table.  Including
+all of these in the diagram would make it too cluttered.  As notations grow
+more formal, they become more explicit and rely less on unwritten
+assumptions.
+</p>
+
+<h2><a name="Z notation">Z notation</a></h2>
+
+<p class="informal">
+Finally, we express the state machine model in Z.
+Don't worry about the details of the notation for now.  You should be
+able to see that the function <var class="zed">transitions</var> models the state
+transition table.   For example, the expression 
+<var class="zed">(patients,enter) <img height=9 width=10 alt="\mapsto" src="zimg/mapsto-m.gif"> fields</var> corresponds to the single
+transition in the first row of the
+table: when the <var class="zed">patients</var> screen is displayed, pressing <var class="zed">enter</var>
+displays the <var class="zed">fields</var> screen.  Likewise, 
+<var class="zed">(fields, select_patient) <img height=9 width=10 alt="\mapsto" src="zimg/mapsto-m.gif"> patients,(fields, enter) <img height=9 width=10 alt="\mapsto" src="zimg/mapsto-m.gif"> setup</var>
+represents the two transitions in the second row of the table.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed">        STATE ::= patients | fields | setup | ready | beam_on</td></tr>
+<tr> <td class="zed"><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td class="zed"> EVENT ::= select_patient | select_field | enter | start | stop | ok | intlk</td></tr>
+<tr> <td class="zed"><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td class="zed">        FSM == (STATE <img width=7 height=7 alt="\cross" src="zimg/cross-m.gif"> EVENT) <img width=14 height=8 alt="\pfun" src="zimg/pfun-m.gif"> STATE</td></tr>
+</table>
+</div>
+
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>        no_change, transitions, control: FSM</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>        control = no_change <img width=9 height=9 alt="\oplus" src="zimg/oplus-m.gif"> transitions</td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>        no_change = {&nbsp; s: STATE; e: EVENT <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> (s, e) <img height=9 width=10 alt="\mapsto" src="zimg/mapsto-m.gif"> s &nbsp;}</td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>        transitions = {&nbsp; (patients, enter) <img height=9 width=10 alt="\mapsto" src="zimg/mapsto-m.gif"> fields, </td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=20 height=1 align=bottom alt="    " src="zimg/clear.gif">             (fields, select_patient) <img height=9 width=10 alt="\mapsto" src="zimg/mapsto-m.gif"> patients, (fields, enter) <img height=9 width=10 alt="\mapsto" src="zimg/mapsto-m.gif"> setup, </td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=20 height=1 align=bottom alt="    " src="zimg/clear.gif">             (setup, select_patient) <img height=9 width=10 alt="\mapsto" src="zimg/mapsto-m.gif"> patients, (setup, select_field) <img height=9 width=10 alt="\mapsto" src="zimg/mapsto-m.gif"> fields, (setup, ok) <img height=9 width=10 alt="\mapsto" src="zimg/mapsto-m.gif"> ready, </td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=20 height=1 align=bottom alt="    " src="zimg/clear.gif">             (ready, select_patient) <img height=9 width=10 alt="\mapsto" src="zimg/mapsto-m.gif"> patients, (ready, select_field) <img height=9 width=10 alt="\mapsto" src="zimg/mapsto-m.gif"> fields, (ready, start) <img height=9 width=10 alt="\mapsto" src="zimg/mapsto-m.gif"> beam_on, (ready, intlk) <img height=9 width=10 alt="\mapsto" src="zimg/mapsto-m.gif"> setup, </td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=20 height=1 align=bottom alt="    " src="zimg/clear.gif">             (beam_on, stop) <img height=9 width=10 alt="\mapsto" src="zimg/mapsto-m.gif"> ready, (beam_on, intlk) <img height=9 width=10 alt="\mapsto" src="zimg/mapsto-m.gif"> setup &nbsp;}</td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+
+</body>
+</html>
+
+
+<p class="informal">
+This is the most explicit version yet. The definition of <var class="zed">no_change</var> spells
+out what was left to convention before: in certain states, certain inputs do
+not cause a state change.
+</p>
+
+<p class="informal">
+This example already illustrates two of the most powerful concepts in formal
+methods: using compact symbolic expressions to represent lots of cases in a
+little space, and using operators to build up complex formulas from simpler
+ones.
+</p>
+
+<p class="informal">
+State transition tables are often very sparse: most of the entries are
+empty "nothing changes" cells that make the tables large and
+difficult to read.  In Z we don't have to enumerate all the
+<var class="zed">no_change</var> transitions as we did in the table --- we can do it
+symbolically; <var class="zed">no_change</var> is actually a state machine that does
+nothing.  We define a second machine, <var class="zed">transitions</var>, that includes
+only the transitions where something actually happens.  Then we use
+the Z <em>override</em> operator <var class="zed"><img width=9 height=9 alt="\oplus" src="zimg/oplus-m.gif"></var> to combine the two.  The
+expression <var class="zed">no_change <img width=9 height=9 alt="\oplus" src="zimg/oplus-m.gif"> transitions</var> describes the state
+machine that behaves as <var class="zed">no_change</var>, except when there is a relevant
+entry in <var class="zed">transitions</var>. 
+</p>
+
+<p class="informal">
+More importantly, the diagram and the table are specialized notations that
+only work for finite state machines.  We cannot use them  to attack the
+hard parts of the problem that I left out of this toy example.
+For example, what really distinguishes the state <b>READY</b> from
+<b>SETUP</b>?  We glossed over this --- we merely said the system becomes
+ready when the <b>ok</b> event occurs.  This mysterious 
+<b>ok</b> event does not
+come from a key or button; we left it undefined.  But we must define
+it; this transition is the central safety-critical event in the
+program because it closes the relay that allows the beam to turn on.
+</p>
+
+<p class="informal">
+In <b>READY</b>, all the settings match their prescribed values; the <b>ok</b>
+event occurs when the system achieves this condition. (In fact, some
+settings must match exactly, while others are permitted to vary within a
+tolerance; some settings that don't match can be overridden, while others
+cannot.  And so on.) We cannot represent this with our diagrams or tables
+because it involves dozens of settings that vary over continuous ranges.  We
+need to model <em>values</em> and <em>relations</em> between values.  We will see
+how when we develop a more complete model of this program in
+chapters&nbsp;21 and&nbsp;22.
+</p>
+
+
+<p class="informal">
+Back to <a href="#top">top</a>
+</p>
+
+<HR>
+
+<ADDRESS>
+<A HREF="http://staff.washington.edu/~jon/">Jonathan Jacky</A> /
+Orthopaedics and Sports Medicine Box 356500<br>
+<a href="http://www.washington.edu/">University of Washington</a> /
+Seattle, Washington 98195-6500 / USA<BR>
+Tel (206) 543-1720<BR>
+<p>
+E-mail: jon@u.washington.edu
+</ADDRESS>
+
+</body>
+</html>

@@ -1,0 +1,9 @@
+% elements.tex - root 
+
+\documentstyle[fuzz]{slides}
+
+\begin{document}
+
+\blackandwhite{elements-slides}
+
+\end{document}

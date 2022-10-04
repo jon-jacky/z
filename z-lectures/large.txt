@@ -1,0 +1,9 @@
+% large.tex - root 
+
+\documentstyle[fuzz]{slides}
+
+\begin{document}
+
+\blackandwhite{large-slides}
+
+\end{document}

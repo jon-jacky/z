@@ -1,0 +1,153 @@
+% synthesis-slides.tex (root is synthesis.tex)
+
+% width of centered minipage to match zed indent
+\newcommand{\minindent}{5.25in} 
+
+\pagestyle{empty}
+
+\begin{slide}{}
+SYNTHESIS
+
+Sets (functions, relations, \dots) and logic are all we need to write
+small formal descriptions.
+
+Well-chosen notational conventions can make mathematical texts
+easier to read.
+
+Formal descriptions are not just paraphrased natural language.
+Writing useful formal descriptions requires design judgment.
+
+\end{slide}
+
+\begin{slide}{}
+SET COMPREHENSION
+
+Combine declaration, predicate, expression.
+
+\[ \{~ declaration | predicate @ expression ~\} \] 
+can be thought of this way
+
+\[	\{~ source | filter @ pattern ~\} \]
+
+The expression and predicate are optional.
+
+\begin{zed} \nat == \{~ i: \num | i \geq 0 ~\} \end{zed}
+
+\begin{zed} ODD == \{ i: \num @ 2*i+1 \} \end{zed}
+
+If the expression is the {\em characteristic tuple}, it can be
+omitted.
+
+\begin{zed} line == \{~ x,y: \num | y = m*x+b ~\} \end{zed}
+means the same as
+
+\begin{zed} line == \{~ x,y: \num | y = m*x+b @ (x,y) ~\} \end{zed}
+
+\end{slide}
+
+\begin{slide}{}
+SPECIFICATIONS
+
+Set comprehensions are specifications in \\
+miniature.
+
+A prime number is an integer larger than 1 that is only divisible by
+itself and 1. Informally,
+
+\begin{zed} PRIME == \{ 2, 3, 5, 7, 11, 13, 17, \dots \} \end{zed}
+Paraphrasing the English
+
+\begin{zed}
+	PRIME == \{~ n: \nat | n > 1 \land \\
+\t2 			\lnot (\exists m: 2 \upto n-1 @ n \mod m = 0) ~\}
+\end{zed}
+Can't we do better? A prime is {\em not} a product of numbers larger
+than 1.
+
+\begin{zed}
+	\nat_2 == \nat \setminus \{ 0, 1 \}
+\also
+	PRIME == \nat_2 \setminus \{~ n,m: \nat_2 @ n * m ~\}
+\end{zed}
+We can make specifications clearer by moving away from a literal
+paraphrase of the English, and using set operators instead of negation and
+quantification.
+
+\end{slide}
+
+\begin{slide}{}
+LAMBDA EXPRESSION
+
+{\em Lambda expressions} define functions.
+
+\[ (\lambda declaration | predicate @ expression) \] 
+
+\begin{zed} isqr == (\lambda i: \num @ i*i) \end{zed}
+means the same as this set comprehension.
+
+\begin{zed} isqr == \{~ i: \num @ i \mapsto i*i ~\} \end{zed}
+Both mean the same as 
+
+\begin{axdef}
+	isqr: \num \fun \nat
+\where
+	\forall i: \num @ isqr~i = i*i
+\end{axdef}
+Lambda expressions enable us to use functions without
+writing declarations.
+
+\[ 9 = (\lambda i: \num @ i*i)~3 \]
+\end{slide}
+
+\begin{slide}{}
+RESTRICTED QUANTIFIERS
+
+{\em Restricted quantifiers} abbreviate common predicates.
+
+\begin{zed} \forall i: ns | odd(i) @ i \leq nmax \end{zed}
+means
+
+\begin{zed} \forall i: ns @ odd(i) \implies i \leq nmax \end{zed}
+and
+
+\begin{zed} \exists i: ns | odd(i) @ i \leq nmax \end{zed}
+means 
+
+\begin{zed} \exists i: ns @ odd(i) \land i \leq nmax \end{zed}
+In general
+
+\begin{zed}
+\also
+	(\forall d | p @ q) \iff (\forall d @ p \implies q)
+\also
+	(\exists d | p @ q) \iff (\exists d @ p \land q)
+\end{zed}
+
+\end{slide}
+
+\begin{slide}{}
+CONVENIENCES AND SHORTCUTS
+
+{\em Local definitions} factor out common expressions.
+
+\begin{zed}
+	(\LET r == iroot(a) @ r*r \leq a < (r+1)*(r+1))
+\end{zed}
+means 
+\begin{zed}
+        iroot(a) * iroot(a) \leq a < \\
+\t3			(iroot(a)+1) * (iroot(a)+1)
+\end{zed}
+
+{\em Conditional expressions} simplify two-way case analyses.
+
+\def\abs({\vert}
+\def\sba){\vert}
+
+\begin{zed} \abs(x\sba) = \IF x \geq 0 \THEN x \ELSE -x \end{zed}
+means
+\begin{zed}
+(x \geq 0 \land \abs(x\sba) = x) \lor (x < 0 \land \abs(x\sba) = -x)
+\end{zed}
+
+\end{slide}

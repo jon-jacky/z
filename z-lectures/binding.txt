@@ -1,0 +1,9 @@
+% binding.tex - root 
+
+\documentstyle[fuzz]{slides}
+
+\begin{document}
+
+\blackandwhite{binding-slides}
+
+\end{document}

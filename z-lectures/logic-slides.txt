@@ -1,0 +1,287 @@
+% logic-slides.tex (root is logic.tex)
+
+% width of centered minipage to match zed indent
+\newcommand{\minindent}{5.25in} 
+
+\pagestyle{empty}
+
+\begin{slide}{}
+LOGIC
+
+Logic can be used for {\em description} or for {\em proof}.
+
+Z emphasizes the descriptive use of logic.
+
+Formulas in logic are called {\em predicates}.  Predicates evaluate to
+one of the two truth values $true$ and $false$.
+
+When used for description, logic {\em classifies} objects into
+two categories: acceptable (predicate evaluates to $true$) and 
+unacceptable ($false$).
+
+Used in this way, predicates act as {\em acceptance tests}.
+
+\end{slide}
+
+\begin{slide}{}
+USING PREDICATES FOR DESCRIPTION.
+
+Predicates can act as {\em acceptance tests}.
+
+We make predicates {\em stronger} by adding \\
+{\em restrictions} that eliminate candidate objects,
+resulting in {\em fewer} acceptable objects that are 
+{\em more specialized}.
+
+\begin{axdef}
+	d_1, d_2: 1 \upto 6
+\end{axdef}
+
+\begin{center} % center slightly narrowed minipage to indent table
+\begin{minipage}[t]{\minindent} % attempt to get nice left margin for table
+\begin{tabular}{l||l|l|l|l|l|l|l|l|l|l|l|}
+$d_1$ & 1 & 1 & 1 & 1 & 1 & 1 & 2 & 2  &  \dots & 6 & 6 \\ \hline
+$d_2$ & 1 & 2 & 3 & 4 & 5 & 6 & 1 & 2  & \dots  & 5 & 6
+\end{tabular}
+\end{minipage}
+\end{center}
+
+\vspace{.5in}
+
+\begin{axdef}
+	d_1, d_2: 1 \upto 6
+\where
+	d_1 + d_2 = 7
+\end{axdef}
+
+\begin{center} % center slightly narrowed minipage to indent table
+\begin{minipage}[t]{\minindent} % attempt to get nice left margin for table
+\begin{tabular}{l||l|l|l|l|l|l|}
+$d_1$ & 1 & 2 & 3 & 4 & 5 & 6 \\ \hline
+$d_2$ & 6 & 5 & 4 & 3 & 2 & 1
+\end{tabular}
+\end{minipage}
+\end{center}
+
+\end{slide}
+
+
+\begin{slide}{}
+THREE BASIC PREDICATES
+
+There are three kinds of basic predicates.
+
+\begin{description}
+
+\item{\em Constants}: $true$, $false$
+
+\item{\em Equations}: $e_1 = e_2$ 
+
+\item{\em Membership}: $x \in S$
+
+\end{description}
+
+All predicates are built up from these.
+\end{slide}
+
+\begin{slide}{}
+
+SETS AND RELATIONS AS PREDICATES
+
+Membership predicates (often with $\in$ disguised):
+%The $\in$ operators is often disguised.
+\begin{tabbing}
+xxxxxxxxxxxxxxxxxxxxxx \= \kill \\ 
+$odd(x)$ \> $x \in (odd \_)$ \\
+$5 < 12$ \> $5 \in (\_ < \_)$ \\
+$k \inrel{divides} 12$ \> $(k,12) \in divides$ \\
+$mother(ishmael, x)$ \> $(ishmael,x) \in mother$ \\
+$leap~year$ \>  $year \in (leap \_)$
+\end{tabbing}
+To use {\em prefix} syntax, declare with {\em underscore}.
+
+\begin{axdef}
+	odd \_, ODD: \power \num
+\end{axdef}
+
+\begin{zed}
+	odd(k) \\
+	k \in ODD
+\end{zed}
+To use {\em infix} syntax, just apply {\em underlining}.
+
+\begin{axdef}
+	divides: \num \rel \num
+\end{axdef}
+
+\begin{zed} 
+	(k,12) \in divides \\
+	k \inrel{divides} 12 
+\end{zed}
+
+\end{slide}
+
+\begin{slide}{}
+LOGICAL CONNECTIVES
+
+Build up complex predicates from basic ones.
+
+\begin{tabbing}
+xxxxxxxx \= \kill \\ 
+$\land$  \> Conjunction, {\em and} (similar to {\tt \&\&} in C) \\
+	\> Used for combining requirements, \\
+	\> restriction, strengthening. \\
+\\
+$\lor$ \> Disjunction, {\em or} (similar to {\tt ||} in C) \\
+	\> Used for offering alternatives, \\
+	\> case analyses, weakening. \\
+\\
+$\lnot$ \> Negation, {\em not} (similar to {\tt !} in C) \\
+\\
+$\iff$ \> Equivalence, {\em if and only if} ({\tt ==} in C) \\
+	\> Used for definitions, ``equality''.  \\
+\\
+$\implies$ \> Implication, {\em if \dots then \dots} \\
+	\> Used for conditional invariants, ordering. \\
+\end{tabbing}
+
+\end{slide}
+CASE ANALYSES
+
+Conjunction ($\land$, {\em and}) and disjunction ($\lor$, {\em or})
+work together to express {\em case analyses}.
+
+Conjunction combines the conditions that are found together in the
+same case; disjunction separates the cases.
+
+\begin{zed}
+	TEMP == \num
+\also
+	PHASE ::= solid | liquid | gas
+\end{zed}
+
+\begin{axdef}
+	temp: TEMP \\
+	phase: PHASE
+\where
+	(temp < 0 \land phase = solid) \lor \\
+	(0 \leq temp \leq 100 \land phase = liquid) \lor \\
+	(temp > 100 \land phase = gas)
+\end{axdef}
+This is a very common pattern in Z.
+
+\begin{slide}{}
+IMPLICATION
+
+Implication ($\implies$, {\em if}) expresses {\em ordering}.
+
+\[ stronger~predicate \implies related~weaker~predicate \]
+
+\begin{center}
+\begin{minipage}[t]{\minindent} % attempt to get nice left margin for table
+\begin{tabular}{|l|l||l|} \hline
+$p$ & $q$ & $p \implies q$ \\ \hline \hline
+$false$ & $false$ & $true$ \\ \hline
+$false$ & $true$ & $true$ \\ \hline
+$true$ & $false$ & $false$ \\ \hline
+$true$ & $true$ & $true$ \\ \hline
+\end{tabular}
+\end{minipage}
+\end{center} 
+It can express conditional {\em safety requirements}.
+
+\begin{zed}
+	BEAM ::= off | on
+\also
+	DOOR ::= closed | open
+\end{zed}
+
+\begin{axdef}
+	beam: BEAM \\
+	door: DOOR \\
+\where
+	beam = on \implies door = closed
+\end{axdef}
+
+\begin{center}
+\begin{minipage}[t]{\minindent} % attempt to get nice left margin for table
+\begin{tabular}{l||l|l|l|}
+$beam$ & $off$ & $off$ & $on$ \\ \hline
+$door$ & $closed$ & $open$ & $closed$ \\
+\end{tabular}
+\end{minipage}
+\end{center}
+
+\end{slide}
+
+\begin{slide}{}
+QUANTIFIERS
+
+{\em Quantifiers} introduce local (``{\em bound}'') variables into
+predicates so they can describe indefinitely large collections of
+objects.
+
+\begin{tabbing}
+xxxx \= \kill \\ 
+$\forall$  \> Universal quantifer, {\em all} \\
+	\> Generalization of $\land$, {\em and}. \\
+	\> Used to describe sets (functions, \dots), \\
+	\> bound variables range over set elements. \\
+\\
+$\exists$  \> Existential quantifer, {\em some} \\
+	\> Generalization of $\lor$, {\em or}. \\
+	\> Bound variables are ``hidden'' private data. \\
+\\
+\end{tabbing}
+
+\end{slide}
+
+\begin{slide}{}
+UNIVERSAL QUANTIFIER
+
+The {\em universal quantifer} ($\forall$, {\em all}) generalizes {\em
+and}.  Given {\em free variable} $ns = \{ n_1, n_2, n_3, \dots \}$,
+
+\begin{zed} \forall i: ns @ i \leq nmax \end{zed}
+means the same thing as
+
+\begin{zed} 
+	n_1 \leq nmax \land n_2 \leq nmax \land n_3 \leq nmax \land \dots 
+\end{zed}
+
+The universal quantifier enables a single predicate to describe
+(define) an entire set (relation, function, sequence, \dots).  Bound
+variables range over set elements and can act as place holders in
+definitions.
+
+\begin{axdef}
+	divides: \num \rel \num
+\where
+	\forall d,n: \num @ d \inrel{divides} n \iff n \mod d = 0
+\end{axdef}
+\end{slide}
+
+\begin{slide}{}
+EXISTENTIAL QUANTIFIER
+
+The {\em existential quantifer} ($\exists$, {\em some}) generalizes {\em
+or}. Given {\em free variable} $ns = \{ n_1, n_2, n_3, \dots \}$,
+
+\begin{zed} \exists i: ns @ i \leq nmax \end{zed}
+means 
+
+\begin{zed} 
+	n_1 \leq nmax \lor n_2 \leq nmax \lor n_3 \leq nmax \lor \dots 
+\end{zed}
+
+The existential quantifier enables definitions to use private,
+``hidden'' variables which may be constrained to particular values.
+
+\begin{axdef}
+	\_ \mod \_ : \num \fun (\num \setminus \{ 0 \}) \fun \num
+\where
+	\forall n,r: \num; q: \num \setminus \{ 0 \} @ \\
+\t1	   n mod q = r \iff (\exists d @ r < d \land n = q*d + r)
+\end{axdef}
+
+\end{slide}

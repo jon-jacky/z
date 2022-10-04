@@ -1,0 +1,537 @@
+<html>
+
+<head>
+<link rel="stylesheet" href="zed.css" type="text/css">
+<title>Z lecture notes: Logic</title>
+</head>
+
+<body>
+
+
+<p class="informal">
+<h3>LOGIC</h3>
+</p>
+
+
+
+<p>
+Based on chapters 23 and 24 in 
+<a href="../z-book/index.html">
+The Way of Z</a>.
+</p>
+
+<p>
+Links to more <a href="z-lectures.html">Z lectures</a>.
+</p>
+
+<p class="informal">
+This page looks best when this <var class="zed"><img height=11 width=9 alt="\power" src="zimg/power-m.gif"></var> and this <var class="zed">X</var> are 
+about the same size: <var class="zed"><img height=11 width=9 alt="\power" src="zimg/power-m.gif"> X</var>.  See these <a href="z-viewing-tips.html">viewing tips</a>.
+</p>
+
+<hr>
+
+<p class="informal">
+Logic can be used for <em>description</em> or for <em>proof</em>.
+</p>
+
+<p class="informal">
+Z emphasizes the descriptive use of logic.
+</p>
+
+<p class="informal">
+Formulas in logic are called <em>predicates</em>.  Predicates evaluate to
+one of the two truth values <var class="zed">true</var> and <var class="zed">false</var>.
+</p>
+
+<p class="informal">
+When used for description, logic <em>classifies</em> situations into
+two categories: acceptable (predicate evaluates to <var class="zed">true</var>) and 
+unacceptable (<var class="zed">false</var>).   
+</p>
+
+<p class="informal">
+A Z specification describes all of the situations 
+where all of its predicates are true.
+</p>
+
+<p class="informal">
+Used in this way, predicates act as <em>acceptance tests</em>.
+</p>
+
+<hr>
+
+<p class="informal">
+USING PREDICATES FOR DESCRIPTION.
+</p>
+
+<p class="informal">
+Predicates can act as <em>acceptance tests</em>.
+</p>
+
+<p class="informal">
+We make predicates <em>stronger</em> by adding 
+<em>restrictions</em> that eliminate candidate objects,
+resulting in <em>fewer</em> acceptable objects that are 
+<em>more specialized</em>.
+</p>
+
+
+<p class="informal">
+This paragraph
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>d<sub><font size=-3>1</font></sub>, d<sub><font size=-3>2</font></sub>: 1 .. 6</td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+
+<p class="informal">
+describes 36 possible combinations of values for 
+<var class="zed">d<sub><font size=-3>1</font></sub></var> and
+<var class="zed">d<sub><font size=-3>2</font></sub></var>
+</p>
+
+<p class="space"></p>
+
+
+<div class="mixed">
+<table border=1 cellpadding=5 cellspacing=0>
+<tr> <td><var class="zed">d<sub><font size=-3>1</font></sub></var> </td>
+ <td>1<td>1<td>1<td>1<td>1<td>1<td>2<td>2<td>&nbsp;...&nbsp;<td>6<td>6
+</tr>
+<tr> <td><var class="zed">d<sub><font size=-3>2</font></sub></var> </td>
+ <td>1<td>2<td>3<td>4<td>5<td>6<td>1<td>2<td>&nbsp;...&nbsp;<td>5<td>6
+</tr>
+</table>
+</div>
+
+
+<p class="informal">
+This paragraph, with a stronger predicate,
+</p>
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>d<sub><font size=-3>1</font></sub>, d<sub><font size=-3>2</font></sub>: 1 .. 6</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>d<sub><font size=-3>1</font></sub> + d<sub><font size=-3>2</font></sub> = 7</td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+
+
+<p class="informal">
+describes only 6 possible combinations of values for 
+<var class="zed">d<sub><font size=-3>1</font></sub></var> and
+<var class="zed">d<sub><font size=-3>2</font></sub></var>
+</p>
+
+<p class="space"></p>
+
+
+<div class="mixed">
+<table border=1 cellpadding=5 cellspacing=0>
+<tr> <td><var class="zed">d<sub><font size=-3>1</font></sub></var> </td>
+ <td>1<td>2<td>3<td>4<td>5<td>6
+</tr>
+<tr> <td><var class="zed">d<sub><font size=-3>2</font></sub></var> </td>
+ <td>6<td>5<td>4<td>3<td>2<td>1
+</tr>
+</table>
+</div>
+
+
+<hr>
+
+<p class="informal">
+THREE BASIC PREDICATES
+</p>
+
+<p class="informal">
+There are three kinds of basic predicates.
+</p>
+
+
+<p class="informal">
+<em>Constants</em>: <var class="zed">true</var>, <var class="zed">false</var>
+</p>
+
+<p class="informal">
+<em>Equations</em>: <var class="zed">e<sub><font size=-3>1</font></sub> = e<sub><font size=-3>2</font></sub></var> 
+</p>
+
+<p class="informal">
+<em>Membership</em>: <var class="zed">x <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> S</var>
+</p>
+
+
+<p class="informal">
+All predicates are built up from these.
+</p>
+
+<hr>
+
+<p class="informal">
+SETS AND RELATIONS AS PREDICATES
+</p>
+
+<p class="informal">
+Membership predicates (often with <var class="zed"><img width=7 height=7 alt="\in" src="zimg/in-m.gif"></var> disguised):
+</p>
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=5>
+<tr> <td><var class="zed">odd(x)</var> </td> <td> <var class="zed">x <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> (odd _)</var> </td></tr>
+<tr> <td><var class="zed">5 &lt; 12</var> </td> <td> <var class="zed">5 <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> (_ &lt; _)</var> </td></tr>
+<tr> <td><var class="zed">k <u>divides</u> 12</var> </td> <td> <var class="zed">(k,12) <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> divides</var> </td></tr>
+<tr> <td><var class="zed">mother(ishmael, x)</var> </td> <td> <var class="zed">(ishmael,x) <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> mother</var> </td></tr>
+<tr> <td><var class="zed">leap&nbsp;year</var> </td> <td>  <var class="zed">year <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> (leap _)</var></td></tr>
+</table>
+</div>
+
+<p class="informal">
+To use <em>prefix</em> syntax, declare with <em>underscore</em>.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>odd _, ODD: <img height=11 width=9 alt="\power" src="zimg/power-m.gif"> <img height=11 width=10 alt="\num" src="zimg/num-m.gif"></td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=5>
+<tr> <td class="zed">odd(k) </td></tr>
+<tr> <td class="zed">k <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> ODD</td></tr>
+</table>
+</div>
+
+<p class="informal">
+To use <em>infix</em> syntax, just apply <em>underlining</em>.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>divides: <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> <img height=11 width=10 alt="\num" src="zimg/num-m.gif"></td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=5> 
+<tr> <td class="zed">(k,12) <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> divides </td></tr>
+<tr> <td class="zed">k <u>divides</u> 12 </td></tr>
+</table>
+</div>
+
+<hr>
+
+<p class="informal">
+LOGICAL CONNECTIVES
+</p>
+
+<p class="informal">
+Build up complex predicates from basic ones.
+</p>
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><var class="zed"><img width=8 height=7 alt="\land" src="zimg/land-m.gif"></var> &nbsp; &nbsp; </td> <td> Conjunction, <em>and</em> (similar to <tt>&&</tt> in C) </td></tr>
+<tr> <td></td> <td> Used for combining requirements, </td></tr>
+<tr> <td></td> <td> restriction, strengthening. </td></tr>
+<tr> <td></td></tr>
+<tr> <td><var class="zed"><img width=8 height=7 alt="\lor" src="zimg/lor-m.gif"></var> </td> <td> Disjunction, <em>or</em> (similar to <tt>||</tt> in C) </td></tr>
+<tr> <td></td> <td> Used for offering alternatives, </td></tr>
+<tr> <td></td> <td> case analyses, weakening. </td></tr>
+<tr> <td></td></tr>
+<tr> <td><var class="zed"><img width=7 height=7 alt="\lnot" src="zimg/lnot-m.gif"></var> </td> <td> Negation, <em>not</em> (similar to <tt>!</tt> in C) </td></tr>
+<tr> <td></td></tr>
+<tr> <td><var class="zed"><img width=13 height=7 alt="\iff" src="zimg/iff-m.gif"></var> </td> <td> Equivalence, <em>if and only if</em> (<tt>==</tt> in C) </td></tr>
+<tr> <td></td> <td> Used for definitions, ``equality''.  </td></tr>
+<tr> <td></td></tr>
+<tr> <td><var class="zed"><img width=13 height=7 alt="\implies" src="zimg/implies-m.gif"></var> </td> <td> Implication, <em>if ... then ...</em> </td></tr>
+<tr> <td></td> <td> Used for conditional invariants, ordering. </td></tr>
+</table>
+</div>
+
+<hr>
+
+<p class="informal">
+CASE ANALYSES
+</p>
+
+<p class="informal">
+Conjunction (<var class="zed"><img width=8 height=7 alt="\land" src="zimg/land-m.gif"></var>, <em>and</em>) and disjunction (<var class="zed"><img width=8 height=7 alt="\lor" src="zimg/lor-m.gif"></var>, <em>or</em>)
+work together to express <em>case analyses</em>.
+</p>
+
+<p class="informal">
+Conjunction combines the conditions that are found together in the
+same case; disjunction separates the cases.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed">TEMP == <img height=11 width=10 alt="\num" src="zimg/num-m.gif"></td></tr>
+<tr> <td class="zed"><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td class="zed">PHASE ::= solid | liquid | gas</td></tr>
+</table>
+</div>
+
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>temp: TEMP </td></tr>
+<tr> <td></td><td class="zed" colspan=2>phase: PHASE</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>(temp &lt; 0 <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> phase = solid) <img width=8 height=7 alt="\lor" src="zimg/lor-m.gif"> </td></tr>
+<tr> <td></td><td class="zed" colspan=2>(0 <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> temp <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> 100 <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> phase = liquid) <img width=8 height=7 alt="\lor" src="zimg/lor-m.gif"> </td></tr>
+<tr> <td></td><td class="zed" colspan=2>(temp &gt; 100 <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> phase = gas)</td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+<p class="informal">
+This is a very common pattern in Z.
+</p>
+
+<hr>
+
+<p class="informal">
+IMPLICATION
+</p>
+
+<p class="informal">
+Implication (<var class="zed"><img width=13 height=7 alt="\implies" src="zimg/implies-m.gif"></var>, <em>if</em>) expresses <em>ordering</em>.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> stronger&nbsp;predicate <img width=13 height=7 alt="\implies" src="zimg/implies-m.gif"> related&nbsp;weaker&nbsp;predicate </td></tr>
+</table>
+</div>
+
+
+<p class="space"></p>
+
+<div class="mixed">
+<table border=1 cellpadding=5 cellspacing=0>
+<tr> <td><var class="zed">p</var> </td> <td> <var class="zed">q</var> </td> <td> <var class="zed">p <img width=13 height=7 alt="\implies" src="zimg/implies-m.gif"> q</var> </td></tr>
+<tr> <td><var class="zed">false</var> </td> <td> <var class="zed">false</var> </td> <td> <var class="zed">true</var>  </td></tr>
+<tr> <td><var class="zed">false</var> </td> <td> <var class="zed">true</var> </td> <td> <var class="zed">true</var>  </td></tr>
+<tr> <td><var class="zed">true</var> </td> <td> <var class="zed">false</var> </td> <td> <var class="zed">false</var>  </td></tr>
+<tr> <td><var class="zed">true</var> </td> <td> <var class="zed">true</var> </td> <td> <var class="zed">true</var>  </td></tr>
+</table>
+</div>
+
+ 
+<p class="informal">
+It can express conditional <em>safety requirements</em>.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed">BEAM ::= off | on</td></tr>
+<tr> <td class="zed"><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td class="zed">DOOR ::= closed | open</td></tr>
+</table>
+</div>
+
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>beam: BEAM </td></tr>
+<tr> <td></td><td class="zed" colspan=2>door: DOOR </td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>beam = on <img width=13 height=7 alt="\implies" src="zimg/implies-m.gif"> door = closed</td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+
+<p class="space"></p>
+
+<p class="informal">
+This Z describes three situations involving the beam and the door.
+</p>
+
+<div class="mixed">
+<table border=1 cellpadding=5 cellspacing=0>
+<tr> <td><var class="zed">BEAM</var> </td> <td> <var class="zed">off</var> </td> <td> <var class="zed">off</var> </td> <td> <var class="zed">on</var></td></tr>
+<tr> <td><var class="zed">DOOR</var> </td> <td> <var class="zed">closed</var> </td> <td> <var class="zed">open</var> </td> <td> <var class="zed">closed</var> </td></tr>
+</table>
+</div>
+
+<hr>
+
+<p class="informal">
+QUANTIFIERS
+</p>
+
+<p class="informal">
+<em>Quantifiers</em> introduce local (``<em>bound</em>'') variables into
+predicates so they can describe indefinitely large collections of
+objects.
+</p>
+
+<div class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><var class="zed"><img width=9 height=10 alt="\forall" src="zimg/forall-m.gif"></var> &nbsp; &nbsp; </td> <td> Universal quantifer, <em>all</em> </td></tr>
+<tr> <td></td> <td> Generalization of <var class="zed"><img width=8 height=7 alt="\land" src="zimg/land-m.gif"></var>, <em>and</em>. </td></tr>
+<tr> <td></td> <td> Used to describe sets (functions, ...), </td></tr>
+<tr> <td></td> <td> bound variables range over set elements. </td></tr>
+<tr> <td></td></tr>
+<tr> <td><var class="zed"><img width=6 height=10 alt="\exists" src="zimg/exists-m.gif"></var>  </td> <td> Existential quantifer, <em>some</em> </td></tr>
+<tr> <td></td> <td> Generalization of <var class="zed"><img width=8 height=7 alt="\lor" src="zimg/lor-m.gif"></var>, <em>or</em>. </td></tr>
+<tr> <td></td> <td> Bound variables are ``hidden'' private data. </td></tr>
+<tr> <td></td></tr>
+</table>
+</div>
+
+<hr>
+
+<p class="informal">
+UNIVERSAL QUANTIFIER
+</p>
+
+<p class="informal">
+The <em>universal quantifer</em> (<var class="zed"><img width=9 height=10 alt="\forall" src="zimg/forall-m.gif"></var>, <em>all</em>) generalizes <em>and</em>.
+Given <em>free variable</em> <var class="zed">ns = { n<sub><font size=-3>1</font></sub>, n<sub><font size=-3>2</font></sub>, n<sub><font size=-3>3</font></sub>, ... }</var>,
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> <img width=9 height=10 alt="\forall" src="zimg/forall-m.gif"> i: ns <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> i <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> nmax </td></tr>
+</table>
+</div>
+
+<p class="informal">
+means the same thing as
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0> 
+<tr> <td class="zed">n<sub><font size=-3>1</font></sub> <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> nmax <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> n<sub><font size=-3>2</font></sub> <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> nmax <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> n<sub><font size=-3>3</font></sub> <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> nmax <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> ... </td></tr>
+</table>
+</div>
+
+
+<p class="informal">
+The universal quantifier enables a single predicate to describe
+(define) an entire set (relation, function, sequence, ...).  Bound
+variables range over set elements and can act as place holders in
+definitions.
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>divides: <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> <img height=11 width=10 alt="\num" src="zimg/num-m.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=9 height=10 alt="\forall" src="zimg/forall-m.gif"> d,n: <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> d <u>divides</u> n <img width=13 height=7 alt="\iff" src="zimg/iff-m.gif"> n <b>mod</b> d = 0</td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+<hr>
+
+<p class="informal">
+EXISTENTIAL QUANTIFIER
+</p>
+
+<p class="informal">
+The <em>existential quantifer</em> (<var class="zed"><img width=6 height=10 alt="\exists" src="zimg/exists-m.gif"></var>, <em>some</em>) generalizes <em>or</em>. Given <em>free variable</em> <var class="zed">ns = { n<sub><font size=-3>1</font></sub>, n<sub><font size=-3>2</font></sub>, n<sub><font size=-3>3</font></sub>, ... }</var>,
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"> <img width=6 height=10 alt="\exists" src="zimg/exists-m.gif"> i: ns <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> i <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> nmax </td></tr>
+</table>
+</div>
+
+<p class="informal">
+means 
+</p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0> 
+<tr> <td class="zed">n<sub><font size=-3>1</font></sub> <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> nmax <img width=8 height=7 alt="\lor" src="zimg/lor-m.gif"> n<sub><font size=-3>2</font></sub> <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> nmax <img width=8 height=7 alt="\lor" src="zimg/lor-m.gif"> n<sub><font size=-3>3</font></sub> <img width=7 height=9 alt="\leq" src="zimg/leq-m.gif"> nmax <img width=8 height=7 alt="\lor" src="zimg/lor-m.gif"> ... </td></tr>
+</table>
+</div>
+
+
+<p class="informal">
+The existential quantifier enables definitions to use private,
+``hidden'' variables which may be constrained to particular values.
+</p>
+
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>_ <b>mod</b> _ : <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> (<img height=11 width=10 alt="\num" src="zimg/num-m.gif"> \ { 0 }) <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> <img height=11 width=10 alt="\num" src="zimg/num-m.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=9 height=10 alt="\forall" src="zimg/forall-m.gif"> n,r: <img height=11 width=10 alt="\num" src="zimg/num-m.gif">; q: <img height=11 width=10 alt="\num" src="zimg/num-m.gif"> \ { 0 } <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> </td></tr>
+<tr> <td></td><td class="zed" colspan=2><img width=10 height=1 align=bottom alt="    " src="zimg/clear.gif">   n mod q = r <img width=13 height=7 alt="\iff" src="zimg/iff-m.gif"> (<img width=6 height=10 alt="\exists" src="zimg/exists-m.gif"> d <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> r &lt; d <img width=8 height=7 alt="\land" src="zimg/land-m.gif"> n = q*d + r)</td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+<p>
+Back to <a href="z-lectures.html">Z lectures</a>.
+</p>
+
+<HR>
+
+<ADDRESS>
+<A HREF="http://staff.washington.edu/~jon/">Jonathan Jacky</A> /
+<a href="http://www.washington.edu/">University of Washington</a> /
+Seattle, Washington / USA<br>
+E-mail: jon@u.washington.edu
+</ADDRESS>
+
+</body>
+</html>

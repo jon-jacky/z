@@ -1,0 +1,174 @@
+% large-slides.tex (root is large.tex)
+
+\pagestyle{empty}
+
+\begin{slide}{}
+MODELLING LARGE SYSTEMS
+
+Large systems are composed of {\em components} collected into {\em
+subsystems}.  Complex components can be built up from simpler ones
+using {\em schema inclusion}.
+
+\begin{schema}{Param}
+	preset, setpoint, value: SIGNAL
+\end{schema}
+
+\begin{schema}{PS}
+	Param \\
+	contactor: SWITCH \\
+	faults: \power FAULT 
+\where
+	faults \neq \emptyset \implies setpoint = 0 \\
+	contactor = open \implies setpoint = 0 \\
+	\dots
+\end{schema}
+
+\begin{zed}
+On \defs [~ PS | contactor = closed \dots  ~]
+\also
+TurnOn \defs Off \land (On' \lor Error')
+\also
+Servo \defs [~ Param; enable: MODE; \dots | \dots ~]
+\end{zed}
+
+\end{slide}
+
+\begin{slide}{}
+COMBINING COMPONENTS
+
+Each component has a {\em name}.  Components have different types but
+they all have the same type of name.  Names of similar components are
+collected into sets.  The state of the entire system is a collection
+of functions from names to bindings of the component types.
+
+\begin{zed}
+	[NAME]
+\also
+	ps = \{ rf, mainfld, \dots \}
+\also
+	s = \{ mainprb, deflprb, \dots \}
+\end{zed}
+
+\begin{schema}{Cyclotron}
+	supply: ps \fun PS \\
+	servo: s \fun Servo \\
+	\dots
+\where
+	\dots
+\end{schema}
+
+\end{slide}
+
+\begin{slide}{}
+PROMOTION
+
+Operations on single components can be {\em promoted} to operations on the
+whole system.  First define a {\em framing} schema.
+
+% \newcommand{\CycloFramePS}{Cyclo \Phi PS}
+
+
+\begin{schema}{CycloFramePS}
+	\Delta Cyclotron \\
+	\Delta PS \\
+	ps?: ps
+\where
+	\{ ps? \} \ndres supply' = \{ ps? \} \ndres supply \\
+	\theta PS = supply~ps? \land \theta PS' = supply'~ps? \\
+\end{schema}
+Then combined the component operation with the frame, identifying the
+component of interest.
+
+\begin{schema}{TurnOnMainfld}
+	CycloFramePS \\
+	TurnOn 
+\where
+	ps? = mainfld
+\end{schema}
+
+\end{slide}
+
+\begin{slide}{}
+SUBSYSTEMS
+
+Subsystems can be modelled by sets of names of dissimilar objects.
+States and operations can be defined on subsystems.
+
+\begin{axdef}
+	rfsys, cyclo, bla, blb, blc, iso, fix: \power NAME
+\end{axdef}
+
+\begin{schema}{TurnOnBLA}
+	\Delta Cyclotron \\
+\where
+	\forall p: ps \cap bla @ \exists TurnOn @ \\
+\t1		\theta PS = supply~p \land \theta PS' = supply'~p
+\end{schema}
+
+\begin{schema}{BLAReady}
+	Cyclotron
+\where
+	supply \limg ps \cap bla \rimg \subseteq On
+\end{schema}
+
+\end{slide}
+
+\begin{slide}{}
+WHOLE SYSTEMS
+
+Complex operations can be described compactly.
+
+
+\begin{schema}{SafeTurnOnBeam}
+	TurnOnBeam
+\where
+	IsoTest \implies CycloReady \land BLAReady \\
+\t5					 \land IsoReady \\
+\also
+	IsoTreat \implies CycloReady \land BLAReady \\
+\t5						\land IsoSafe \\
+\also
+	\mbox{Preconditions for other modes \dots} \\
+\also
+\end{schema}
+
+\begin{zed}
+ T\_TurnOnBeam \defs SafeTurnOnBeam \\
+\t3		\lor (Interlocked \land \Xi Cyclotron)
+\end{zed}
+
+\end{slide}
+
+\begin{slide}{}
+OBJECT-ORIENTED STYLE IN Z
+
+Schema inclusion is much like inheritance in object-oriented
+programming languages, but every schema type is distinct (no ``subtypes'').
+
+\begin{zed}
+	Param \defs [~ preset, setpoint, value: SIGNAL ~]
+\also
+	PS \defs [~ Param; contactor: SWITCH;  \dots ~]
+\end{zed}
+
+\begin{axdef}
+	panel: Param \\
+	mainfld: PS
+\where
+	panel.setpoint = mainfld.setpoint
+\end{axdef}
+
+\begin{argue}
+	offset == (\lambda Param @ value - setpoint) & Definition \\
+% \also
+	offset~panel  & Type correct
+% \also
+	offset~mainfld & Type error!
+\end{argue}
+Use a {\em projection function} to extract the $Param$.
+
+\begin{argue} 
+  offset~((\lambda PS @ \theta Param)~mainfld) & &nbsp; Type correct
+\end{argue}
+
+\end{slide}

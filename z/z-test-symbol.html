@@ -1,0 +1,288 @@
+<html>
+
+<head>
+<link rel="stylesheet" href="zed.css" type="text/css">
+<title>Z notation</title>
+</head>
+
+<body>
+
+<h1>Z test page</h1>
+
+<p class="informal">
+This page exercises most of the translations provided by the <b> Z2HTML</b> tool.
+</p>
+
+
+<h2><a name="Symbols">Symbols</a></h2> 
+
+<p class="informal">
+Most Z symbols are represented by GIF's.  Symbols which are not
+yet supported appear as untranslated LaTeX commands.
+</p>
+
+
+<blockquote>
+<p class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td>Logic </td> <td> <font face="Helvetica, Arial">true false &not; <font face=symbol>&#217;</font> <font face=symbol>&#218;</font> <font face=symbol>&#222;</font> <font face=symbol>&#219;</font> <font face=symbol>&#34;</font> <font face=symbol>&#36;</font> <font face=symbol>&#36;</font><sub><font size=-3>1</font></sub> <b>let</b> <img width=8 height=11 alt="\vdash" src=zimg/vdash-m.gif> <img width=8 height=11 alt="\models" src=zimg/models-m.gif></font> </td>
+<tr> <td>Sets etc. </td> <td> <font face="Helvetica, Arial">= <font face=symbol>&#185;</font> <font face=symbol>&#206;</font> <font face=symbol>&#207;</font> <font face=symbol>&#198;</font> <font face=symbol>&#205;</font> <font face=symbol>&#204;</font> { } | <font face=symbol>&#183;</font> <font face=symbol>l</font> <font face=symbol>m</font>  <font face=symbol>&#199;</font> <font face=symbol>&#200;</font> \ <img width=11 height=14 alt="\bigcup" align="absbottom" src=zimg/bigcup-m.gif> <img width=11 height=14 alt="\bigcap" align="absbottom" src=zimg/bigcap-m.gif> <img height=11 width=9 alt="\power" src=zimg/power-m.gif> <font face=symbol>&#180;</font> first second <b>if</b> <b>then</b> <b>else</b> <img width=8 height=14 align=absbottom alt="\ldata" src=zimg/ldata-m.gif> <img width=8 height=14 align=absbottom alt="\rdata" src=zimg/rdata-m.gif></font> </td>
+<tr> <td>Relations </td> <td> <font face="Helvetica, Arial"><font face=symbol>&#171;</font> <img height=9 width=10 alt="\mapsto" src=zimg/mapsto-m.gif> <b>dom</b> <b>ran</b> <img width=6 height=12 alt="\comp" src=zimg/comp-m.gif align=absbottom> <font face=symbol>&#176;</font> <img height=11 width=10 alt="\dres" src=zimg/dres-m.gif> <img height=11 width=10  alt="\ndres" src=zimg/ndres-m.gif> <img height=11 width=10 alt="\rres" src=zimg/rres-m.gif> <img height=11 width=10 alt="\nrres" src=zimg/nrres-m.gif> <img height=14 width=7 alt="\limg" src=zimg/limg-m.gif align=absbottom> <img height=14 width=7 alt="\rimg" src=zimg/rimg-m.gif align=absbottom> <sup>~</sup> <sup>+</sup> <sup>*</sup> <font face=symbol>&#197;</font> <u>R</u> <b>id</b></font> </td>
+<tr> <td>Functions </td> <td> <font face="Helvetica, Arial"><img width=14 height=8 alt="\pfun" src=zimg/pfun-m.gif> <font face=symbol>&#174;</font> <img width=14 height=8 alt="\pinj" src=zimg/pinj-m.gif> <img  width=14 height=8 alt="\inj" src=zimg/inj-m.gif> <img width=14 height=8 alt="\bij" src=zimg/bij-m.gif> <img width=14 height=8 alt="\psurj" src=zimg/psurj-m.gif> <img width=14 height=8 alt="\surj" src=zimg/surj-m.gif> <img width=14 height=8 alt="\ffun" src=zimg/ffun-m.gif> <img width=14 height=8 alt="\finj" src=zimg/finj-m.gif> </font> </td>
+<tr> <td>Numbers etc. </td> <td> <font face="Helvetica, Arial"><img height=11 width=10 alt="\num" src=zimg/num-m.gif> <img height=11 width=10 alt="\nat" src=zimg/nat-m.gif> <img height=11 width=10 alt="\nat" src=zimg/nat-m.gif><sub><font size=-3>1</font></sub> + - * <b>div</b> <b>mod</b> <font face=symbol>&#163;</font> &lt; <font face=symbol>&#179;</font> &gt; .. min max # <img height=11 width=8 alt="\finset" src=zimg/finset-m.gif> <img height=11 width=8 alt="\finset" src=zimg/finset-m.gif><sub><font size=-3>1</font></sub></font> </td>
+<tr> <td>Sequences </td> <td> <font face="Helvetica, Arial">seq seq<sub><font size=-3>1</font></sub> iseq <font face=symbol>&#225;</font> <font face=symbol>&#241;</font> ^ <img width=17 height=14 align=absbottom alt="\dcat" src=zimg/dcat-m.gif> head tail last front rev <b>in</b> <img width=5 height=14 align=absbottom alt="\filter" src=zimg/filter-m.gif> <img width=5 height=14 align=absbottom alt="\extract" src=zimg/extract-m.gif> <b>disjoint</b> <b>partition</b> </font>  </td>
+<tr> <td>&nbsp; </td> <td> <font face="Helvetica, Arial">squash <b>prefix</b> <b>suffix</b></font> </td>
+<tr> <td>Bags </td> <td> <font face="Helvetica, Arial">bag <img width=7 height=14 align=absbottom alt="\lbag" src=zimg/lbag-m.gif> <img width=7 height=14 align=absbottom alt="\rbag" src=zimg/rbag-m.gif> count <img width=5 height=14 align=absbottom alt="\bcount" src=zimg/bcount-m.gif> <img width=9 height=9 alt="\otimes" src=zimg/otimes-m.gif> <img width=7 height=7 alt="\inbag" src=zimg/inbag-m.gif> <img width=9 height=10 align=absbottom alt="\subbageq" src=zimg/subbageq-m.gif> <img width=11 height=7 alt="\uplus" src=zimg/uplus-m.gif> <img width=11 height=7 alt="\uminus" src=zimg/uminus-m.gif> items</font> </td>
+<tr> <td>Schema calc. </td> <td> <font face="Helvetica, Arial"><img height=11 width=11 alt="\defs" src=zimg/defs-m.gif> [ | ] ; . &not; <font face=symbol>&#217;</font> <font face=symbol>&#218;</font> <font face=symbol>q</font> <img width=6 height=12 alt="\semi" align=absbottom src=zimg/comp-m.gif> &gt;&gt; \ <img width=5 height=14 align=absbottom alt="\project" src=zimg/filter-m.gif> <b>pre</b> <img width=5 height=14 align=absbottom alt="\lblot" src=zimg/lblot-m.gif> <img width=5 height=14 align=absbottom alt="\rblot" src=zimg/rblot-m.gif> </font> </td>
+<tr> <td>Conventions &nbsp;&nbsp;&nbsp; </td> <td> <font face="Helvetica, Arial">? ! ' <font face=symbol>D</font> <font face=symbol>X</font></font> </td>
+</table>
+</p>
+</blockquote>
+
+
+<h2><a name="Z paragraphs">Z paragraphs</a></h2>
+
+<h3><a name="Inline math">Inline math</a></h3>
+
+
+<blockquote>
+<p class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><font face="Helvetica, Arial"> ConsoleOp <img height=11 width=11 alt="\defs" src=zimg/defs-m.gif> SelectDisplay <font face=symbol>&#218;</font> SelectPatientList <font face=symbol>&#218;</font> SelectFieldList <font face=symbol>&#218;</font>  ... <font face=symbol>&#218;</font> IgnoreOthers </font></td>
+</table>
+</p>
+</blockquote>
+
+
+<h3><a name="Axiomatic definition">Axiomatic definition</a></h3>
+
+<h4><a name="Inline axiomatic definition and Z">Inline axiomatic definition and Z</a></h4> 
+
+<blockquote>
+<p class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src=zimg/clear.gif><br></td>
+<tr> <td width=10></td><td><font face="Helvetica, Arial"> no_name: NAME </font></td>
+<tr><td><img width=1 height=1 alt="\end{axdef}" src=zimg/clear.gif></td>
+</table>
+</p>
+</blockquote>
+
+<blockquote>
+<p class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><font face="Helvetica, Arial"> no_patient == no_name; no_field == no_name </font></td>
+</table>
+</p>
+</blockquote>
+
+
+<h4><a name="Multiline Z, axiomatic definition boxes">Multiline Z, axiomatic definition boxes</a></h4>
+
+<blockquote>
+<p class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src=zimg/clear.gif><br></td>
+<tr> <td></td><td colspan=2><font face="Helvetica, Arial">cal_factor: cal_const <font face=symbol>&#174;</font> VALUE</font></td>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src=zimg/clear.gif></td>
+</table>
+</p>
+</blockquote>
+
+
+<blockquote>
+<p class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><font face="Helvetica, Arial">ACCUMULATION == counter <font face=symbol>&#174;</font> VALUE</font></td>
+<tr> <td><font face="Helvetica, Arial"><img width=1 height=10 align=bottom alt=" " src=zimg/clear.gif></font></td>
+<tr> <td><font face="Helvetica, Arial"> PRESCRIPTION == prescrip <font face=symbol>&#174;</font> VALUE</font></td>
+</table>
+</p>
+</blockquote>
+
+
+<blockquote>
+<p class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src=zimg/clear.gif><br></td>
+<tr> <td></td><td colspan=2><font face="Helvetica, Arial">Preset: studies <font face=symbol>&#174;</font> (FIELD <img width=14 height=8 alt="\pfun" src=zimg/pfun-m.gif> PRESCRIPTION) </font></td>
+<tr> <td></td><td colspan=2><font face="Helvetica, Arial">Prescribed: patients <font face=symbol>&#174;</font> (FIELD <img width=14 height=8 alt="\pfun" src=zimg/pfun-m.gif> PRESCRIPTION) </font></td>
+<tr> <td></td><td colspan=2><font face="Helvetica, Arial">Accumulated: patients <font face=symbol>&#174;</font> (FIELD <img width=14 height=8 alt="\pfun" src=zimg/pfun-m.gif> ACCUMULATION) </font></td>
+<tr> <td height=10><img alt=" " src=zimg/clear.gif></td>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src=zimg/black-10.gif></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src=zimg/black-15.gif></td>
+      <td height=1><img width=75 height=1 alt=" " src=zimg/black-75.gif></td>
+<tr> <td height=10><img alt=" " src=zimg/clear.gif></td>
+<tr> <td></td><td colspan=2><font face="Helvetica, Arial"><font face=symbol>&#34;</font> s: studies <font face=symbol>&#183;</font> no_field <font face=symbol>&#207;</font> <b>dom</b> (Preset&nbsp;s) </font></td>
+<tr> <td></td><td colspan=2><font face="Helvetica, Arial"><font face=symbol>&#34;</font> p: patients <font face=symbol>&#183;</font> no_field <font face=symbol>&#207;</font> <b>dom</b> (Prescribed&nbsp;p) </font></td>
+<tr> <td></td><td colspan=2><font face="Helvetica, Arial"><img width=90 height=1 align=bottom alt="    " src=zimg/clear.gif><font face=symbol>&#217;</font> <b>dom</b>&nbsp;(Prescribed&nbsp;p) = <b>dom</b>&nbsp;(Accumulated&nbsp;p) </font></td>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src=zimg/clear.gif></td>
+</table>
+</p>
+</blockquote>
+
+
+<h3><a name="Schema boxes">Schema boxes</a></h3> 
+
+<blockquote>
+<p class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src=zimg/clear.gif></td>
+     <td></td><td><font face="Helvetica, Arial">TherapyControl</font></td>
+     <td><img alt="}" src=zimg/clear.gif></td>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src=zimg/black-10.gif></td>
+     <td height=1><img alt=" " src=zimg/clear.gif></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src=zimg/black-200.gif></td>
+<tr> <td height=10><img alt=" " src=zimg/clear.gif></td>
+<tr> <td></td><td colspan=2><font face="Helvetica, Arial">Session </font></td>
+<tr> <td></td><td colspan=2><font face="Helvetica, Arial">Field </font></td>
+<tr> <td></td><td colspan=2><font face="Helvetica, Arial">Intlk </font></td>
+<tr> <td></td><td colspan=2><font face="Helvetica, Arial">... </font></td>
+<tr> <td></td><td colspan=2><font face="Helvetica, Arial">Console </font></td>
+<tr> <td height=10><img alt=" " src=zimg/clear.gif></td>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src=zimg/black-300.gif></td>
+</table>
+</p>
+</blockquote>
+
+
+
+<p class="informal">
+The <font face="Helvetica, Arial">CheckOut</font> operation has two input parameters, the person <font face="Helvetica, Arial">p?</font> and
+the document <font face="Helvetica, Arial">d?</font>.
+</p>
+
+<blockquote>
+<p class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src=zimg/clear.gif></td>
+     <td></td><td><font face="Helvetica, Arial">CheckOut</font></td>
+     <td><img alt="}" src=zimg/clear.gif></td>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src=zimg/black-10.gif></td>
+     <td height=1><img alt=" " src=zimg/clear.gif></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src=zimg/black-200.gif></td>
+<tr> <td height=10><img alt=" " src=zimg/clear.gif></td>
+<tr> <td></td><td colspan=2><font face="Helvetica, Arial"><font face=symbol>D</font> Documents </font></td>
+<tr> <td></td><td colspan=2><font face="Helvetica, Arial">p?: PERSON </font></td>
+<tr> <td></td><td colspan=2><font face="Helvetica, Arial">d?: DOCUMENT</font></td>
+<tr> <td height=10><img alt=" " src=zimg/clear.gif></td>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src=zimg/black-10.gif></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src=zimg/black-15.gif></td>
+      <td height=1><img width=75 height=1 alt=" " src=zimg/black-75.gif></td>
+<tr> <td height=10><img alt=" " src=zimg/clear.gif></td>
+<tr> <td></td><td colspan=2><font face="Helvetica, Arial">d? <font face=symbol>&#207;</font> <b>dom</b> checked_out </font></td>
+<tr> <td></td><td colspan=2><font face="Helvetica, Arial">(d?, p?) <font face=symbol>&#206;</font> permission </font></td>
+<tr> <td></td><td colspan=2><font face="Helvetica, Arial">checked_out' = checked_out <font face=symbol>&#200;</font> {(d?, p?)}</font></td>
+<tr> <td height=10><img alt=" " src=zimg/clear.gif></td>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src=zimg/black-300.gif></td>
+</table>
+</p>
+</blockquote>
+
+
+<h3><a name="Generic definition box">Generic definition box</a></h3>
+
+
+<blockquote>
+<p class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><font face="Helvetica, Arial">Q <img width=6 height=12 alt="\comp" src=zimg/comp-m.gif align=absbottom> R</font> </td> <td> - </td> <td> Relational composition: <font face="Helvetica, Arial">Q</font> composed with <font face="Helvetica, Arial">R</font> </td>
+<tr> <td><font face="Helvetica, Arial">R <font face=symbol>&#176;</font> Q</font> </td> <td> - </td> <td> Backward relational composition, same as <font face="Helvetica, Arial">Q <img width=6 height=12 alt="\comp" src=zimg/comp-m.gif align=absbottom> R</font> </td>
+</table>
+</p>
+</blockquote>
+
+
+<blockquote>
+<p class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{gendef}" src=zimg/clear.gif></td>
+     <td></td><td><font face="Helvetica, Arial">[X,Y,Z]</font></td>
+     <td><img alt=" " src=zimg/clear.gif></td>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td>
+<tr> <td width=10 height=1 bgcolor=black><img width=10 height=1 alt=" " src=zimg/black-10.gif></td>
+     <td height=1><img alt=" " src=zimg/clear.gif></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src=zimg/black-200.gif></td>
+<tr> <td height=3><img alt=" " src=zimg/clear.gif></td>
+<tr> <td width=10 height=1 bgcolor=black><img width=10 height=1 alt=" " src=zimg/black-10.gif></td>
+     <td height=1><img alt=" " src=zimg/clear.gif></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src=zimg/black-200.gif></td>
+<tr> <td height=10><img alt=" " src=zimg/clear.gif></td>
+<tr> <td></td><td colspan=2><font face="Helvetica, Arial">_ <img width=6 height=12 alt="\comp" src=zimg/comp-m.gif align=absbottom> _ : (X <font face=symbol>&#171;</font> Y) <font face=symbol>&#180;</font> (Y <font face=symbol>&#171;</font> Z) <font face=symbol>&#174;</font> (X <font face=symbol>&#171;</font> Z) </font></td>
+<tr> <td></td><td colspan=2><font face="Helvetica, Arial">_ <font face=symbol>&#176;</font> _ : (Y <font face=symbol>&#171;</font> Z) <font face=symbol>&#180;</font> (X <font face=symbol>&#171;</font> Y) <font face=symbol>&#174;</font> (X <font face=symbol>&#171;</font> Z) </font></td>
+<tr> <td height=10><img alt=" " src=zimg/clear.gif></td>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src=zimg/black-10.gif></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src=zimg/black-15.gif></td>
+      <td height=1><img width=75 height=1 alt=" " src=zimg/black-75.gif></td>
+<tr> <td height=10><img alt=" " src=zimg/clear.gif></td>
+<tr> <td></td><td colspan=2><font face="Helvetica, Arial"><font face=symbol>&#34;</font> Q: X <font face=symbol>&#171;</font> Y; R: Y <font face=symbol>&#171;</font> Z <font face=symbol>&#183;</font> </font></td>
+<tr> <td></td><td colspan=2><font face="Helvetica, Arial"><img width=30 height=1 align=bottom alt="    " src=zimg/clear.gif>Q <img width=6 height=12 alt="\comp" src=zimg/comp-m.gif align=absbottom> R = R <font face=symbol>&#176;</font> Q = {&nbsp; x: X; y: Y; z: Z | x <u>Q</u> y <font face=symbol>&#217;</font> y <u>R</u> z <font face=symbol>&#183;</font> x <img height=9 width=10 alt="\mapsto" src=zimg/mapsto-m.gif> z &nbsp;}</font></td>
+<tr> <td height=10><img alt=" " src=zimg/clear.gif></td>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{gendef}" src=zimg/black-300.gif></td>
+</table>
+</p>
+</blockquote>
+
+
+<h3><a name="Argue environment">Argue environment</a></h3>
+
+<blockquote>
+<p class="mixed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><font face="Helvetica, Arial"> <font face=symbol>&#36;</font> Editor' <font face=symbol>&#183;</font> Insert </font></td><td align=right> Definition of precondition </td>
+<tr> <td><font face="Helvetica, Arial"><img width=10 height=1 align=bottom alt="    " src=zimg/clear.gif> <font face=symbol>&#219;</font> <font face=symbol>&#36;</font> left', right': TEXT | ...  <font face=symbol>&#183;</font> ... </font></td><td align=right> Expand schemas </td>
+<tr> <td><font face="Helvetica, Arial"><img width=10 height=1 align=bottom alt="    " src=zimg/clear.gif> <font face=symbol>&#219;</font> <font face=symbol>&#36;</font> left', right': TEXT <font face=symbol>&#183;</font> ... <font face=symbol>&#217;</font> ... </font></td><td align=right> Restricted <font face="Helvetica, Arial"><font face=symbol>&#36;</font></font>-quantifier </td>
+<tr> <td><font face="Helvetica, Arial"><img width=10 height=1 align=bottom alt="    " src=zimg/clear.gif> <font face=symbol>&#219;</font> pr <font face=symbol>&#217;</font> # ((left ^ <font face=symbol>&#225;</font> ch? <font face=symbol>&#241;</font>) ^ right) <font face=symbol>&#163;</font> maxsize </font></td><td align=right> One-point rule</td>
+<tr> <td><font face="Helvetica, Arial"><img width=10 height=1 align=bottom alt="    " src=zimg/clear.gif> <font face=symbol>&#219;</font> pr <font face=symbol>&#217;</font> # left + # <font face=symbol>&#225;</font> ch? <font face=symbol>&#241;</font> + # right <font face=symbol>&#163;</font> maxsize </font></td><td align=right> <font face="Helvetica, Arial"># (s ^ t) = # s + #t</font> </td>
+<tr> <td><font face="Helvetica, Arial"><img width=10 height=1 align=bottom alt="    " src=zimg/clear.gif> <font face=symbol>&#219;</font> pr <font face=symbol>&#217;</font> # left + 1 + # right <font face=symbol>&#163;</font> maxsize </font></td><td align=right> <font face="Helvetica, Arial"># <font face=symbol>&#225;</font> x <font face=symbol>&#241;</font> = 1</font> </td>
+<tr> <td><font face="Helvetica, Arial"><img width=10 height=1 align=bottom alt="    " src=zimg/clear.gif> <font face=symbol>&#219;</font> pr <font face=symbol>&#217;</font> # left + # right &lt; maxsize </font></td><td align=right> Arithmetic </td>
+</table>
+</p>
+</blockquote>
+
+
+<p class="informal">
+This completes the calculation.  The precondition of <font face="Helvetica, Arial">Insert</font> is 
+&nbsp;<font face="Helvetica, Arial"> ch? <font face=symbol>&#206;</font> printing <font face=symbol>&#217;</font> # left + # right &lt; maxsize</font>.  When the input is a
+printing character, the number of characters to
+the left and right of the cursor must be less than the buffer size. 
+</p>
+
+
+<h2><a name="Other formatting">Other formatting</a></h2> 
+
+<p class="informal">
+Here is some <em> emphasized text</em>, <b> boldface text</b>, 
+&nbsp;<tt> typewriter font text</tt>, and an enclosed mbox.  
+You must ensure that these don't break across a line, {\em like
+this).  Footnotes don't appear at the bottom of the 
+page (Instead footnotes are translated
+inline, as you see here.).  Footnotes are the only one of these
+environments that can extend across lines.
+</p>
+
+<blockquote>
+<p class="informal">
+Quotes are indented.
+</p>
+</blockquote>
+
+
+<h4>Cross references</h4>
+
+<p class="informal">
+ The <font face="Helvetica, Arial">TherapyControl</font> schema in
+section&nbsp;[sect:schema] is from&nbsp;[jacky95].
+</p>
+
+<h3><a name="Miscellaneous">Miscellaneous</a></h3>
+
+<p class="informal">
+&nbsp;<font face="Helvetica, Arial">TherapyControl</font> or any other formal text at the beginning of a line
+is handled properly.  ... That's about all.
+</p>
+
+</body>
+</html>

@@ -1,0 +1,5 @@
+#!/bin/sh
+for f in *.html
+do
+   cat $f | sed s/jon@radonc/jon@u/g > $f.new
+done

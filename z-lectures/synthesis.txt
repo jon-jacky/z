@@ -1,0 +1,9 @@
+% synthesis.tex - root 
+
+\documentstyle[fuzz]{slides}
+
+\begin{document}
+
+\blackandwhite{synthesis-slides}
+
+\end{document}

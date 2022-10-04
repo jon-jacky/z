@@ -1,0 +1,9 @@
+% state.tex - root 
+
+\documentstyle[fuzz]{slides}
+
+\begin{document}
+
+\blackandwhite{state-slides}
+
+\end{document}

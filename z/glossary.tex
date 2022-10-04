@@ -1,0 +1,214 @@
+% glossary.tex
+
+\section*{Glossary of Z Notation} \label{app:gloss}
+
+This glossary is based on the one by Jonathan Bowen at the Z home page, \\
+{\tt http://www.comlab.ox.ac.uk/archive/z.html}.  
+
+It includes all the notation used in {\em The Way of Z}.
+
+\paragraph{Names}
+
+\begin{tabbing}
+xxxxxxxxxxx \= \kill \\ 
+$a,b$ \> identifiers \\
+$d,e$ \> declarations (e.g., $a: A; b, \dots: B \dots$) \\
+$f,g$ \> functions \\
+$m,n$ \> numbers \\
+$p,q$ \> predicates \\
+$s,t$ \> sequences \\
+$x,y$ \> expressions \\
+$A,B$ \> sets \\
+$C,D$ \> bags \\
+$Q,R$ \> relations \\
+$S,T$ \> schemas \\
+$X$ \> schema text (e.g., $d$, $d | p$, or $S$) \\
+\end{tabbing}
+
+\paragraph{Definitions}
+
+\begin{tabbing}
+xxxxxxxxxxx \= \kill \\ 
+$a == x$ \>  Abbreviation definition \\
+$a ::= b | \dots$ \> Free type definition \\
+$[a]$ \> Introduction of a given set (or $[a,\dots]$) \\
+$a \_$ \> Prefix operator \\
+$\_ a$ \> Postfix operator \\
+$\_ a \_$ \> Infix operator \\
+\end{tabbing}
+
+\newpage
+
+\paragraph{Logic}
+
+\begin{tabbing}
+xxxxxxxxxxxxxxxxxxx \= \kill \\ 
+$true$ \> Logical true constant \\
+$false$ \> Logical false constant \\
+$\lnot p$ \> Logical negation, {\em not} \\
+$p \land q$ \> Logical conjunction, {\em and} \\
+$p \lor q$ \> Logical disjunction, {\em or} \\
+$p \implies q$ \> Logical implication \\
+$p \iff q$ \> Logical equivalence \\
+$\forall X @ q$ \> Universal quantification \\
+$\exists X @ q$ \> Existential quantification \\
+$(\LET a == x; \dots @ p)$ \> Local definition \\
+\end{tabbing}
+
+\paragraph{Sets and expressions}
+
+\begin{tabbing}
+xxxxxxxxxxxxxxxxxxx \= \kill \\ 
+$x = y$ \> Equality \\
+$x \neq y$ \> Inequality \\
+$x \in A$ \> Set membership \\
+$x \notin A$ \> Non-membership \\
+$\emptyset$ \> Empty set \\
+$A \subseteq B$ \> Set inclusion \\
+$A \subset B$ \> Strict set inclusion \\
+$\{ x, y, \dots \}$ \> Set display \\
+$\{~ X @ x ~\}$ \> Set comprehension \\
+$(\lambda X @ x)$ \> Lambda expression \\
+$(\LET a == x; \dots @ y)$ \> Local definition \\
+$\IF p \THEN x \ELSE y$ \> Conditional expression \\
+$(x,y, \dots)$ \> Tuple \\
+$(x,y)$ \> Pair \\
+$A \cross B \cross \dots$ \> Cartesian product \\
+$\power A$ \> Power set \\
+$A \cap B$ \> Set intersection \\
+$A \cup B$ \> Set union \\
+$A \setminus B$ \> Set difference \\
+$first~x$ \> First element of an ordered pair \\
+$second~x$ \> Second element of an ordered pair \\
+$\# A$ \> Number of elements in a set \\
+\end{tabbing}
+
+\paragraph{Relations}
+
+\begin{tabbing}
+xxxxxxxxxxx \= \kill \\ 
+$A \rel B$ \> Binary relation ($\power (A \cross B)$) \\
+$a \mapsto b$ \> Maplet ($(a,b)$) \\
+$\dom R$ \> Domain of a relation \\
+$\ran R$ \> Range of a relation \\
+$Q \comp R$ \> Forward relational composition \\
+$Q \circ R$ \> Backward relational composition ($R \comp Q$) \\
+$A \dres R$ \> Domain restriction \\
+$A \ndres R$ \> Domain anti-restriction \\
+$A \rres R$ \> Range restriction \\
+$A \nrres R$ \> Range anti-restriction \\
+$R \limg A \rimg$ \> Relational image \\
+$R \inv$ \> Inverse of relation \\
+$R \plus$ \> Transitive closure \\
+$Q \oplus R$ \> Relational overriding \\
+$a \inrel{R} b$ \> Infix relation \\
+\end{tabbing}
+
+\paragraph{Functions}
+
+\begin{tabbing}
+xxxxxxxxxxx \= \kill \\ 
+$A \pfun B$ \> Partial functions \\
+$A \fun B$ \> Total functions \\
+$A \pinj B$ \> Partial injections \\
+$A \inj B$ \> Total injections \\
+$A \bij B$ \> Bijections \\
+$f~x$ \> Function application (or $f(x)$) \\
+\end{tabbing}
+
+\paragraph{Numbers}
+
+\begin{tabbing}
+xxxxxxxxxxx \= \kill \\ 
+$\num$ \> Set of integers \\
+$\nat$ \> Set of natural numbers $\{ 0, 1, 2, \dots \}$ \\
+$\nat_1$ \> Set of strictly positive numbers $\{ 1, 2, \dots \}$ \\
+$m+n$ \> Addition \\
+$m-n$ \> Subtraction \\
+$m*n$ \> Multiplication \\
+$m \div n$ \> Division \\
+$m \mod n$ \> Remainder (modulus) \\
+$m \leq n$ \> Less than or equal \\
+$m < n$ \> Less than \\
+$m \geq n$ \> Greater than or equal \\
+$m > n$ \> Greater than \\
+$m \upto n$ \> Number range \\
+$min~A$ \> Minimum of a set of numbers \\
+$max~A$ \> Maximum of a set of numbers \\
+\end{tabbing}
+
+\paragraph{Sequences}
+
+\begin{tabbing}
+xxxxxxxxxxx \= \kill \\ 
+$\seq A$ \> Set of finite sequences \\
+$\seq_1 A$ \> Set of non-empty finite sequences \\
+$\iseq A$ \> Set of finite injective sequences \\
+$\langle \rangle$ \> Empty sequence \\
+$\langle x, y, \dots \rangle$ \> Sequence display \\
+$s \cat t$ \> Sequence concatenation \\
+$head~s$ \> First element of a sequence \\
+$tail~s$ \> All but the head element of a sequence \\
+$last~s$ \> Last element of a sequence \\
+$front~s$ \> All but the last element of a sequence \\
+$s \inseq t$ \> Sequence segment relation \\
+\end{tabbing}
+
+\paragraph{Schema}
+
+\begin{schema}{S}
+	d
+\where
+	p
+\end{schema}
+
+\newpage
+
+
+\paragraph{Axiomatic definition}
+
+\begin{axdef}
+	d
+\where
+	p
+\end{axdef}
+
+\paragraph{Generic definition}
+
+\begin{gendef}[a, \dots]
+	d
+\where
+	p
+\end{gendef}
+
+\paragraph{Schema calculus}
+
+\begin{tabbing}
+xxxxxxxxxxxxxx \= \kill \\ 
+$S \defs [~ X ~]$ \> Horizontal schema \\
+$[~ T; \dots | \dots ~]$  \> Schema inclusion \\
+$z.a$ \> Component selection (given $z:S$) \\
+$\theta S$ \> Binding \\
+$\lnot S$ \> Schema negation \\
+$S \land T$ \> Schema conjunction \\
+$S \lor T$ \> Schema disjunction \\
+$S \semi T$ \> Schema composition \\
+$S \pipe T$ \> Schema piping \\
+\end{tabbing}
+
+\paragraph{Conventions}
+
+\begin{tabbing}
+xxxxxxxxxxxxxx \= \kill \\ 
+$a?$ \> Input to an operation \\
+$a!$ \> Output from an operation \\
+$a$ \> State component before an operation \\
+$a'$ \> State component after an operation \\
+$S$ \> State schema before an operation \\
+$S'$ \> State schema after an operation \\
+$\Delta S$ \> Change of state \\
+$\Xi S$ \> No change of state \\
+\end{tabbing}
+
+
+
