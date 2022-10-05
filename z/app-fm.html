@@ -1,0 +1,278 @@
+<!-- app-fm.html -->
+
+<html>
+<head>
+<link rel="stylesheet" href="zed.css" type="text/css">
+<title>Formal Development for a Radiation Therapy Machine</title>
+</head>
+
+<body>
+
+<h2>Formal Development for a Radiation Therapy Machine</h2>
+
+<p>Jon Jacky, University of Washington<br>
+<em>jon@u.washington.edu</em></p>
+
+<hr>
+
+<h2>Clinical Neutron Therapy System at UWMC</h2>
+
+<p>
+Pictures <a href="ap-fm-pics.html">here</a>.
+
+<ul>
+<li>Unique machine, best treatment for certain rare cancers
+<li>Built by NCI for research, now in routine use
+<li>Begin treating patients 1984
+<li>Maintained, upgraded by UWMC staff
+<li>Replacement control system anticipated from the start
+<li>Funded by hospital (patients etc.), not research grants or education
+<li>New control system begins treating patients 1999, in use today
+</ul>
+
+<hr>
+
+<h2>Motivation</h2>
+
+<p>
+Formal methods are not mainstream.<br>
+What justifies unusual development effort?
+
+<p>
+<em>Radiation therapy machine control system!</em>
+
+<ul>
+<li>Safety-critical, fatal accidents a real possibility
+<li>Limited opportunities for testing, unique machine already in use
+<li>Novel design, all new code, no previous performance record
+</ul>
+
+<hr>
+
+<h2>Culture and environment</h2>
+
+<p>
+We had an unusually supportive culture and working environment:
+
+<ul>
+<li>Culture of safety, legal and personal responsibility
+<li>Long experience, deep understanding of application 
+and other staff (1981 - 1999)
+<li>Respect for science, correctness, precision, mathematical modeling
+<li>Not much schedule pressure
+</ul>
+
+<hr>
+
+<h2>Formal development product</h2>
+
+<p>
+We produced a <b>formal specification</b> that serves two purposes:
+
+<ol>
+<li>Mathematical model
+
+<ul>
+<li>Justify and check design
+<li>Support safety analysis
+</ul>
+
+<li>Detailed design document
+
+<ul>
+<li>State variables in the model become program variables
+<li>Operations in the model become functions
+</ul>
+</ol>
+
+<hr>
+
+<h2>State-based safety analysis</h2>
+
+<p>
+Tutorial and exercises 
+<a href="meded/inv.html">here</a>.
+
+<p>
+Answers to exercises 
+<a href="meded/inv-solns.html">here</a>.
+
+<hr>
+
+<h2>Z Notation</h2>
+
+<p>
+Specification language for expressing very large boolean expressions
+(CNTS spec is 2000 lines).
+
+<p>
+Tutorial and links <a href="../z-lectures/z-lectures.html">here</a>.
+
+<p>
+Good Z style emphasizes invariants (the "value added" that isn't easily
+expressed in most programming languages)
+
+<p>
+Specify a radiation therapy machine on the back of an envelope!
+
+<p>
+<em>
+The therapy beam can only turn on or remain on when the actual setup
+of the machine matches a stored prescription that the operator has
+selected and approved.
+</em>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed">  [SETTING, VALUE, FIELD]</td></tr>
+<tr> <td class="zed"><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td class="zed">  SETUP == SETTING <img width=14 height=8 alt="\fun" src="zimg/fun-m.gif"> VALUE</td></tr>
+<tr> <td class="zed"><img width=1 height=10 align=bottom alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td class="zed">  BEAM ::= OFF | ON</td></tr>
+</table>
+</div>
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td width=1 rowspan=99 bgcolor=black><img width=1 height=1 alt="\begin{axdef}" src="zimg/clear.gif"><br></td></tr>
+<tr> <td></td><td class="zed" colspan=2>  safe_: <img height=11 width=9 alt="\power" src="zimg/power-m.gif"> SETUP </td></tr>
+<tr> <td></td><td class="zed" colspan=2>  match_: SETUP <img width=13 height=8 alt="\rel" src="zimg/rel-m.gif"> SETUP </td></tr>
+<tr> <td></td><td class="zed" colspan=2>  prescription: FIELD <img width=14 height=8 alt="\pfun" src="zimg/pfun-m.gif"> SETUP </td></tr>
+<tr><td width=10 height=1><img width=10 height=1 alt="\end{axdef}" src="zimg/clear.gif"></td></tr>
+</table>
+</div>
+
+
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">TherapyMachine</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>  beam: BEAM</td></tr>
+<tr> <td></td><td class="zed" colspan=2>  measured, prescribed: SETUP</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td><img alt="\begin{schema}{" src="zimg/clear.gif"></td>
+     <td></td><td class="zed">SafeTreatment</td>
+     <td><img alt="}" src="zimg/clear.gif"></td></tr>
+<tr> <td width=1 rowspan=99 bgcolor=black><br></td></tr>
+<tr> <td width=10  height=1 bgcolor=black><img width=10 height=1 alt=" " src="zimg/black-10.gif"></td>
+     <td height=1><img alt=" " src="zimg/clear.gif"></td>
+     <td width=200 height=1 bgcolor=black><img width=200 height=1 alt=" " src="zimg/black-200.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>  TherapyMachine</td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td height=1 bgcolor=black><img width=10 height=1 alt="\where" src="zimg/black-10.gif"></td>
+      <td height=1 bgcolor=black><img width=15 height=1 alt=" " src="zimg/black-15.gif"></td>
+      <td height=1><img width=75 height=1 alt=" " src="zimg/black-75.gif"></td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td></td><td class="zed" colspan=2>  safe(measured) </td></tr>
+<tr> <td></td><td class="zed" colspan=2>  match(measured, prescribed) </td></tr>
+<tr> <td></td><td class="zed" colspan=2>  presribed <img width=7 height=7 alt="\in" src="zimg/in-m.gif"> <b>ran</b> prescription </td></tr>
+<tr> <td height=10><img alt=" " src="zimg/clear.gif"></td></tr>
+<tr> <td colspan=3 bgcolor=black><img width=300 height=1 alt="\end{schema}" src="zimg/black-300.gif"></td></tr>
+</table>
+</div>
+
+<p class="space"></p>
+
+<div class="zed">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr> <td class="zed"><img width=9 height=10 alt="\forall" src="zimg/forall-m.gif"> TherapyMachine <img width=7 height=7 alt="@" src="zimg/spot-m.gif"> beam = ON <img width=13 height=7 alt="\implies" src="zimg/implies-m.gif"> SafeTreatment</td></tr>
+</table>
+</div>
+
+
+<p>
+The 2000 line detailed formal specification that we analyzed and coded
+from is elaborated from this.
+
+<hr>
+
+<h2>Implementation</h2>
+
+<p>
+Safe system design throughout --- not just formal specification
+
+
+<ul>
+<li>Careful hardware/software/system design
+<li>Minimize software complexity in embedded program
+</ul>
+
+<p>
+Time-tested, lowest-common-denominator technology, minimize dependencies
+
+<ul>
+<li>C, Xlib, TCP/IP, VxWorks 
+<li>Nothing else! No database, No window manager etc.
+<li>VME hardware
+</ul>
+
+<p>
+Traditional technology for this application domain.
+
+<hr>
+
+<h2>Some project metrics</h2>
+
+<p>
+Rough measures of effort and quality
+
+<ul>
+<li>About 300 page requirements (prose, pictures, tables)
+<li>About 70 page, 2000 line formal specification
+<li>About 16000 lines C
+<li>About 500 pages manuals and other docs
+<li>Requirements were significant effort, spread over many years
+<li>Most work except requirements done in 3 years, 2-3 people
+</ul>
+
+<p>
+About 10 errors, < 1 error/KLOC, compare to > 2 error/KLOC other
+projects we've done (without formal spec).
+
+<p>
+Errors not serious, easily corrected, no patients mistreated, no
+treatments delayed
+
+<p>
+Model (formal spec) not quite accurate.  Insufficient granularity in timing.
+
+<p>
+One (potentially) safety-critical failure occurs after 3 years in use!<br>
+No harm done, detected immediately.  Hardware failure involved.
+
+<hr>
+
+<h2>Further reading</h2>
+
+<ul>
+<li><a href="https://jon-jacky.github.io/CNTS/iccr.html">Project summary</a>
+<li><a href="https://jon-jacky.github.io/CNTS/">Project web site</a>
+</ul>
+
+<hr>
+
+<a href="http://staff.washington.edu/jon/index.html">Jon Jacky</a>, <em class="email">jon@u.washington.edu</em>
+
+</body></html>
