@@ -8,10 +8,16 @@
 
 <h3>Z History</h3>
 
+<a href="https://jon-jacky.github.io/z/">Jon Jacky</a>
+
 <p>
 Annotated links to sources (by others, not me) that document
 significant moments in the history of the Z notation.  They trace the
 growth, then decline, of interest in Z.
+</p>
+
+<p>
+<a href="https://jon-jacky.github.io/z/">More pages</a> about Z.
 </p>
 
 <hr>
@@ -26,27 +32,86 @@ these approaches is a clear winner at present ..."
 </p>
 
 <p>
-This thorough report surveys the work of much of the Z community at
-the time of its greatest expansion.  It explains some difficult
+This thorough report surveys the work of the Z tool-making community
+at the time of its greatest expansion.  It explains some difficult
 technical issues in Z better than any other source I know.
 </p>
 
 <p>
-I think this report also shows why interest in Z declined from about
-this time, though criticism of the community is never made explicit
-here.  The Z community encountered technical issues that were at first
-poorly understood, which turned out to be more difficult than
-expected, and could no longer be avoided.  By then it was too late to
-adopt the obvious solution of banishing the problems by simplifying
-the notation.  Each group -- there were many -- tried to cope with the
-difficulties in its own way.  No consensus solution
-emerged. The community was fragmented.  The larger world began to
-abandon Z.
+I think this report also shows why interest in Z started to decline at
+about this time, though criticism of the community is never made
+explicit here.  Here is how I remember it:
+</p>
+
+<p>
+Z was supposed to be easy.  The author of <em>The Z Reference
+Manual</em> (ZRM) (1989, 2e 1992) said, "We just wanted to use simple
+mathematics to describe software".  But Z turned out to be harder than
+expected.  Some Z users began to use the notation in a more flexible,
+expressive way than shown in the ZRM.  They apparently believed that
+their meaning was clear, and these were obvious extensions that should
+not create new difficulties.  But in fact, they introduced subtle
+complications which could not be avoided by tool builders.
+</p>
+
+<p>
+A Z Standard committee began work around 1992.  The standard would
+say what constructs are allowed in Z, and what their meaning is.
+Instead of just codifying the contents of the ZRM, then the de-facto
+standard, the committee attemped to accommodate the expressive
+innovations.  They chose not to simply banish the problems by
+standardizing a more restricted form of the notation.  They tried to
+innovate and standardize at the same time, a perilous undertaking.
+The committee worked on through the 1990s, producing a series of
+inconclusive draft standards.  After several years, one frustrated
+tool builder wrote, "The Z committee has missed the boat."  The
+standard was not adopted until 2002 -- too late.
+</p>
+
+<p>
+Meanwhile, lacking guidance from a standard, each group -- there were
+many -- tried to cope with the difficulties in its own way.  No
+consensus solution emerged. The community was fragmented.  The proof
+tools were all incompatible.  Each tool used proof scripts that were
+not usable by any other.  Even the kinds of properties that could be
+proved varied from one tool to another.   This is the situation described
+in Martin's report.
+</p>
+
+<p>
+It turned out that Z was not so easy after all.  Z was was supposed to
+be simpler and clearer than any programming language -- that was part
+of its appeal.  But, like any programming language, it had its gnarly
+corners that one might easily wander into.  The long-delayed standard,
+and the proliferation of incompatible tools, made Z seem irrelevant to
+software development.  If you are designing a system, you don't want
+your notation and tools to be somebody's idea of a research problem.
+The larger software development world lost interest in Z and today it
+is mostly forgotten.
+</p>
+
+<p>
+It could be argued that Z was doomed in any case because most software
+developers were never going to write or use formal specifications in any
+notation whatsoever.  In this view, the expectation some had in the
+1980s and 1990s that writing formal specifications was going to become
+a widespread practice was simply mistaken, a delusion experienced by a
+few academics.  If that is true, the technical difficulties discussed
+in Martin's report, the ordeal of the standards committee, and the
+fragmentation among tool developers were not decisive.  This view is
+supported by observations that contemporary alternatives, or
+rivals, to Z such as VDM or B are also mostly forgotten.  And yet, 
+a notation that emerged in that same period lives on and 
+is used today. 
+<a href="https://en.wikipedia.org/wiki/TLA%2B">TLA+</a>, which
+appeared in 1999, is similar to Z (and VDM etc.) and now fills the
+niche they hoped to occupy.  It has been used by Amazon and Microsoft.
+It provides a focused and well-integrated toolset including an IDE,
+a model checker, and proof support.
 </p>
 
 <hr>
 
 <p>
-<a href="https://jon-jacky.github.io/home/">Jon Jacky</a>, 
-revised Oct 2022
+Revised Oct 2022
 </p>
