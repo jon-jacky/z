@@ -39,79 +39,117 @@ technical issues in Z better than any other source I know.
 
 <p>
 I think this report also shows why interest in Z started to decline at
-about this time, though criticism of the community is never made
-explicit here.  Here is how I remember it:
+about this time.  Martin finds a proliferation of incompatible proof
+tools of only prototype quality, whose convenience and power were
+limited by technical and foundational issues.  This seemed to reveal
+problems with Z itself, which might have discouraged its adoption.
+How did this situation arise?  Here is how I remember it:
 </p>
 
 <p>
-Z was supposed to be easy.  The author of <em>The Z Reference
-Manual</em> (ZRM) (1989, 2e 1992) said, "We just wanted to use simple
-mathematics to describe software".  But Z turned out to be harder than
-expected.  Some Z users began to use the notation in a more flexible,
-expressive way than shown in the ZRM.  They apparently believed that
-their meaning was clear, and these were obvious extensions that should
-not create new difficulties.  But in fact, they introduced subtle
-complications which could not be avoided by tool builders.
+Z was supposed to be easy.  One of its creators said, "We just wanted
+to use simple mathematics to describe software".  Z began as nothing
+more than some conventions for writing formulas about logic and sets,
+which seemed to be straightforward and uncontroversial.  But Z turned
+out to be harder than expected.
 </p>
 
 <p>
-A Z Standard committee began work around 1992.  The standard would
-say what constructs are allowed in Z, and what their meaning is.
-Instead of just codifying the contents of the ZRM, then the de-facto
-standard, the committee attemped to accommodate the expressive
-innovations.  They chose not to simply banish the problems by
-standardizing a more restricted form of the notation.  They tried to
-innovate and standardize at the same time, a perilous undertaking.
-The committee worked on through the 1990s, producing a series of
-inconclusive draft standards.  After several years, one frustrated
-tool builder wrote, "The Z committee has missed the boat."  The
-standard was not adopted until 2002 -- too late.
+The defining innovation in Z is a construct called
+the <em>schema</em>, which attaches a name to a collection of
+formulas.  An author can use this name in subsequent formulas
+as if it were an ordinary identifier.  There is a <em>schema
+calculus</em> where all of the usual logical operators can be
+applied to schema names, with the meanings that intuition would
+expect.  For example, to express that a radiation therapy machine
+control system meets its safety requirements, one can write
+<em>TherapyControl => SafeTreatment</em> (pronounced "therapy control
+implies safe treatment"), where <em>TherapyControl</em> is the schema
+name applied to many pages of formulas that describe the control
+system as a collection of state transitions,
+and <em>SafeTreatment</em> is the schema name applied to many more
+pages that express the safety requirements as a collection of safe
+states.  This formula says that the operations of the control system
+can never reach an unsafe state.  Here the schema names are used as
+predicates, but schema names can play <em>any</em> role in a formula -- 
+as declarations, expressions, or predicates -- so their interpretation
+depends on context.
 </p>
 
 <p>
-Meanwhile, lacking guidance from a standard, each group -- there were
-many -- tried to cope with the difficulties in its own way.  No
-consensus solution emerged. The community was fragmented.  The proof
-tools were all incompatible.  Each tool used proof scripts that were
-not usable by any other.  Even the kinds of properties that could be
-proved varied from one tool to another.   This is the situation described
-in Martin's report.
+Authors found that they could use Z schemas to write formal
+specifications that were not only precise, but also expressive and
+pursuasive.  Readers found that schemas provided a structure that
+could make formal specifications easier to grasp.  Z promised to
+relieve the tedium and pedantry of writing and reading formal
+specifications.  It might help formal specifications become an
+accepted part of the software development process, analogous to
+mathematical models in science and engineering.  For some, Z
+was not just a notation, it was the vanguard innovation in a movement
+to reform computer programming into a more rigorous, science-based
+discipline.
 </p>
 
 <p>
-It turned out that Z was not so easy after all.  Z was was supposed to
-be simpler and clearer than any programming language -- that was part
-of its appeal.  But, like any programming language, it had its gnarly
-corners that one might easily wander into.  The long-delayed standard,
-and the proliferation of incompatible tools, made Z seem irrelevant to
-software development.  If you are designing a system, you don't want
-your notation and tools to be somebody's idea of a research problem.
-The larger software development world lost interest in Z and today it
-is mostly forgotten.
+Some authors were content to regard a Z specifications as purely
+descriptive: precise and well-structured documentation,
+which could be more helpful for coding the program
+than a prose description.  In this view, the
+formula <em>TherapyControl => SafeTreatment</em> merely expresses the
+designer's intent.  Others were more ambitious.  They hoped to
+to <em>prove</em> properties of the Z specification.  They would use
+the methods of logical inference to check whether all the formulas
+included in <em>TherapyControl</em> really do guarantee all the safety
+requirements in <em>SafeTreatment</em>.  A successful proof should
+provide strong confidence that the design expressed in the Z
+specification really does specify a safe therapy machine -- that
+nothing has been overlooked or written incorrectly.  In this view, the
+main reason for writing a formal specification is to make it possible
+to perform proofs like this.
 </p>
 
 <p>
-It could be argued that Z was doomed in any case because most software
-developers were never going to write or use formal specifications in any
-notation whatsoever.  In this view, the expectation some had in the
-1980s and 1990s that writing formal specifications was going to become
-a widespread practice was simply mistaken, a delusion experienced by a
-few academics.  If that is true, the technical difficulties discussed
-in Martin's report, the ordeal of the standards committee, and the
-fragmentation among tool developers were not decisive.  This view is
-supported by observations that contemporary alternatives, or
-rivals, to Z such as VDM or B are also mostly forgotten.  And yet, 
-a notation that emerged in that same period lives on and 
-is used today. 
-<a href="https://en.wikipedia.org/wiki/TLA%2B">TLA+</a>, which
-appeared in 1999, is similar to Z (and VDM etc.) and now fills the
-niche they hoped to occupy.  It has been used by Amazon and Microsoft.
-It provides a focused and well-integrated toolset including an IDE,
-a model checker, and proof support.
+The proofs would consist of long sequences where rules of inference
+are applied to formulas from (for example)
+<em>TherapyControl</em> to derive new formulas, until eventually the
+sequence reaches the formulas in <em>SafeTreatment</em>.  Such proofs
+are usually lengthy, tedious, and error-prone, to such a degree that most
+people would not even consider attempting them.  But there is a
+technology of <em>theorem prover</em> programs that assist authors
+writing proofs, which might make the proofs feasible.  These programs
+check every proof step to confirm that the inference rules have been
+correctly applied.  Some provers, under the author's direction, can
+even generate some of the tedious proof steps.  A proof that has been
+checked by one of these programs is considered to be valid, even if it
+is complicated and difficult to follow.   It seemed to some that the
+eventual success of the entire Z movement depended on getting a useful
+theorem prover program for Z.
+</p>
+
+<p>
+When Z appeared, there were already a number of these theorem prover
+programs in use, for ordinary logic without schemas.  Since Z was
+"just sets and logic" and a schema just named a collection of ordinary
+formulas, it seemed that adapting these provers to work with Z
+specifications should be straightforward.  But this turned out to be
+more difficult than expected.  To be acceptable to Z authors, from the
+users' point of view the prover has to work with schemas, not the
+underlying formulas.  But it was found that, due to various technical
+issues, especially their context dependence, schemas and their
+constituents cannot be handled like ordinary logical formulas.
+Therefore, to adapt an existing prover, it is necessary to translate Z
+into its native logic, which is difficult to do faithfully.
+Alternatively, an entirely new prover tailored to Z can be developed
+from scratch, requiring substantial effort.  Both approaches were
+tried.  This is the landscape surveyed in Martin's review.
+</p>
+
+<p>
+More to come ...
 </p>
 
 <hr>
 
 <p>
-Revised Oct 2022
+Revised Nov 2022
 </p>
