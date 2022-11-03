@@ -145,8 +145,74 @@ tried.  This is the landscape surveyed in Martin's review.
 </p>
 
 <p>
-More to come ...
+The struggles to build provers revealed that Z was not so easy after
+all -- there were some gnarly corners that were poorly understood,
+which each development project tried to handle in their own way.
+There was a felt need for a standard that would clarify these issues
+and provide a canonical interpretation for each.  A Z Committee was
+formed in 1992 to write a Z standard and get it approved by an international
+standards organization, the ISO/IEC.
 </p>
+
+<p>
+A single author had already written <em>The Z Notation: A Reference
+Manual</em> in 1989, with a second edition in 1992.  Usually called
+the <em>ZRM</em>, it was the <em>de facto</em> standard, but it did
+not provide a <em>deductive system</em> - a collection of inference
+rules for writing proofs with Z schemas.  Moreover, some Z authors
+were eager to use schemas even more liberally, in ways not explained
+in the <em>ZRM</em>.  The Z Committee chose not to simply codify
+the <em>ZRM</em>, but to go further -- to provide a deductive system,
+and accommodate the new styles for using schemas.  
+</p>
+
+<p>
+The Z Committee had, in effect, undertaken a research project.  They
+tried to innovate and standardize at the same time.  They worked on
+through the 1990s, producing a series of inconclusive draft standards.
+The deductive system proposed in one draft was found to be
+inconsistent, and the committee eventually decided not to include one.
+(They wrote that any deductive system conformed to the standard if it
+was consistent with the standard semantics they defined -- but they
+declined to provide an example.) After several years, one frustrated
+tool builder wrote, "The Z committee has missed the boat."  The
+standard was finally adopted in 2002 -- too late, some felt.
+</p>
+
+<p>
+Meanwhile, lacking guidance from a standard, each group -- there were
+many -- tried to cope with the difficulties in its own way.  No
+consensus solution emerged. The community was fragmented.  The proof
+tools were all incompatible.  Each tool used proof scripts that were
+not usable by any other.  Even the kinds of properties that could be
+proved varied from one tool to another.   This is the situation described
+in Martin's report.
+</p>
+
+<p>
+Several authors (outside the Z Committee) eventually did propose
+deductive systems that appeared to be sound, but by then interest in Z
+was waning.  The revelations that Z was not so simple, the long-delayed
+standard, and the proliferation of incompatible tools may have
+contributed to its decline.  If you are designing a system, you don't
+want your notation and tools to be somebody's idea of a research
+problem.
+</p>
+
+<p>
+Z was most popular in the 1980s and 1990s, an age of innocence when
+people thought Z was easy and there was no standard -- at first, not
+even the <em>ZRM</em>.  The Z movement was sparked by the early
+book <em>Specification Case Studies</em> (1987) which merely presented
+some pursuasive examples with minimal explanation.  Readers thought
+they understood it, formed their own intuitions, and began writing Z
+specifications that avoided -- or ignored -- the difficulties that
+detained later tool builders and standards writers.  A later, more
+critical author called their style <em>vernacular Z</em>.  But some
+ambitious systems were specified in this style, and some even got
+built -- without proof.
+</p>
+
 
 <hr>
 
