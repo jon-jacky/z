@@ -48,10 +48,11 @@ How did this situation arise?  Here is how I remember it:
 
 <p>
 Z was supposed to be easy.  One of its creators said, "We just wanted
-to use simple mathematics to describe software".  Z began as nothing
-more than some conventions for writing formulas about logic and sets,
-which seemed to be straightforward and uncontroversial.  But Z turned
-out to be harder than expected.
+to use simple mathematics to describe software".  It is the
+mathematics that makes Z <em>formal</em> in a way that prose is not.
+Z began as nothing more than some conventions for writing formulas
+about logic and sets, which seemed to be straightforward and
+uncontroversial.  But Z turned out to be harder than expected.
 </p>
 
 <p>
@@ -70,10 +71,10 @@ system as a collection of state transitions,
 and <em>SafeTreatment</em> is the schema name applied to many more
 pages that express the safety requirements as a collection of safe
 states.  This formula says that the operations of the control system
-can never reach an unsafe state.  Here the schema names are used as
-predicates, but schema names can play <em>any</em> role in a formula -- 
-as declarations, expressions, or predicates -- so their interpretation
-depends on context.
+can only reach safe states -- never an unsafe state.  Here the schema
+names are used as predicates, but schema names can play <em>any</em>
+role in a formula -- as declarations, expressions, or predicates -- so
+their interpretation depends on context.
 </p>
 
 <p>
@@ -91,7 +92,7 @@ discipline.
 </p>
 
 <p>
-Some authors were content to regard a Z specifications as purely
+Some authors were content to regard a Z specification as purely
 descriptive: precise and well-structured documentation,
 which could be more helpful for coding the program
 than a prose description.  In this view, the
@@ -141,7 +142,7 @@ Therefore, to adapt an existing prover, it is necessary to translate Z
 into its native logic, which is difficult to do faithfully.
 Alternatively, an entirely new prover tailored to Z can be developed
 from scratch, requiring substantial effort.  Both approaches were
-tried.  This is the landscape surveyed in Martin's review.
+tried, in many variations.  This is the landscape surveyed in Martin's review.
 </p>
 
 <p>
@@ -149,8 +150,13 @@ The struggles to build provers revealed that Z was not so easy after
 all -- there were some gnarly corners that were poorly understood,
 which each development project tried to handle in their own way.
 There was a felt need for a standard that would clarify these issues
-and provide a canonical interpretation for each.  A Z Committee was
-formed in 1992 to write a Z standard and get it approved by an international
+and provide a canonical interpretation for each.  
+The standard should include a <em>semantics</em> that describes exactly what 
+any Z text denoted, as a collection of variable names and their
+values, after schemas had been eliminated.  It should also include 
+a <em>deductive system</em> -- a "logic for Z" -- a collection of inference
+rules for writing proofs that included schemas.   A Z Committee was formed
+in 1992 to write a Z standard and get it approved by an international
 standards organization, the ISO/IEC.
 </p>
 
@@ -158,12 +164,14 @@ standards organization, the ISO/IEC.
 A single author had already written <em>The Z Notation: A Reference
 Manual</em> in 1989, with a second edition in 1992.  Usually called
 the <em>ZRM</em>, it was the <em>de facto</em> standard, but it did
-not provide a <em>deductive system</em> - a collection of inference
-rules for writing proofs with Z schemas.  Moreover, some Z authors
-were eager to use schemas even more liberally, in ways not explained
-in the <em>ZRM</em>.  The Z Committee chose not to simply codify
-the <em>ZRM</em>, but to go further -- to provide a deductive system,
-and accommodate the new styles for using schemas.  
+not provide a deductive system nor a semantics (although the same author
+did propose a semantics in another book).  Moreover, some Z
+authors were eager to use schemas even more liberally, in ways not
+endorsed by the <em>ZRM</em>.  The Z Committee (which did not include the
+<em>ZRM</em> author) chose not to simply codify the
+existing <em>ZRM</em> in the format required by ISO, but to go
+further -- to provide a deductive system and semantics, and
+accommodate the new styles for using schemas.
 </p>
 
 <p>
@@ -171,12 +179,13 @@ The Z Committee had, in effect, undertaken a research project.  They
 tried to innovate and standardize at the same time.  They worked on
 through the 1990s, producing a series of inconclusive draft standards.
 The deductive system proposed in one draft was found to be
-inconsistent, and the committee eventually decided not to include one.
-(They wrote that any deductive system conformed to the standard if it
-was consistent with the standard semantics they defined -- but they
-declined to provide an example.) After several years, one frustrated
-tool builder wrote, "The Z committee has missed the boat."  The
-standard was finally adopted in 2002 -- too late, some felt.
+inconsistent -- that is, erroneous -- and the committee eventually
+decided not to include one.  They wrote that any deductive system
+would conform to the standard if it was consistent with the
+semantics they defined -- but they declined to provide an example.
+After several years, one frustrated tool builder wrote, "The Z
+committee has missed the boat."  The standard was finally adopted in
+2002 -- too late, some felt.
 </p>
 
 <p>
@@ -191,12 +200,12 @@ in Martin's report.
 
 <p>
 Several authors (outside the Z Committee) eventually did propose
-deductive systems that appeared to be sound, but by then interest in Z
-was waning.  The revelations that Z was not so simple, the long-delayed
-standard, and the proliferation of incompatible tools may have
-contributed to its decline.  If you are designing a system, you don't
-want your notation and tools to be somebody's idea of a research
-problem.
+different deductive systems that appeared to be sound, but by then
+interest in Z was waning.  The revelations that Z was not so simple,
+the long-delayed standard, and the proliferation of incompatible tools
+may have contributed to its decline.  If you are designing a system,
+you don't want your notation and tools to be somebody's idea of a
+research problem.
 </p>
 
 <p>
@@ -206,13 +215,40 @@ even the <em>ZRM</em>.  The Z movement was sparked by the early
 book <em>Specification Case Studies</em> (1987) which merely presented
 some pursuasive examples with minimal explanation.  Readers thought
 they understood it, formed their own intuitions, and began writing Z
-specifications that avoided -- or ignored -- the difficulties that
+specifications that avoided -- or ignored -- the complications that
 detained later tool builders and standards writers.  A later, more
-critical author called their style <em>vernacular Z</em>.  But some
+critical author called their style <em>vernacular Z</em>.  But
 ambitious systems were specified in this style, and some even got
-built -- without proof.
+built -- without proof.   The same features that made Z proofs difficult
+also encouraged people to write Z specifications in the first place.
 </p>
 
+<p>
+The most ambitious aspirations of the Z movement were probably doomed
+to disappointment.  The movement viewed formal methods as a
+Field of Dreams: "Build it and they'll come."  But most software
+developers were never going to write or use formal specifications in
+any notation, because they know that most successful projects don't
+use them.  Since the 1990s, the emphasis in software development
+has moved even more toward getting quickly to code, then
+trying to solve all the problems there.  So the travails I relate here
+may not have been decisive in Z's decline.
+</p>
+
+<p>
+And yet, there is a small niche where formal specifications and even
+proof are used -- where some combination of novelty, difficulty, and
+the cost of errors convinces developers that their usual intuitive
+approach is not adequate.  Z is almost forgotten, but another notation
+that emerged in the 1990s lives on and is used today.
+<a href="https://en.wikipedia.org/wiki/TLA%2B">TLA+</a> has impeccable
+mathematical credentials, and comes with a focused and well-integrated
+toolset including a prover.  The introductory paragraphs of the linked
+Wikipedia article read like explanations of Z written thirty years
+ago.  Since the beginning, its design has been the work of a single author, 
+who writes, "In spirit, TLA+ is close to Z.  In fact, some
+aspects of TLA+ were inspired by Z."
+</p>
 
 <hr>
 
