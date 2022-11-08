@@ -91,13 +91,23 @@ their interpretation depends on context.
 </p>
 
 <p>
+The most conspicuous innovation in Z is its distinctive appearance,
+quite unlike program code, or anything else in computing.  Schemas and
+other language constructs are written inside specially shaped
+boxes, while the enclosed formulas can include Greek letters and made-up
+graphic symbols.  Authors and readers might experience a childish delight
+in secret writing -- or have another kind of reaction.
+</p>
+
+<p>
 Authors found that they could use Z schemas to write formal
 specifications that were not only precise, but also expressive and
-pursuasive.  Readers found that schemas provided a structure that
-could make formal specifications easier to grasp.  Z promised to
-relieve the tedium and pedantry of writing and reading formal
-specifications.  Advocates hoped it might help formal specifications
-become an accepted part of the software development process.
+pursuasive.  Readers found that the schema boxes and graphic symbols
+provided structure and mnemonics that could make formal specifications
+easier to grasp.  Z promised to relieve the tedium and pedantry of
+writing and reading formal specifications.  Advocates hoped it might
+help formal specifications become an accepted part of the software
+development process.
 </p>
 
 <p>
@@ -219,10 +229,11 @@ in Martin's report.
 Several authors (outside the Z Committee) eventually did propose
 different deductive systems that appeared to be sound, but by then
 interest in Z was waning.  The revelations that Z was not so simple,
-the long-delayed standard, and the proliferation of incompatible tools
-may have contributed to its decline.  If you are designing a system,
-you don't want your notation and tools to be somebody's idea of a
-research problem.
+the long-delayed standard, the proliferation of incompatible tools,
+and even the need to learn a typesetting program in order to write the
+boxes and graphic symbols, may have contributed to its decline.  If you
+are designing a system, you don't want your notation and tools to be
+somebody's idea of a research problem.
 </p>
 
 <p>
@@ -230,11 +241,12 @@ The most ambitious aspirations of the Z movement were probably doomed
 to disappointment.  The movement viewed formal methods as a Field of
 Dreams: "Build it and they'll come."  But most software developers
 were never going to write or use formal specifications in any
-notation, because they know that most successful projects don't use
-them.  Since the 1990s, the emphasis in the mainstream of software
-development has moved even more toward getting quickly to code, then
-trying to solve all the problems there.  So the travails I relate here
-may not have been decisive in Z's decline.
+notation, because it seems like extra work, and they know that many
+successful projects don't use them.  Since the 1990s, the emphasis in
+the mainstream of software development has moved even more toward
+getting quickly to code, and then trying to solve all the problems there.
+So the travails I relate here may not have been decisive in Z's
+decline.
 </p>  
 
 <p>
@@ -254,16 +266,19 @@ Z is almost forgotten, but there are niches where formal
 specifications are still used -- where some combination of novelty,
 difficulty, and the cost of errors convinces developers that their
 usual intuitive approach is not adequate.  But instead of Z, two other
-notations that appeared in the 1990s were the most reported on in the
+notations that appeared in the 1990s were the most written about in the
 2010s.  Both
 <a href="https://alloytools.org/citations/case-studies.html">Alloy</a>
 and
 <a href="https://lamport.azurewebsites.net/tla/industrial-use.html">TLA+</a>
-are influenced by Z.  But unlike Z, both are the creations of a single
-author who remains the leader of their community, provides focus, and
-avoids fragmentation.  Both notations are simpler than Z and were developed
-along with their tool sets, which both feature a model checker.  TLA+ also
-has a prover, but its model checker is used more often.
+are influenced by Z.  But they don't look like Z; they have dispensed
+with the boxes and graphics, so they can be typed and edited in the
+same way as program code.  Both are the creations of a single author
+who remains the leader of their community, provides focus, and avoids
+fragmentation.  Both notations are simpler than Z -- no schemas -- and
+were developed along with their tool sets, which both feature a model
+checker.  TLA+ also has a prover, but its model checker is used more
+often.
 </p>
 
 <hr>
