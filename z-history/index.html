@@ -28,7 +28,9 @@ described in the literature. This paper presents a survey of these
 approaches, and the underlying semantic issues which make proof in Z a
 non-trivial task. ...  Special care is given to an account of the
 peculiarities of Z schemas. ...  The broad conclusion is that none of
-these approaches is a clear winner at present ..."
+these approaches is a clear winner at present ...
+We appear to be faced here with a paradox. Z is constructed using an
+easy theory, yet it is too expensive to produce useful tools for it. ..."
 </p>
 
 <p>
@@ -91,14 +93,14 @@ their interpretation depends on context.
 </p>
 
 <p>
-The most conspicuous innovation in Z is its distinctive appearance,
+The most visible innovation in Z is its distinctive appearance,
 quite unlike program code, or anything else in computing.  Schemas and
 other language constructs are written inside specially shaped boxes,
 while the enclosed formulas can include Greek letters, mathematical
 symbols, several kinds of arrows, and some new graphic symbols not
 found in traditional mathematics.  Authors and readers might
-appreciate the appearance -- or have some other reaction -- but the
-intent is to provide structure, brevity, and mnemonics that could make
+enjoy the appearance -- or have some other reaction -- but the
+intent is to provide structure, brevity, and visual mnemonics that could make
 formal specifications easier to grasp.  
 </p>
 
@@ -264,7 +266,7 @@ more effective than provers for detecting most errors.
 </p>
 
 <p>
-Z is almost forgotten, but there are niches where formal
+Z is almost forgotten today, but there are niches where formal
 specifications are still used -- where some combination of novelty,
 difficulty, and the cost of errors convinces developers that their
 usual intuitive approach is not adequate.  But instead of Z, two other
@@ -281,6 +283,22 @@ fragmentation.  Both notations are simpler than Z -- no schemas -- and
 were developed along with their tool sets, which both feature a model
 checker.  TLA+ also has a prover, but its model checker is used more
 often.
+</p>
+
+<p>
+Z was most popular in the 1980s and 1990s, an age of innocence when
+people thought Z was easy and there was no standard -- at first, not
+even the <em>ZRM</em>.  The Z movement was sparked by the early
+book <em>Specification Case Studies</em> (1987) which merely presented
+some pursuasive examples with minimal explanation.  Readers liked it, thought
+they understood it, formed their own intuitions, and began writing Z
+specifications that avoided -- or ignored -- the complications that
+detained later tool builders and standards writers.  A later, more
+critical author called their style <em>vernacular Z</em>.  But
+ambitious systems were specified in this style, and some even got
+built -- without proof.   
+The same features that made Z proofs difficult
+also encouraged people to write Z specifications in the first place.
 </p>
 
 <hr>
